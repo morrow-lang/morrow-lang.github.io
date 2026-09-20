@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["extract","prepare","select_entry"],"struct":["Example","Prepared"]};

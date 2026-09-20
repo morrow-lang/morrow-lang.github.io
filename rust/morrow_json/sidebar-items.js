@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ALLOC","DEPTH","INPUT","NODES","OUTPUT"],"enum":["Kind"],"fn":["encode","encode_string","error","get","input","message","retained_bytes","seal","stringify","text_node"],"mod":["convert","parse","scope"],"struct":["Budget","Error","Limits","Node"],"type":["Json","Result"]};

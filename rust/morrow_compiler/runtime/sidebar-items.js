@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["NativeType","Operation","ValueAbi"],"fn":["lookup","names","native_type","omissions","reserved_namespace","resolve","signature"],"struct":["Omission","Signature"]};

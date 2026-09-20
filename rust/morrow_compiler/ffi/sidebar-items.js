@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["API_NAMES"],"enum":["AbiType"],"fn":["abi_type","is_api","libraries","reserved_type"],"struct":["Declaration"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["emit_object","emit_object_for_target"]};

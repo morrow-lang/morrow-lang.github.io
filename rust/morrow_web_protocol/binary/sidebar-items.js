@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["MAX_IDENTITY_BYTES","MAX_TASKS","SUBPROTOCOL"],"fn":["decode_client","decode_command","decode_server","encode_client","encode_command","encode_server"]};

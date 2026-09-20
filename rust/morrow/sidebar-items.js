@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Backend"],"fn":["build","dispatch","emit_file","help","main","options","output_destination","publish_bytes","run","same_file"],"mod":["cli_controls","doctest_cli","documentation_cli","format_cli","native","source_directory","syntax_cli"],"struct":["NativeCode","Options"]};

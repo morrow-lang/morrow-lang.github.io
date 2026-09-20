@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["EMBEDDED_ASSETS"],"fn":["router","serve"],"struct":["BoundedListener","Config"],"type":["Assets"]};

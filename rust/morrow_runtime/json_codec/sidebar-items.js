@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["morrow_json_codec_decode","morrow_json_codec_decode_context","morrow_json_codec_encode","morrow_json_codec_encode_context"],"struct":["Codec","Variant"]};

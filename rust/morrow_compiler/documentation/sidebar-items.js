@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Output"],"fn":["render","render_inferred","render_inferred_project","render_project","render_with_schemes"],"mod":["markdown","site"],"struct":["InferredDocument","SourceDocument"]};

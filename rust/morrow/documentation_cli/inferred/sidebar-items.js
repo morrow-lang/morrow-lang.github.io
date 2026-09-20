@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["check","checked_inputs","inputs","run"],"struct":["GraphBudget","Input"]};

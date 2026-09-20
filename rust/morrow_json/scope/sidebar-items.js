@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["charge_nodes","exhausted","limits","mark_exhausted"],"struct":["Scope","ScopedLimits","Usage"]};

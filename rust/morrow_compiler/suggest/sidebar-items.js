@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["hint","nearest","nearest_member","tail"]};

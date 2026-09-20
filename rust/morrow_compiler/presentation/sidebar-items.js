@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["render_type","render_type_in_context","render_type_with_names","resolved_signature","source_signature"],"struct":["Limits"]};

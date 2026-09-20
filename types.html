@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="morrow doc">
+<title>Types — Morrow</title>
+<link rel="stylesheet" href="morrow-docs.css">
+<script src="morrow-search.js" defer></script>
+<script src="morrow-docs.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+<button class="menu" id="menu" type="button" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">&#9776;</button>
+<a class="topbar-title" href="index.html">Morrow</a>
+<button class="theme" id="theme" type="button" aria-label="Toggle dark mode">&#9681;</button>
+</header>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Documentation">
+<div class="brand"><a href="index.html">Morrow</a> <span class="version">v0.1.0</span></div>
+<div class="search"><input id="search" type="search" placeholder="Search" aria-label="Search documentation" autocomplete="off"><kbd>/</kbd></div>
+<ul id="search-results" class="results" hidden></ul>
+<div id="nav-lists">
+<section class="nav-group">
+<h2>Guides</h2>
+<ul>
+<li><a href="index.html">Morrow</a></li>
+<li><a href="readme.html">Morrow documentation</a></li>
+<li><a href="actor-cleanup.html">Actor-owned deferred cleanup</a></li>
+<li><a href="actor-continuations.html">Actor continuations</a></li>
+<li><a href="actor-runtime.html">Actor runtime status and contracts</a></li>
+<li><a href="actor-simulation.html">Deterministic native actor simulation</a></li>
+<li><a href="admin-dashboard.html">System dashboard</a></li>
+<li><a href="cluster.html">Connected Morrow servers</a></li>
+<li><a href="compatibility-policy.html">Compatibility and deprecation policy</a></li>
+<li><a href="comptime.html">Compile-time constants</a></li>
+<li><a href="continue-actor-parity.html">Actor parity handoff — 2026-09-19</a></li>
+<li><a href="custom-json.html">Custom JSON codecs</a></li>
+<li><a href="deploy.html">Deploy the demo and publish the docs</a></li>
+<li><a href="deterministic-simulation.html">Deterministic simulation and a Morrow demo</a></li>
+<li><a href="development-environment.html">Development environment</a></li>
+<li><a href="documentation.html">Writing and publishing documentation</a></li>
+<li><a href="ffi.html">Native foreign functions</a></li>
+<li><a href="file-text-io.html">File text IO</a></li>
+<li><a href="full-stack-architecture.html">Full-stack Morrow: actors and a reactive WebAssembly client</a></li>
+<li><a href="history.html">HISTORY</a></li>
+<li><a href="json-native-core.html">Immutable JSON native core (J1)</a></li>
+<li><a href="json-rust-api.html">Rust native JSON API</a></li>
+<li><a href="json-typed-codecs.html">Typed JSON codecs in the Rust compiler</a></li>
+<li><a href="labeled-calls.html">Source call labels</a></li>
+<li><a href="language-guide.html">Start writing Morrow</a></li>
+<li><a href="language-parity.html">Executable language compatibility</a></li>
+<li><a href="language-status.html">Executable language status</a></li>
+<li><a href="liveview-study.html">LiveView source study and Morrow&#39;s local preview</a></li>
+<li><a href="memory-management.html">Runtime memory</a></li>
+<li><a href="network-protocol.html">Morrow network protocol: decision and measurements</a></li>
+<li><a href="newtypes.html">Distinct newtypes in the Rust frontend</a></li>
+<li><a href="process-execution.html">Bounded process execution</a></li>
+<li><a href="process-model.html">Typed local processes</a></li>
+<li><a href="release-readiness.html">Morrow release readiness</a></li>
+<li><a href="repl-actors.html">Interactive actors and source simulation</a></li>
+<li><a href="result-handling.html">Result handling in the Rust compiler</a></li>
+<li><a href="rust-actors.html">Rust native actor execution</a></li>
+<li><a href="rust-workspace.html">RUST WORKSPACE</a></li>
+<li><a href="sets.html">Immutable sets</a></li>
+<li><a href="sql-lifecycle.html">SQL connection lifecycle</a></li>
+<li><a href="stdlib-api-reference.html">Morrow Standard Library API Reference (Gate C)</a></li>
+<li><a href="string-decimal.html">Decimal text classification</a></li>
+<li><a href="test-runner.html">Rust unit tests and documentation examples</a></li>
+<li><a href="tooling-parity.html">Compiler tooling contracts</a></li>
+<li><a href="traits.html">Traits and explicit structural derivation</a></li>
+<li><a href="unions.html">Finite unions in the Rust frontend</a></li>
+<li><a href="wasm-language.html">Portable Morrow language execution</a></li>
+<li><a href="web-application-acceptance.html">WEB APPLICATION ACCEPTANCE</a></li>
+<li><a href="web-preview.html">Morrow web preview</a></li>
+<li><a href="web-workers.html">Web actor workers</a></li>
+<li><a href="wire-standard-proposal.html">Adopted Morrow live wire standard</a></li>
+<li><a href="error-handling.html">Error handling</a></li>
+<li><a href="getting-started.html">Getting started</a></li>
+<li><a href="overview.html">Morrow language guide</a></li>
+<li><a href="syntax-and-values.html">Syntax and values</a></li>
+<li class="current"><a href="types.html">Types</a>
+<ul class="members">
+<li><a href="#scalar-types">Scalar types</a></li>
+<li><a href="#unit">Unit</a></li>
+<li><a href="#tuples">Tuples</a></li>
+<li><a href="#collections">Collections</a></li>
+<li><a href="#option-and-result">Option and Result</a></li>
+<li><a href="#records">Records</a></li>
+<li><a href="#tagged-sums">Tagged sums</a></li>
+<li><a href="#type-aliases">Type aliases</a></li>
+<li><a href="#newtypes">Newtypes</a></li>
+<li><a href="#unions">Unions</a></li>
+<li><a href="#generic-types">Generic types</a></li>
+<li><a href="#deriving-traits">Deriving traits</a></li>
+<li><a href="#how-values-print">How values print</a></li>
+</ul>
+</li>
+<li><a href="value-traits.html">Traits</a></li>
+<li><a href="design.html">Morrow Language Design Document</a></li>
+<li><a href="roadmap.html">Morrow Roadmap</a></li>
+<li><a href="2026-01-26-192328363-python-style-indentation-syntax.html">2026 01 26 192328363 python style indentation syntax</a></li>
+<li><a href="2026-01-26-192328373-implementing-compiler-in-c-with-safety-libraries.html">2026 01 26 192328373 implementing compiler in c with safety libraries</a></li>
+<li><a href="2026-01-26-192328383-compiling-to-c-via-qbe.html">2026 01 26 192328383 compiling to c via qbe</a></li>
+<li><a href="2026-01-27-192328294-using-operator-instead-of.html">2026 01 27 192328294 using operator instead of</a></li>
+<li><a href="2026-01-27-192328303-no-panics-or-crashes.html">2026 01 27 192328303 no panics or crashes</a></li>
+<li><a href="2026-01-27-192328311-actor-based-concurrency-model.html">2026 01 27 192328311 actor based concurrency model</a></li>
+<li><a href="2026-01-27-192328326-labeled-arguments-for-clarity.html">2026 01 27 192328326 labeled arguments for clarity</a></li>
+<li><a href="2026-01-27-192328336-with-expression-for-complex-error-handling.html">2026 01 27 192328336 with expression for complex error handling</a></li>
+<li><a href="2026-01-27-192328345-defer-statement-for-resource-cleanup.html">2026 01 27 192328345 defer statement for resource cleanup</a></li>
+<li><a href="2026-01-27-192328354-doc-tests-for-reliability.html">2026 01 27 192328354 doc tests for reliability</a></li>
+<li><a href="2026-01-28-192328215-deterministic-simulation-testing-for-actors-fernsim.html">2026 01 28 192328215 deterministic simulation testing for actors fernsim</a></li>
+<li><a href="2026-01-28-192328224-hexdocs-style-documentation-generation.html">2026 01 28 192328224 hexdocs style documentation generation</a></li>
+<li><a href="2026-01-28-192328232-unicode-and-emoji-identifiers.html">2026 01 28 192328232 unicode and emoji identifiers</a></li>
+<li><a href="2026-01-28-192328242-adopting-tigerbeetle-inspired-fern-style.html">2026 01 28 192328242 adopting tigerbeetle inspired fern style</a></li>
+<li><a href="2026-01-28-192328251-no-named-tuples-use-records-for-named-fields.html">2026 01 28 192328251 no named tuples use records for named fields</a></li>
+<li><a href="2026-01-28-192328259-no-unless-keyword.html">2026 01 28 192328259 no unless keyword</a></li>
+<li><a href="2026-01-28-192328267-no-while-or-loop-constructs-gleam-style.html">2026 01 28 192328267 no while or loop constructs gleam style</a></li>
+<li><a href="2026-01-28-192328276-elixir-style-record-update-syntax.html">2026 01 28 192328276 elixir style record update syntax</a></li>
+<li><a href="2026-01-28-192328285-using-operator-for-result-propagation.html">2026 01 28 192328285 using operator for result propagation</a></li>
+<li><a href="2026-01-29-192328142-perceus-style-reference-counting-for-wasm-support.html">2026 01 29 192328142 perceus style reference counting for wasm support</a></li>
+<li><a href="2026-01-29-192328151-four-pillars-philosophy-joy-one-way-no-surprises-jetpack.html">2026 01 29 192328151 four pillars philosophy joy one way no surprises jetpack</a></li>
+<li><a href="2026-01-29-192328160-tui-nested-module-namespace-for-terminal-ui.html">2026 01 29 192328160 tui nested module namespace for terminal ui</a></li>
+<li><a href="2026-01-29-192328170-embedded-qbe-compiler-backend.html">2026 01 29 192328170 embedded qbe compiler backend</a></li>
+<li><a href="2026-01-29-192328180-boehm-gc-for-automatic-memory-management.html">2026 01 29 192328180 boehm gc for automatic memory management</a></li>
+<li><a href="2026-01-29-192328199-built-in-module-syntax-for-standard-functions.html">2026 01 29 192328199 built in module syntax for standard functions</a></li>
+<li><a href="2026-01-29-192328207-optional-return-type-for-main-rust-style.html">2026 01 29 192328207 optional return type for main rust style</a></li>
+<li><a href="2026-02-06-192328020-erlang-pattern-hardening-pass-explicit-link-context-determin.html">2026 02 06 192328020 erlang pattern hardening pass explicit link context determin</a></li>
+<li><a href="2026-02-06-192328028-erlang-style-process-lifecycle-baseline-exited-pids-become-d.html">2026 02 06 192328028 erlang style process lifecycle baseline exited pids become d</a></li>
+<li><a href="2026-02-06-192328037-erlang-inspired-actor-monitoring-baseline-down-notifications.html">2026 02 06 192328037 erlang inspired actor monitoring baseline down notifications</a></li>
+<li><a href="2026-02-06-192328045-milestone-8-supervision-baseline-with-spawn-link-and-linked.html">2026 02 06 192328045 milestone 8 supervision baseline with spawn link and linked</a></li>
+<li><a href="2026-02-06-192328053-civetweb-runtime-backend-for-http-get-http-post-ship-now.html">2026 02 06 192328053 civetweb runtime backend for http get http post ship now</a></li>
+<li><a href="2026-02-06-192328062-sqlite-first-sql-runtime-backend-with-libsql-compatible-api.html">2026 02 06 192328062 sqlite first sql runtime backend with libsql compatible api</a></li>
+<li><a href="2026-02-06-192328070-gate-c-actor-runtime-core-baseline-fifo-mailbox-round-robin.html">2026 02 06 192328070 gate c actor runtime core baseline fifo mailbox round robin</a></li>
+<li><a href="2026-02-06-192328079-step-d-memory-path-selection-for-first-wasm-target.html">2026 02 06 192328079 step d memory path selection for first wasm target</a></li>
+<li><a href="2026-02-06-192328088-constrained-step-c-dup-drop-insertion-in-codegen.html">2026 02 06 192328088 constrained step c dup drop insertion in codegen</a></li>
+<li><a href="2026-02-06-192328097-perceus-object-header-contract-for-core-runtime-heap-values.html">2026 02 06 192328097 perceus object header contract for core runtime heap values</a></li>
+<li><a href="2026-02-06-192328105-runtime-memory-api-alloc-dup-drop-abstraction-with-boehm-bri.html">2026 02 06 192328105 runtime memory api alloc dup drop abstraction with boehm bri</a></li>
+<li><a href="2026-02-06-192328114-stabilize-gate-c-placeholder-runtime-behavior-with-error-ret.html">2026 02 06 192328114 stabilize gate c placeholder runtime behavior with error ret</a></li>
+<li><a href="2026-02-06-192328123-standardize-stdlib-entry-points-to-fs-json-http-sql-actors.html">2026 02 06 192328123 standardize stdlib entry points to fs json http sql actors</a></li>
+<li><a href="2026-02-06-192328132-wasm-memory-strategy-perceus-target-boehm-bridge.html">2026 02 06 192328132 wasm memory strategy perceus target boehm bridge</a></li>
+<li><a href="2026-09-05-192327726-expose-typed-rust-json-values-through-explicit-native-adapte.html">2026 09 05 192327726 expose typed rust json values through explicit native adapte</a></li>
+<li><a href="2026-09-05-192327733-preserve-resolved-global-references-as-explicit-ast-identiti.html">2026 09 05 192327733 preserve resolved global references as explicit ast identiti</a></li>
+<li><a href="2026-09-05-192327742-expand-transparent-aliases-before-nominal-checking-with-shar.html">2026 09 05 192327742 expand transparent aliases before nominal checking with shar</a></li>
+<li><a href="2026-09-05-192327750-publish-checked-source-facts-for-editor-hover.html">2026 09 05 192327750 publish checked source facts for editor hover</a></li>
+<li><a href="2026-09-05-192327758-generate-bounded-directory-documentation-as-one-searchable-a.html">2026 09 05 192327758 generate bounded directory documentation as one searchable a</a></li>
+<li><a href="2026-09-05-192327766-replace-the-json-string-copy-baseline-with-opaque-json-value.html">2026 09 05 192327766 replace the json string copy baseline with opaque json value</a></li>
+<li><a href="2026-09-05-192327774-represent-delayed-inference-shapes-with-non-executable-probe.html">2026 09 05 192327774 represent delayed inference shapes with non executable probe</a></li>
+<li><a href="2026-09-05-192327781-generalize-private-signatures-by-recursive-component.html">2026 09 05 192327781 generalize private signatures by recursive component</a></li>
+<li><a href="2026-09-05-192327789-generate-source-documentation-with-the-rust-parser.html">2026 09 05 192327789 generate source documentation with the rust parser</a></li>
+<li><a href="2026-09-05-192327797-validate-generic-bodies-with-rigid-equality-and-capability-r.html">2026 09 05 192327797 validate generic bodies with rigid equality and capability r</a></li>
+<li><a href="2026-09-05-192327805-index-editor-symbols-by-source-identity-and-lexical-scope.html">2026 09 05 192327805 index editor symbols by source identity and lexical scope</a></li>
+<li><a href="2026-09-05-192327813-infer-private-parameter-types-from-complete-pattern-evidence.html">2026 09 05 192327813 infer private parameter types from complete pattern evidence</a></li>
+<li><a href="2026-09-05-192327821-eliminate-eligible-self-tail-calls-without-changing-cleanup.html">2026 09 05 192327821 eliminate eligible self tail calls without changing cleanup</a></li>
+<li><a href="2026-09-05-192327828-normalize-adjacent-function-clauses-through-the-shared-patte.html">2026 09 05 192327828 normalize adjacent function clauses through the shared patte</a></li>
+<li><a href="2026-09-05-192327836-preserve-indentation-for-block-expressions-inside-delimiters.html">2026 09 05 192327836 preserve indentation for block expressions inside delimiters</a></li>
+<li><a href="2026-09-05-192327844-share-bounded-sequence-patterns-across-language-constructs.html">2026 09 05 192327844 share bounded sequence patterns across language constructs</a></li>
+<li><a href="2026-09-05-192327851-infer-private-return-schemes-before-concrete-specialization.html">2026 09 05 192327851 infer private return schemes before concrete specialization</a></li>
+<li><a href="2026-09-05-192327860-preserve-utf-8-strings-at-slicing-and-splitting-boundaries.html">2026 09 05 192327860 preserve utf 8 strings at slicing and splitting boundaries</a></li>
+<li><a href="2026-09-05-192327868-define-entry-errors-and-guard-legacy-runtime-preconditions.html">2026 09 05 192327868 define entry errors and guard legacy runtime preconditions</a></li>
+<li><a href="2026-09-05-192327877-define-numeric-domains-and-unwind-runtime-faults-through-cle.html">2026 09 05 192327877 define numeric domains and unwind runtime faults through cle</a></li>
+<li><a href="2026-09-05-192327886-preserve-literal-contents-and-document-unicode-identifier-sp.html">2026 09 05 192327886 preserve literal contents and document unicode identifier sp</a></li>
+<li><a href="2026-09-05-192327895-keep-iteration-lazy-and-error-handlers-concretely-typed.html">2026 09 05 192327895 keep iteration lazy and error handlers concretely typed</a></li>
+<li><a href="2026-09-05-192327902-preserve-abrupt-control-flow-and-function-exit-cleanup.html">2026 09 05 192327902 preserve abrupt control flow and function exit cleanup</a></li>
+<li><a href="2026-09-05-192327912-preserve-immutable-map-and-record-update-semantics.html">2026 09 05 192327912 preserve immutable map and record update semantics</a></li>
+<li><a href="2026-09-05-192327929-lift-typed-closures-with-explicit-environments.html">2026 09 05 192327929 lift typed closures with explicit environments</a></li>
+<li><a href="2026-09-05-192327936-make-directory-listing-failures-explicit-in-the-source-api.html">2026 09 05 192327936 make directory listing failures explicit in the source api</a></li>
+<li><a href="2026-09-05-192327944-execute-argument-vectors-without-shell-reconstruction.html">2026 09 05 192327944 execute argument vectors without shell reconstruction</a></li>
+<li><a href="2026-09-05-192327953-preserve-ieee-float-values-across-native-and-payload-boundar.html">2026 09 05 192327953 preserve ieee float values across native and payload boundar</a></li>
+<li><a href="2026-09-05-192327961-specialize-generic-code-and-preserve-nominal-type-layouts.html">2026 09 05 192327961 specialize generic code and preserve nominal type layouts</a></li>
+<li><a href="2026-09-05-192327970-extend-rust-through-typed-collections-and-built-in-sum-types.html">2026 09 05 192327970 extend rust through typed collections and built in sum types</a></li>
+<li><a href="2026-09-05-192327979-evaluate-a-safe-rust-frontend-with-typed-ir-and-the-existing.html">2026 09 05 192327979 evaluate a safe rust frontend with typed ir and the existing</a></li>
+<li><a href="2026-09-05-192327988-verify-native-diagnostics-before-replacing-the-reference-che.html">2026 09 05 192327988 verify native diagnostics before replacing the reference che</a></li>
+<li><a href="2026-09-05-192327996-actor-invariants-and-explicit-executable-feature-boundaries.html">2026 09 05 192327996 actor invariants and explicit executable feature boundaries</a></li>
+<li><a href="2026-09-05-192328004-relocatable-compiler-bundles-and-isolated-run-artifacts.html">2026 09 05 192328004 relocatable compiler bundles and isolated run artifacts</a></li>
+<li><a href="2026-09-05-192328012-deterministic-terminal-ui-composition-and-interactive-editin.html">2026 09 05 192328012 deterministic terminal ui composition and interactive editin</a></li>
+<li><a href="2026-09-06-192327451-integrate-cranelift-through-shared-typed-machine-lowering.html">2026 09 06 192327451 integrate cranelift through shared typed machine lowering</a></li>
+<li><a href="2026-09-06-192327459-use-an-explicitly-dated-nightly-for-fern-development-and-ci.html">2026 09 06 192327459 use an explicitly dated nightly for fern development and ci</a></li>
+<li><a href="2026-09-06-192327466-package-the-rust-frontend-as-an-explicit-relocatable-preview.html">2026 09 06 192327466 package the rust frontend as an explicit relocatable preview</a></li>
+<li><a href="2026-09-06-192327473-execute-bounded-typed-actors-through-explicit-native-continu.html">2026 09 06 192327473 execute bounded typed actors through explicit native continu</a></li>
+<li><a href="2026-09-06-192327479-preserve-common-cli-controls-during-rust-migration.html">2026 09 06 192327479 preserve common cli controls during rust migration</a></li>
+<li><a href="2026-09-06-192327486-incremental-rust-lint-and-benchmark-guidance.html">2026 09 06 192327486 incremental rust lint and benchmark guidance</a></li>
+<li><a href="2026-09-06-192327493-reproducible-development-tasks-with-mise.html">2026 09 06 192327493 reproducible development tasks with mise</a></li>
+<li><a href="2026-09-06-192327501-reevaluate-native-backends-with-measured-user-workflows.html">2026 09 06 192327501 reevaluate native backends with measured user workflows</a></li>
+<li><a href="2026-09-06-192327510-encode-explicitly-derived-sums-with-stable-source-tags.html">2026 09 06 192327510 encode explicitly derived sums with stable source tags</a></li>
+<li><a href="2026-09-06-192327518-retain-native-test-identity-until-descendant-cleanup-is-comp.html">2026 09 06 192327518 retain native test identity until descendant cleanup is comp</a></li>
+<li><a href="2026-09-06-192327526-respect-apple-arm64-reserved-registers-in-the-shared-backend.html">2026 09 06 192327526 respect apple arm64 reserved registers in the shared backend</a></li>
+<li><a href="2026-09-06-192327533-build-finite-recursive-json-plans-and-extend-explicit-deriva.html">2026 09 06 192327533 build finite recursive json plans and extend explicit deriva</a></li>
+<li><a href="2026-09-06-192327541-expose-canonical-formatting-through-the-editor-protocol.html">2026 09 06 192327541 expose canonical formatting through the editor protocol</a></li>
+<li><a href="2026-09-06-192327548-format-source-directories-after-complete-input-validation.html">2026 09 06 192327548 format source directories after complete input validation</a></li>
+<li><a href="2026-09-06-192327554-derive-explicit-typed-json-codecs-with-bounded-shared-execut.html">2026 09 06 192327554 derive explicit typed json codecs with bounded shared execut</a></li>
+<li><a href="2026-09-06-192327562-stop-supervised-descendants-before-fallible-exit-notificatio.html">2026 09 06 192327562 stop supervised descendants before fallible exit notificatio</a></li>
+<li><a href="2026-09-06-192327569-concentrate-new-language-features-in-rust-and-retain-c-as-a.html">2026 09 06 192327569 concentrate new language features in rust and retain c as a</a></li>
+<li><a href="2026-09-06-192327576-prove-result-handling-on-reachable-paths-before-publication.html">2026 09 06 192327576 prove result handling on reachable paths before publication</a></li>
+<li><a href="2026-09-06-192327583-check-formatting-without-modifying-source-files.html">2026 09 06 192327583 check formatting without modifying source files</a></li>
+<li><a href="2026-09-06-192327591-stage-a-verified-zed-component-with-an-immutable-grammar-rev.html">2026 09 06 192327591 stage a verified zed component with an immutable grammar rev</a></li>
+<li><a href="2026-09-06-192327599-launch-the-native-checker-through-a-content-validated-c-boot.html">2026 09 06 192327599 launch the native checker through a content validated c boot</a></li>
+<li><a href="2026-09-06-192327606-pin-decimal-text-classification-to-unicode-16-with-bounded-w.html">2026 09 06 192327606 pin decimal text classification to unicode 16 with bounded w</a></li>
+<li><a href="2026-09-06-192327613-preserve-source-label-interfaces-and-written-argument-evalua.html">2026 09 06 192327613 preserve source label interfaces and written argument evalua</a></li>
+<li><a href="2026-09-06-192327621-complete-file-text-io-before-publishing-successful-results.html">2026 09 06 192327621 complete file text io before publishing successful results</a></li>
+<li><a href="2026-09-06-192327629-port-quality-workflows-through-bounded-native-process-apis.html">2026 09 06 192327629 port quality workflows through bounded native process apis</a></li>
+<li><a href="2026-09-06-192327636-report-stderr-failures-without-changing-global-signal-policy.html">2026 09 06 192327636 report stderr failures without changing global signal policy</a></li>
+<li><a href="2026-09-06-192327643-preserve-signed-64-bit-int-through-the-c-frontend-abi.html">2026 09 06 192327643 preserve signed 64 bit int through the c frontend abi</a></li>
+<li><a href="2026-09-06-192327651-capture-bounded-literal-processes-with-explicit-cleanup-owne.html">2026 09 06 192327651 capture bounded literal processes with explicit cleanup owne</a></li>
+<li><a href="2026-09-06-192327658-generate-the-indentation-aware-editor-grammar-from-authored.html">2026 09 06 192327658 generate the indentation aware editor grammar from authored</a></li>
+<li><a href="2026-09-06-192327665-directional-finite-unions-and-typed-narrowing.html">2026 09 06 192327665 directional finite unions and typed narrowing</a></li>
+<li><a href="2026-09-06-192327673-separate-module-type-and-value-namespaces.html">2026 09 06 192327673 separate module type and value namespaces</a></li>
+<li><a href="2026-09-06-192327680-run-source-owned-unit-tests-alongside-documentation-examples.html">2026 09 06 192327680 run source owned unit tests alongside documentation examples</a></li>
+<li><a href="2026-09-06-192327688-preserve-distinct-newtype-identities-without-wrapper-allocat.html">2026 09 06 192327688 preserve distinct newtype identities without wrapper allocat</a></li>
+<li><a href="2026-09-06-192327695-publish-checked-inferred-documentation-without-executing-exa.html">2026 09 06 192327695 publish checked inferred documentation without executing exa</a></li>
+<li><a href="2026-09-06-192327703-complete-one-incomplete-member-using-independent-current-sou.html">2026 09 06 192327703 complete one incomplete member using independent current sou</a></li>
+<li><a href="2026-09-06-192327711-evaluate-immutable-json-in-the-repl-with-explicit-aggregate.html">2026 09 06 192327711 evaluate immutable json in the repl with explicit aggregate</a></li>
+<li><a href="2026-09-06-192327718-execute-documentation-examples-as-checked-native-tests.html">2026 09 06 192327718 execute documentation examples as checked native tests</a></li>
+<li><a href="2026-09-12-192327362-deliver-a-bounded-rust-hosted-web-preview-while-retaining-fu.html">2026 09 12 192327362 deliver a bounded rust hosted web preview while retaining fu</a></li>
+<li><a href="2026-09-12-192327369-prioritize-supervised-native-actors-and-reactive-fern-webass.html">2026 09 12 192327369 prioritize supervised native actors and reactive fern webass</a></li>
+<li><a href="2026-09-12-192327376-preserve-safe-native-service-boundaries-during-the-rust-rewr.html">2026 09 12 192327376 preserve safe native service boundaries during the rust rewr</a></li>
+<li><a href="2026-09-12-192327383-replace-the-legacy-implementation-with-a-rust-workspace.html">2026 09 12 192327383 replace the legacy implementation with a rust workspace</a></li>
+<li><a href="2026-09-12-192327389-preserve-bounded-inline-value-match-arms.html">2026 09 12 192327389 preserve bounded inline value match arms</a></li>
+<li><a href="2026-09-12-192327397-preserve-consistent-tab-indentation-during-compiler-migratio.html">2026 09 12 192327397 preserve consistent tab indentation during compiler migratio</a></li>
+<li><a href="2026-09-12-192327404-preserve-lookup-accountability-across-denied-directory-searc.html">2026 09 12 192327404 preserve lookup accountability across denied directory searc</a></li>
+<li><a href="2026-09-12-192327410-retain-separate-measured-compiler-budgets-during-default-mig.html">2026 09 12 192327410 retain separate measured compiler budgets during default mig</a></li>
+<li><a href="2026-09-12-192327417-ship-the-rust-compiler-as-fern-with-explicit-native-componen.html">2026 09 12 192327417 ship the rust compiler as fern with explicit native componen</a></li>
+<li><a href="2026-09-12-192327423-preserve-executable-c-source-operations-through-typed-rust-l.html">2026 09 12 192327423 preserve executable c source operations through typed rust l</a></li>
+<li><a href="2026-09-12-192327429-complete-cli-and-interactive-tool-compatibility-with-safe-ru.html">2026 09 12 192327429 complete cli and interactive tool compatibility with safe ru</a></li>
+<li><a href="2026-09-12-192327436-prove-bounded-recursive-result-builder-contracts.html">2026 09 12 192327436 prove bounded recursive result builder contracts</a></li>
+<li><a href="2026-09-12-192327444-close-sqlite-handles-explicitly-and-bound-live-connections.html">2026 09 12 192327444 close sqlite handles explicitly and bound live connections</a></li>
+<li><a href="2026-09-13-192327249-keep-actor-cleanup-attached-to-logical-function-activations.html">2026 09 13 192327249 keep actor cleanup attached to logical function activations</a></li>
+<li><a href="2026-09-13-192327256-run-source-actors-interactively-under-deterministic-virtual.html">2026 09 13 192327256 run source actors interactively under deterministic virtual</a></li>
+<li><a href="2026-09-13-192327263-execute-custom-json-methods-inside-a-shared-codec-boundary.html">2026 09 13 192327263 execute custom json methods inside a shared codec boundary</a></li>
+<li><a href="2026-09-13-192327270-preserve-logical-call-and-loop-state-in-typed-actor-continua.html">2026 09 13 192327270 preserve logical call and loop state in typed actor continua</a></li>
+<li><a href="2026-09-13-192327277-refine-json-unions-with-bounded-structural-evidence.html">2026 09 13 192327277 refine json unions with bounded structural evidence</a></li>
+<li><a href="2026-09-13-192327284-keep-foreign-abi-and-pointer-ownership-explicit.html">2026 09 13 192327284 keep foreign abi and pointer ownership explicit</a></li>
+<li><a href="2026-09-13-192327291-run-portable-language-values-in-bounded-wasm-memory.html">2026 09 13 192327291 run portable language values in bounded wasm memory</a></li>
+<li><a href="2026-09-13-192327298-implement-immutable-sets-over-the-existing-traced-collection.html">2026 09 13 192327298 implement immutable sets over the existing traced collection</a></li>
+<li><a href="2026-09-13-192327307-evaluate-constants-with-the-checked-language-and-no-host-cap.html">2026 09 13 192327307 evaluate constants with the checked language and no host cap</a></li>
+<li><a href="2026-09-13-192327315-resolve-coherent-traits-statically-and-derive-value-behavior.html">2026 09 13 192327315 resolve coherent traits statically and derive value behavior</a></li>
+<li><a href="2026-09-13-192327321-observe-pinned-workers-without-queuing-behind-their-callback.html">2026 09 13 192327321 observe pinned workers without queuing behind their callback</a></li>
+<li><a href="2026-09-13-192327328-exercise-production-boundaries-under-seeded-virtual-time.html">2026 09 13 192327328 exercise production boundaries under seeded virtual time</a></li>
+<li><a href="2026-09-13-192327335-reuse-actor-slots-and-suspend-recursive-unit-tail-paths.html">2026 09 13 192327335 reuse actor slots and suspend recursive unit tail paths</a></li>
+<li><a href="2026-09-13-192327342-pin-room-runtimes-to-workers-with-shared-admission-and-durab.html">2026 09 13 192327342 pin room runtimes to workers with shared admission and durab</a></li>
+<li><a href="2026-09-13-192327348-execute-complete-fern-application-logic-through-explicit-bro.html">2026 09 13 192327348 execute complete fern application logic through explicit bro</a></li>
+<li><a href="2026-09-13-192327355-commit-bounded-room-checkpoints-before-acknowledging-shared.html">2026 09 13 192327355 commit bounded room checkpoints before acknowledging shared</a></li>
+<li><a href="2026-09-14-192327141-generate-hexdocs-style-documentation-sites-from-moduledoc-do.html">2026 09 14 192327141 generate hexdocs style documentation sites from moduledoc do</a></li>
+<li><a href="2026-09-14-192327148-sort-structured-elements-through-ord-with-a-runtime-driven-m.html">2026 09 14 192327148 sort structured elements through ord with a runtime driven m</a></li>
+<li><a href="2026-09-14-192327155-print-structured-values-through-show-with-an-on-demand-prelu.html">2026 09 14 192327155 print structured values through show with an on demand prelu</a></li>
+<li><a href="2026-09-14-192327163-report-argument-type-mismatches-before-missing-labels-add-so.html">2026 09 14 192327163 report argument type mismatches before missing labels add so</a></li>
+<li><a href="2026-09-14-192327169-provide-non-faulting-positional-list-access-and-exact-intege.html">2026 09 14 192327169 provide non faulting positional list access and exact intege</a></li>
+<li><a href="2026-09-14-192327183-name-the-nearest-known-symbol-and-the-missing-cases-in-diagn.html">2026 09 14 192327183 name the nearest known symbol and the missing cases in diagn</a></li>
+<li><a href="2026-09-14-192327198-expose-safe-constant-arithmetic-and-retain-integer-tail-para.html">2026 09 14 192327198 expose safe constant arithmetic and retain integer tail para</a></li>
+<li><a href="2026-09-14-192327208-optimize-native-list-callbacks-under-explicit-scope-and-allo.html">2026 09 14 192327208 optimize native list callbacks under explicit scope and allo</a></li>
+<li><a href="2026-09-14-192327215-reuse-native-callback-root-registrations-without-changing-im.html">2026 09 14 192327215 reuse native callback root registrations without changing im</a></li>
+<li><a href="2026-09-14-192327222-standardize-live-browser-and-peer-messages-on-a-bounded-prot.html">2026 09 14 192327222 standardize live browser and peer messages on a bounded prot</a></li>
+<li><a href="2026-09-14-192327228-measure-codecs-separately-from-transport-and-delivery-semant.html">2026 09 14 192327228 measure codecs separately from transport and delivery semant</a></li>
+<li><a href="2026-09-14-192327235-connect-fixed-room-owners-through-authenticated-bounded-forw.html">2026 09 14 192327235 connect fixed room owners through authenticated bounded forw</a></li>
+<li><a href="2026-09-14-192327242-compose-actor-functions-through-typed-returns-and-ordinary-c.html">2026 09 14 192327242 compose actor functions through typed returns and ordinary c</a></li>
+<li><a href="2026-09-15-192327121-finish-the-language-guides-and-support-richer-documentation.html">2026 09 15 192327121 finish the language guides and support richer documentation</a></li>
+<li><a href="2026-09-15-192327128-move-heap-ownership-from-thread-local-storage-to-an-explicit.html">2026 09 15 192327128 move heap ownership from thread local storage to an explicit</a></li>
+<li><a href="2026-09-15-192327135-rename-the-language-to-morrow.html">2026 09 15 192327135 rename the language to morrow</a></li>
+<li><a href="2026-09-19-192327032-account-for-removed-self-calls-in-bounded-actor-tail-batches.html">2026 09 19 192327032 account for removed self calls in bounded actor tail batches</a></li>
+<li><a href="2026-09-19-192327039-elide-immediately-consumed-send-result-allocations.html">2026 09 19 192327039 elide immediately consumed send result allocations</a></li>
+<li><a href="2026-09-19-192327045-defer-combined-small-copy-storage-after-repeated-stealing-re.html">2026 09 19 192327045 defer combined small copy storage after repeated stealing re</a></li>
+<li><a href="2026-09-19-192327051-add-typed-links-cooperative-exit-signals-and-first-cause-ret.html">2026 09 19 192327051 add typed links cooperative exit signals and first cause ret</a></li>
+<li><a href="2026-09-19-192327057-scan-initialized-actor-payload-roots-and-full-width-message.html">2026 09 19 192327057 scan initialized actor payload roots and full width message</a></li>
+<li><a href="2026-09-19-192327063-cache-immutable-actor-descriptors-with-unchanged-work-accoun.html">2026 09 19 192327063 cache immutable actor descriptors with unchanged work accoun</a></li>
+<li><a href="2026-09-19-192327069-add-isolated-native-processes-with-typed-monitor-identities.html">2026 09 19 192327069 add isolated native processes with typed monitor identities</a></li>
+<li><a href="2026-09-19-192327075-reuse-private-actor-frames-and-consume-sparse-allocation-map.html">2026 09 19 192327075 reuse private actor frames and consume sparse allocation map</a></li>
+<li><a href="2026-09-19-192327081-select-heap-transfer-validation-by-the-live-graph-and-foreig.html">2026 09 19 192327081 select heap transfer validation by the live graph and foreig</a></li>
+<li><a href="2026-09-19-192327087-remove-measured-actor-scheduling-and-continuation-overhead-w.html">2026 09 19 192327087 remove measured actor scheduling and continuation overhead w</a></li>
+<li><a href="2026-09-19-192327095-bound-native-actor-turns-and-transfer-eligible-heaps-between.html">2026 09 19 192327095 bound native actor turns and transfer eligible heaps between</a></li>
+<li><a href="2026-09-19-192327101-execute-pinned-actors-on-independent-schedulers-with-copied.html">2026 09 19 192327101 execute pinned actors on independent schedulers with copied</a></li>
+<li><a href="2026-09-19-192327107-retain-actor-control-records-outside-collected-program-heaps.html">2026 09 19 192327107 retain actor control records outside collected program heaps</a></li>
+<li><a href="2026-09-19-192327114-domain-ownership-is-checked-on-tokens-and-on-actor-control-r.html">2026 09 19 192327114 domain ownership is checked on tokens and on actor control r</a></li>
+<li><a href="2026-09-20-011538473-carry-live-viewer-counts-on-room-snapshots-and-publish-the-d.html">2026 09 20 011538473 carry live viewer counts on room snapshots and publish the d</a></li>
+<li><a href="2026-09-20-011538473-keep-otp-supervisor-strategies-in-a-pure-driver-owned-engine.html">2026 09 20 011538473 keep otp supervisor strategies in a pure driver owned engine</a></li>
+<li><a href="2026-09-20-022249155-issue-same-origin-sessions-from-get-session-and-create-missi.html">2026 09 20 022249155 issue same origin sessions from get session and create missi</a></li>
+<li><a href="2026-09-20-024254281-hide-the-system-dashboard-on-public-origins.html">2026 09 20 024254281 hide the system dashboard on public origins</a></li>
+<li><a href="2026-09-20-115542263-serve-the-system-dashboard-on-public-origins.html">2026 09 20 115542263 serve the system dashboard on public origins</a></li>
+<li><a href="2026-09-20-122219920-suspend-the-fly-demo-machine-when-idle.html">2026 09 20 122219920 suspend the fly demo machine when idle</a></li>
+<li><a href="build.html">Build and develop Morrow</a></li>
+<li><a href="morrow-style.html">Morrow Rust style and safety</a></li>
+</ul>
+</section>
+<section class="nav-group">
+<h2>Modules</h2>
+<ul>
+<li><a href="actor_app.html">actor_app</a></li>
+<li><a href="add.html">add</a></li>
+<li><a href="conditionals.html">conditionals</a></li>
+<li><a href="data_processing.html">data_processing</a></li>
+<li><a href="factorial.html">factorial</a></li>
+<li><a href="fibonacci.html">fibonacci</a></li>
+<li><a href="file_io.html">file_io</a></li>
+<li><a href="hello.html">hello</a></li>
+<li><a href="http_api.html">http_api</a></li>
+<li><a href="language_tour.html">language_tour</a></li>
+<li><a href="list_advanced.html">list_advanced</a></li>
+<li><a href="list_ops.html">list_ops</a></li>
+<li><a href="print_test.html">print_test</a></li>
+<li><a href="string_advanced.html">string_advanced</a></li>
+<li><a href="string_interpolation.html">string_interpolation</a></li>
+<li><a href="string_ops.html">string_ops</a></li>
+<li><a href="supervised_workers.html">supervised_workers</a></li>
+<li><a href="tiny_cli.html">tiny_cli</a></li>
+<li><a href="tui_demo.html">tui_demo</a></li>
+<li><a href="tui_project.html">tui_project</a></li>
+<li><a href="checklist.html">checklist</a></li>
+<li><a href="server.html">server</a></li>
+</ul>
+</section>
+<section class="nav-group">
+<h2>Links</h2>
+<ul>
+<li><a href="https://github.com/morrow-lang/morrow" rel="noopener">GitHub</a></li>
+<li><a href="rust/morrow_compiler/index.html" rel="noopener">Rust API (rustdoc)</a></li>
+</ul>
+</section>
+</div>
+</nav>
+<main id="content" class="content">
+<article class="guide">
+<header class="page-header"><h1 class="page-title">Types</h1></header>
+<p>This chapter describes the types a Morrow program is built from: the scalar and
+collection types the compiler knows about, the record, sum, alias, newtype and union
+declarations you write yourself, generic type parameters, and structural derivation.</p>
+<p>Morrow is statically typed. Every expression has one type that the compiler knows before
+the program runs; local <code>let</code> bindings are inferred and function signatures state their
+parameter and result types. Type names start with an uppercase letter (<code>Int</code>, <code>User</code>).
+Lowercase names in type positions (<code>a</code>, <code>key</code>) are type parameters. Generic arguments
+are written in parentheses: <code>List(Int)</code>, <code>Map(String, Int)</code>, <code>Result(Int, String)</code>.</p>
+<h2 id="scalar-types">Scalar types</h2>
+<table>
+<thead>
+<tr><th>Type</th><th>Values</th><th>Notes</th></tr>
+</thead>
+<tbody>
+<tr><td><code>Int</code></td><td>signed 64-bit integers</td><td><code>+</code>, <code>-</code> and <code>*</code> wrap; <code>/</code> and <code>%</code> fault on a zero divisor</td></tr>
+<tr><td><code>Float</code></td><td>IEEE 754 doubles</td><td>no total order; see <a href="value-traits.html#built-in-traits">Traits</a></td></tr>
+<tr><td><code>Bool</code></td><td><code>true</code>, <code>false</code></td><td><code>and</code>, <code>or</code>, <code>not</code>, <code>==</code>, <code>!=</code></td></tr>
+<tr><td><code>String</code></td><td>immutable UTF-8 text</td><td><code>String.len</code> counts bytes</td></tr>
+</tbody>
+</table>
+<pre><code class="language-morrow"><span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="kw">let</span> count: <span class="ty">Int</span> = <span class="num">9007199254740993</span>
+    <span class="kw">let</span> ratio: <span class="ty">Float</span> = <span class="num">2.5</span>
+    <span class="kw">let</span> ready: <span class="ty">Bool</span> = <span class="kw">true</span>
+    <span class="kw">let</span> name: <span class="ty">String</span> = <span class="str">&quot;Morrow 🌿&quot;</span>
+    <span class="fn">println</span>(count)
+    <span class="fn">println</span>(ratio)
+    <span class="fn">println</span>(ready)
+    <span class="fn">println</span>(name)
+    <span class="fn">println</span>(<span class="num">7</span> / <span class="num">2</span>)
+    <span class="fn">println</span>(-<span class="num">7</span> % <span class="num">3</span>)
+    <span class="fn">println</span>(<span class="num">2</span> ** <span class="num">10</span>)
+    <span class="fn">println</span>(<span class="ty">String</span>.<span class="fn">len</span>(name))
+</code></pre>
+<pre><code class="language-output">9007199254740993
+2.5
+true
+Morrow 🌿
+3
+-1
+1024
+11
+</code></pre>
+<p>Integer division truncates toward zero and the remainder takes the sign of the
+dividend. Overflow wraps rather than faulting; <code>Int.checked_add</code> and the other checked
+operations return <code>Option(Int)</code> when you need to detect it. Dividing by zero is a
+runtime fault that runs deferred cleanup and then stops the program with a diagnostic;
+see <a href="error-handling.html#no-exceptions">Error handling</a>.</p>
+<pre><code class="language-morrow"><span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="num">9223372036854775807</span> + <span class="num">1</span>)
+    <span class="fn">println</span>(<span class="ty">Int</span>.<span class="fn">checked_add</span>(<span class="num">9223372036854775807</span>, <span class="num">1</span>))
+    <span class="fn">println</span>(<span class="ty">Int</span>.<span class="fn">parse</span>(<span class="str">&quot;42&quot;</span>))
+    <span class="fn">println</span>(<span class="ty">Int</span>.<span class="fn">parse</span>(<span class="str">&quot;4x&quot;</span>))
+</code></pre>
+<pre><code class="language-output">-9223372036854775808
+None
+Some(42)
+None
+</code></pre>
+<p>Float text uses up to 17 significant digits to preserve the stored double when
+read back, and whole floats print without a fraction.</p>
+<pre><code class="language-morrow"><span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="num">1.0</span>)
+    <span class="fn">println</span>(<span class="num">0.1</span> + <span class="num">0.2</span>)
+    <span class="fn">println</span>(<span class="num">2.5</span> * <span class="num">2.0</span>)
+</code></pre>
+<pre><code class="language-output">1
+0.30000000000000004
+5
+</code></pre>
+<p>Strings, interpolation with <code>{...}</code> and the <code>String</code> module are covered in
+<a href="syntax-and-values.html#string">Strings</a>.</p>
+<h2 id="unit">Unit</h2>
+<p><code>()</code> is the type and the value of &quot;nothing&quot;. It is spelled <code>()</code> in both positions;
+<code>Unit</code> is an accepted alias in type positions. A function whose body ends in a
+Unit expression returns <code>()</code>, and a <code>let</code> may bind that value. Private functions
+infer a missing return annotation; <code>main</code> without an annotation returns <code>()</code>.</p>
+<pre><code class="language-morrow"><span class="kw">fn</span> <span class="fn">log</span>(message: <span class="ty">String</span>) -&gt; ():
+    <span class="fn">println</span>(message)
+
+<span class="kw">fn</span> <span class="fn">nothing</span>() -&gt; <span class="ty">Unit</span>: ()
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="kw">let</span> done: () = <span class="fn">log</span>(<span class="str">&quot;side effect&quot;</span>)
+    <span class="kw">let</span> also: () = <span class="fn">nothing</span>()
+    <span class="fn">println</span>(<span class="str">&quot;both bound&quot;</span>)
+</code></pre>
+<pre><code class="language-output">side effect
+both bound
+</code></pre>
+<p><code>()</code> implements <code>Show</code>, but direct <code>print</code> and <code>println</code> calls reject Unit arguments.
+Use <code>println(show(done))</code> to print its <code>()</code> representation.</p>
+<h2 id="tuples">Tuples</h2>
+<p>A tuple groups a fixed number of values of possibly different types. The type of
+<code>(1, &quot;one&quot;)</code> is <code>(Int, String)</code>. Read positions with <code>.0</code>, <code>.1</code> and so on, or
+destructure with a tuple pattern. A one-element tuple needs a trailing comma: <code>(7,)</code>
+has type <code>(Int,)</code>.</p>
+<pre><code class="language-morrow"><span class="kw">fn</span> <span class="fn">swap</span>(pair: (a, b)) -&gt; (b, a):
+    (pair.<span class="num">1</span>, pair.<span class="num">0</span>)
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="kw">let</span> pair: (<span class="ty">Int</span>, <span class="ty">String</span>) = (<span class="num">1</span>, <span class="str">&quot;one&quot;</span>)
+    <span class="kw">let</span> (number, text) = pair
+    <span class="fn">println</span>(number)
+    <span class="fn">println</span>(text)
+    <span class="fn">println</span>(pair.<span class="num">0</span>)
+    <span class="fn">println</span>(<span class="fn">swap</span>(pair))
+    <span class="fn">println</span>((<span class="num">1</span>, <span class="num">2.5</span>, <span class="kw">false</span>))
+</code></pre>
+<pre><code class="language-output">1
+one
+1
+(&quot;one&quot;, 1)
+(1, 2.5, false)
+</code></pre>
+<p>Tuples are positional. When the fields need names, declare a <a href="#records">record</a>
+instead.</p>
+<h2 id="collections">Collections</h2>
+<p><code>List(a)</code>, <code>Map(k, v)</code> and <code>Set(a)</code> are immutable. Operations that update a collection
+return a new collection and leave the original unchanged. List literals use brackets, map literals
+use <code>%{key: value}</code>, and sets are built through <code>Set.from_list</code> or <code>Set.insert</code>.</p>
+<pre><code class="language-morrow"><span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="kw">let</span> numbers: <span class="ty">List</span>(<span class="ty">Int</span>) = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+    <span class="kw">let</span> ages: <span class="ty">Map</span>(<span class="ty">String</span>, <span class="ty">Int</span>) = %{<span class="str">&quot;ada&quot;</span>: <span class="num">36</span>, <span class="str">&quot;alan&quot;</span>: <span class="num">41</span>}
+    <span class="kw">let</span> tags: <span class="ty">Set</span>(<span class="ty">String</span>) = <span class="ty">Set</span>.<span class="fn">from_list</span>([<span class="str">&quot;a&quot;</span>, <span class="str">&quot;b&quot;</span>, <span class="str">&quot;a&quot;</span>])
+    <span class="fn">println</span>(<span class="ty">List</span>.<span class="fn">push</span>(numbers, <span class="num">4</span>))
+    <span class="fn">println</span>(numbers)
+    <span class="fn">println</span>(<span class="ty">Map</span>.<span class="fn">get</span>(ages, <span class="str">&quot;ada&quot;</span>))
+    <span class="fn">println</span>(<span class="ty">Map</span>.<span class="fn">get</span>(ages, <span class="str">&quot;grace&quot;</span>))
+    <span class="fn">println</span>(<span class="ty">Set</span>.<span class="fn">len</span>(tags))
+</code></pre>
+<pre><code class="language-output">[1, 2, 3, 4]
+[1, 2, 3]
+Some(36)
+None
+2
+</code></pre>
+<p>A list has one element type. Map keys may be <code>Int</code>, <code>Bool</code>, <code>String</code> or newtypes over
+them; <code>Float</code> is not a valid key. Lookups return <code>Option(v)</code>. See the
+<a href="../../examples/list_advanced.mr">list examples</a> and <a href="sets.html">Set API</a> for more operations.</p>
+<h2 id="option-and-result">Option and Result</h2>
+<p><code>Option(a)</code> is <code>Some(value)</code> or <code>None</code>. <code>Result(a, e)</code> is <code>Ok(value)</code> or <code>Err(error)</code>.
+Morrow has no null value and no exceptions; these two types carry absence and failure,
+and the compiler requires every <code>Result</code> to be handled. Both are ordinary tagged sums
+that you match on.</p>
+<pre><code class="language-morrow"><span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="kw">let</span> maybe: <span class="ty">Option</span>(<span class="ty">Int</span>) = <span class="ty">Some</span>(<span class="num">3</span>)
+    <span class="kw">let</span> absent: <span class="ty">Option</span>(<span class="ty">Int</span>) = <span class="ty">None</span>
+    <span class="fn">println</span>(maybe)
+    <span class="fn">println</span>(absent)
+    <span class="fn">println</span>(<span class="ty">Option</span>.<span class="fn">unwrap_or</span>(absent, <span class="num">0</span>))
+    <span class="kw">let</span> outcome: <span class="ty">Result</span>(<span class="ty">Int</span>, <span class="ty">String</span>) = <span class="ty">Err</span>(<span class="str">&quot;boom&quot;</span>)
+    <span class="kw">match</span> outcome:
+        <span class="ty">Ok</span>(value) -&gt; <span class="fn">println</span>(value)
+        <span class="ty">Err</span>(message) -&gt; <span class="fn">println</span>(message)
+</code></pre>
+<pre><code class="language-output">Some(3)
+None
+0
+boom
+</code></pre>
+<p><a href="error-handling.html">Error handling</a> covers <code>?</code>, <code>with</code>, <code>defer</code> and the handling
+obligation in depth.</p>
+<h2 id="records">Records</h2>
+<p>A <code>type</code> declaration with named fields defines a record. Construct it with the type
+name and positional arguments in field order, read fields with <code>.name</code>, and build a
+changed copy with the update syntax <code>%{ value | field: new }</code>. The original is
+unchanged.</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">User</span> <span class="kw">derive</span>(<span class="ty">Show</span>):
+    name: <span class="ty">String</span>
+    email: <span class="ty">String</span>
+    age: <span class="ty">Int</span>
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="kw">let</span> user = <span class="ty">User</span>(<span class="str">&quot;Ada&quot;</span>, <span class="str">&quot;ada@example.com&quot;</span>, <span class="num">36</span>)
+    <span class="fn">println</span>(user.name)
+    <span class="kw">let</span> older = %{ user | age: <span class="num">37</span> }
+    <span class="fn">println</span>(older)
+    <span class="fn">println</span>(user)
+</code></pre>
+<pre><code class="language-output">Ada
+User(name: &quot;Ada&quot;, email: &quot;ada@example.com&quot;, age: 37)
+User(name: &quot;Ada&quot;, email: &quot;ada@example.com&quot;, age: 36)
+</code></pre>
+<p>Constructors take positional arguments; <code>User(name: &quot;Ada&quot;, ...)</code> is rejected with
+<code>this callable uses positional arguments</code>. Labeled arguments apply to functions, as
+described in <a href="labeled-calls.html">Labeled calls</a>.</p>
+<p>Records can refer to themselves through <code>Option</code>, <code>List</code> or another allocated container:</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">Node</span> <span class="kw">derive</span>(<span class="ty">Show</span>):
+    value: <span class="ty">Int</span>
+    next: <span class="ty">Option</span>(<span class="ty">Node</span>)
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="ty">Node</span>(<span class="num">1</span>, <span class="ty">Some</span>(<span class="ty">Node</span>(<span class="num">2</span>, <span class="ty">None</span>))))
+</code></pre>
+<pre><code class="language-output">Node(value: 1, next: Some(Node(value: 2, next: None)))
+</code></pre>
+<h2 id="tagged-sums">Tagged sums</h2>
+<p>A <code>type</code> whose body lists variants defines a tagged sum. Each variant is a constructor
+with zero or more payload fields. Payload fields may be named in the declaration for
+documentation; construction is positional. <code>match</code> selects a variant and binds its
+payload, and the compiler checks that every variant is covered.</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">Shape</span> <span class="kw">derive</span>(<span class="ty">Show</span>):
+    <span class="ty">Circle</span>(radius: <span class="ty">Float</span>)
+    <span class="ty">Rectangle</span>(width: <span class="ty">Float</span>, height: <span class="ty">Float</span>)
+    <span class="ty">Point</span>
+
+<span class="kw">fn</span> <span class="fn">area</span>(shape: <span class="ty">Shape</span>) -&gt; <span class="ty">Float</span>:
+    <span class="kw">match</span> shape:
+        <span class="ty">Circle</span>(radius) -&gt; <span class="num">3.0</span> * radius * radius
+        <span class="ty">Rectangle</span>(width, height) -&gt; width * height
+        <span class="ty">Point</span> -&gt; <span class="num">0.0</span>
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="fn">area</span>(<span class="ty">Circle</span>(<span class="num">1.0</span>)))
+    <span class="fn">println</span>(<span class="fn">area</span>(<span class="ty">Rectangle</span>(<span class="num">2.0</span>, <span class="num">3.5</span>)))
+    <span class="fn">println</span>([<span class="ty">Circle</span>(<span class="num">1.0</span>), <span class="ty">Rectangle</span>(<span class="num">2.0</span>, <span class="num">3.5</span>), <span class="ty">Point</span>])
+</code></pre>
+<pre><code class="language-output">3
+7
+[Circle(1), Rectangle(2, 3.5), Point]
+</code></pre>
+<p>Sums may be recursive, and they are the usual way to model trees and custom error
+types:</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">Tree</span>(a):
+    <span class="ty">Leaf</span>(value: a)
+    <span class="ty">Branch</span>(left: <span class="ty">Tree</span>(a), right: <span class="ty">Tree</span>(a))
+
+<span class="kw">fn</span> <span class="fn">sum</span>(tree: <span class="ty">Tree</span>(<span class="ty">Int</span>)) -&gt; <span class="ty">Int</span>:
+    <span class="kw">match</span> tree:
+        <span class="ty">Leaf</span>(value) -&gt; value
+        <span class="ty">Branch</span>(left, right) -&gt; <span class="fn">sum</span>(left) + <span class="fn">sum</span>(right)
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="fn">sum</span>(<span class="ty">Branch</span>(<span class="ty">Leaf</span>(<span class="num">4294967296</span>), <span class="ty">Branch</span>(<span class="ty">Leaf</span>(<span class="num">20</span>), <span class="ty">Leaf</span>(<span class="num">22</span>)))))
+</code></pre>
+<pre><code class="language-output">4294967338
+</code></pre>
+<p>Patterns, guards and exhaustiveness are described in
+<a href="language-guide.html#choose-a-result-and-work-with-lists">Control flow</a>.</p>
+<h2 id="type-aliases">Type aliases</h2>
+<p><code>type Name = Type</code> introduces a transparent alias. The alias and its target are the
+same type: a <code>Score</code> is an <code>Int</code> and can be used wherever an <code>Int</code> is expected. Aliases
+may take parameters.</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">Score</span> = <span class="ty">Int</span>
+<span class="kw">type</span> <span class="ty">Headers</span> = <span class="ty">Map</span>(<span class="ty">String</span>, <span class="ty">String</span>)
+<span class="kw">type</span> <span class="ty">Pairs</span>(a) = <span class="ty">List</span>((a, a))
+
+<span class="kw">fn</span> <span class="fn">total</span>(scores: <span class="ty">List</span>(<span class="ty">Score</span>)) -&gt; <span class="ty">Score</span>: <span class="ty">List</span>.<span class="fn">sum</span>(scores)
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="kw">let</span> headers: <span class="ty">Headers</span> = %{<span class="str">&quot;content-type&quot;</span>: <span class="str">&quot;text/plain&quot;</span>}
+    <span class="fn">println</span>(<span class="ty">Map</span>.<span class="fn">get</span>(headers, <span class="str">&quot;content-type&quot;</span>))
+    <span class="kw">let</span> plain: <span class="ty">Int</span> = <span class="fn">total</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>])
+    <span class="fn">println</span>(plain)
+    <span class="kw">let</span> pairs: <span class="ty">Pairs</span>(<span class="ty">Int</span>) = [(<span class="num">1</span>, <span class="num">2</span>), (<span class="num">3</span>, <span class="num">4</span>)]
+    <span class="fn">println</span>(pairs)
+</code></pre>
+<pre><code class="language-output">Some(&quot;text/plain&quot;)
+6
+[(1, 2), (3, 4)]
+</code></pre>
+<p>Function types are written <code>(Int) -&gt; String</code>; the <code>fn(Int) -&gt; String</code> spelling is also
+accepted. Use an alias when a function type appears in several signatures.</p>
+<h2 id="newtypes">Newtypes</h2>
+<p>A newtype wraps one payload in a distinct nominal type without allocating. Two newtypes
+over the same payload are different types, so the compiler rejects passing a
+<code>ProductId</code> where a <code>UserId</code> is required. Unwrap with <code>.0</code> or a constructor pattern.</p>
+<pre><code class="language-morrow"><span class="kw">newtype</span> <span class="ty">UserId</span> = <span class="ty">UserId</span>(<span class="ty">Int</span>)
+<span class="kw">newtype</span> <span class="ty">ProductId</span> = <span class="ty">ProductId</span>(<span class="ty">Int</span>)
+
+<span class="kw">fn</span> <span class="fn">describe</span>(id: <span class="ty">UserId</span>) -&gt; <span class="ty">String</span>:
+    <span class="str">&quot;user #{id.0}&quot;</span>
+
+<span class="kw">fn</span> <span class="fn">raw</span>(<span class="ty">UserId</span>(value): <span class="ty">UserId</span>) -&gt; <span class="ty">Int</span>: value
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="kw">let</span> id = <span class="ty">UserId</span>(<span class="num">42</span>)
+    <span class="fn">println</span>(<span class="fn">describe</span>(id))
+    <span class="fn">println</span>(<span class="fn">raw</span>(id))
+    <span class="fn">println</span>(id == <span class="ty">UserId</span>(<span class="num">42</span>))
+</code></pre>
+<pre><code class="language-output">user #42
+42
+true
+</code></pre>
+<p>Passing <code>ProductId(42)</code> to <code>describe</code> does not compile. <code>bin/morrow check ids.mr</code> reports:</p>
+<pre><code class="language-text">ids.mr:8:22: error: function return: call argument: call argument: call result: expected ids.UserId, found ids.ProductId
+      println(describe(ProductId(42)))
+</code></pre>
+<p>Arithmetic and interpolation need the payload, not the wrapper; printing needs
+<code>Show</code>, and trait-based comparison needs <code>Ord</code>:
+<code>Meters(1) + Meters(2)</code> is rejected with <code>addition operator requires Int, Float, or
+String operands</code>. <code>==</code> compares wrappers of the same newtype by payload. A generic
+newtype may use a constructor name that differs from the type name, and newtypes accept
+<code>derive</code>:</p>
+<pre><code class="language-morrow"><span class="kw">newtype</span> <span class="ty">Wrapper</span>(a) = <span class="ty">Packed</span>(a)
+<span class="kw">newtype</span> <span class="ty">UserId</span> <span class="kw">derive</span>(<span class="ty">Show</span>, <span class="ty">Eq</span>, <span class="ty">Ord</span>, <span class="ty">Clone</span>) = <span class="ty">UserId</span>(<span class="ty">Int</span>)
+
+<span class="kw">fn</span> <span class="fn">unwrap</span>(<span class="ty">Packed</span>(value): <span class="ty">Wrapper</span>(a)) -&gt; a: value
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="fn">unwrap</span>(<span class="ty">Packed</span>(<span class="str">&quot;text&quot;</span>)))
+    <span class="fn">println</span>(<span class="ty">List</span>.<span class="fn">sort</span>([<span class="ty">UserId</span>(<span class="num">3</span>), <span class="ty">UserId</span>(<span class="num">1</span>), <span class="ty">UserId</span>(<span class="num">2</span>)]))
+</code></pre>
+<pre><code class="language-output">text
+[UserId(1), UserId(2), UserId(3)]
+</code></pre>
+<p>Construction and <code>.0</code> compile to the same machine operand as the payload; wrapping an
+<code>Int</code> costs nothing at runtime. A newtype cannot contain itself directly, but recursion
+through a <code>List</code> or another allocated container is allowed. Details and limits are in
+<a href="newtypes.html">Newtypes</a>.</p>
+<h2 id="unions">Unions</h2>
+<p>A union type accepts any of an explicit, finite set of member types. Write the members
+separated by <code>|</code>, usually behind an alias. A value of union type cannot be used with a
+member-specific operation until a typed pattern narrows it: <code>name: Type</code> in a <code>match</code>
+arm binds <code>name</code> at that member&#39;s type.</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">Value</span> = <span class="ty">Int</span> | <span class="ty">String</span>
+
+<span class="kw">fn</span> <span class="fn">describe</span>(value: <span class="ty">Value</span>) -&gt; <span class="ty">String</span>:
+    <span class="kw">match</span> value:
+        n: <span class="ty">Int</span> -&gt; <span class="str">&quot;number: {n}&quot;</span>
+        s: <span class="ty">String</span> -&gt; <span class="str">&quot;text: {s}&quot;</span>
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="fn">describe</span>(<span class="num">4294967296</span>))
+    <span class="fn">println</span>(<span class="fn">describe</span>(<span class="str">&quot;morrow&quot;</span>))
+    <span class="kw">let</span> items: <span class="ty">List</span>(<span class="ty">Value</span>) = [<span class="num">1</span>, <span class="str">&quot;two&quot;</span>, <span class="num">3</span>]
+    <span class="kw">for</span> item <span class="kw">in</span> items:
+        <span class="fn">println</span>(<span class="fn">describe</span>(item))
+</code></pre>
+<pre><code class="language-output">number: 4294967296
+text: morrow
+number: 1
+text: two
+number: 3
+</code></pre>
+<p>An arm may select a subset of members with <code>name: A | B</code>, and the match must cover
+every member; a guard does not count as coverage. Passing an <code>Int</code> where <code>Int | String</code>
+is declared is allowed, as is widening a smaller union into a larger one. The compiler
+does not invent a union from unrelated branch types: both branches of an <code>if</code> still need
+the same type unless an annotation supplies the union.</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">Value</span> = <span class="ty">Int</span> | <span class="ty">String</span> | <span class="ty">Bool</span>
+
+<span class="kw">fn</span> <span class="fn">classify</span>(value: <span class="ty">Value</span>) -&gt; <span class="ty">String</span>:
+    <span class="kw">match</span> value:
+        n: <span class="ty">Int</span> -&gt; <span class="str">&quot;number {n}&quot;</span>
+        other: <span class="ty">String</span> | <span class="ty">Bool</span> -&gt; <span class="str">&quot;not a number&quot;</span>
+
+<span class="kw">fn</span> <span class="fn">widen</span>(n: <span class="ty">Int</span>) -&gt; <span class="ty">Value</span>: n
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="fn">classify</span>(<span class="kw">true</span>))
+    <span class="fn">println</span>(<span class="fn">classify</span>(<span class="fn">widen</span>(<span class="num">1</span>)))
+</code></pre>
+<pre><code class="language-output">not a number
+number 1
+</code></pre>
+<p>Operations that need one concrete type reject an unnarrowed union. <code>value + 1</code> on an
+<code>Int | String</code> fails with <code>expected Int, found Int | String</code>, and a union has no <code>Show</code>,
+so <code>println(value)</code> is rejected until you match. Members flatten and deduplicate:
+<code>Int | Int</code> is <code>Int</code>, and <code>(Int) -&gt; String | Bool</code> is a function returning a union;
+write <code>((Int) -&gt; String) | Bool</code> for a union containing a function. Containers are
+invariant: a <code>List(Int)</code> is not a <code>List(Int | String)</code>. The complete contract is in
+<a href="unions.html">Unions</a>.</p>
+<div class="alert alert-note"><p class="alert-title">Note</p>
+<p>Constructor refinements such as <code>Ok(data) | Err(msg)</code> as a type, implicit union joins
+across branches and lifted capabilities are proposals in <a href="design.html">DESIGN.md</a>;
+they are not implemented. See <a href="language-status.html">Language status</a>.</p>
+</div>
+<h2 id="generic-types">Generic types</h2>
+<p>Records and sums take type parameters in parentheses after the name. Parameters are
+lowercase identifiers and are substituted at each use; <code>Box(Int)</code> and <code>Box(String)</code> are
+distinct concrete types produced from one declaration.</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">Box</span>(a) <span class="kw">derive</span>(<span class="ty">Show</span>):
+    value: a
+
+<span class="kw">type</span> <span class="ty">Pair</span>(a, b) <span class="kw">derive</span>(<span class="ty">Show</span>):
+    left: a
+    right: b
+
+<span class="kw">fn</span> <span class="fn">swap</span>(pair: <span class="ty">Pair</span>(a, b)) -&gt; <span class="ty">Pair</span>(b, a):
+    <span class="ty">Pair</span>(pair.right, pair.left)
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="ty">Box</span>(<span class="num">1</span>))
+    <span class="fn">println</span>(<span class="ty">Box</span>(<span class="str">&quot;text&quot;</span>))
+    <span class="fn">println</span>(<span class="fn">swap</span>(<span class="ty">Pair</span>(<span class="num">1</span>, <span class="str">&quot;one&quot;</span>)))
+</code></pre>
+<pre><code class="language-output">Box(value: 1)
+Box(value: &quot;text&quot;)
+Pair(left: &quot;one&quot;, right: 1)
+</code></pre>
+<p>A parameter that appears in no field is a phantom parameter. It still distinguishes
+types, which is useful for tagging quantities with a unit:</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">Quantity</span>(unit):
+    amount: <span class="ty">Int</span>
+
+<span class="kw">type</span> <span class="ty">Meters</span>:
+    <span class="ty">Meters</span>
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="kw">let</span> distance: <span class="ty">Quantity</span>(<span class="ty">Meters</span>) = <span class="ty">Quantity</span>(<span class="num">5</span>)
+    <span class="fn">println</span>(distance.amount)
+</code></pre>
+<pre><code class="language-output">5
+</code></pre>
+<p>Function signatures and their inferred types are covered in
+<a href="syntax-and-values.html#type-annotations-and-inference">Type annotations and inference</a>;
+<code>where</code> bounds are covered in <a href="value-traits.html#bounds-on-generic-functions">Traits</a>.</p>
+<h2 id="deriving-traits">Deriving traits</h2>
+<p><code>derive(...)</code> after a record, sum or newtype name asks the compiler to generate
+structural implementations of the built-in traits <code>Show</code>, <code>Eq</code>, <code>Ord</code> and <code>Clone</code>.
+<code>Ord</code> requires <code>Eq</code> on the same type. Fields are compared and printed in declaration
+order; variants of a sum order by declaration order before their payloads.</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">Point</span> <span class="kw">derive</span>(<span class="ty">Show</span>, <span class="ty">Eq</span>, <span class="ty">Ord</span>, <span class="ty">Clone</span>):
+    x: <span class="ty">Int</span>
+    y: <span class="ty">Int</span>
+
+<span class="kw">type</span> <span class="ty">Priority</span> <span class="kw">derive</span>(<span class="ty">Show</span>, <span class="ty">Eq</span>, <span class="ty">Ord</span>):
+    <span class="ty">Low</span>
+    <span class="ty">Medium</span>
+    <span class="ty">High</span>
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="ty">List</span>.<span class="fn">sort</span>([<span class="ty">Point</span>(<span class="num">2</span>, <span class="num">1</span>), <span class="ty">Point</span>(<span class="num">1</span>, <span class="num">9</span>), <span class="ty">Point</span>(<span class="num">1</span>, <span class="num">2</span>)]))
+    <span class="fn">println</span>(<span class="ty">List</span>.<span class="fn">sort</span>([<span class="ty">High</span>, <span class="ty">Low</span>, <span class="ty">Medium</span>]))
+    <span class="fn">println</span>(<span class="fn">eq</span>(left: <span class="ty">Point</span>(<span class="num">1</span>, <span class="num">2</span>), right: <span class="ty">Point</span>(<span class="num">1</span>, <span class="num">2</span>)))
+    <span class="fn">println</span>(<span class="fn">clone</span>(<span class="ty">Point</span>(<span class="num">4</span>, <span class="num">5</span>)))
+</code></pre>
+<pre><code class="language-output">[Point(x: 1, y: 2), Point(x: 1, y: 9), Point(x: 2, y: 1)]
+[Low, Medium, High]
+true
+Point(x: 4, y: 5)
+</code></pre>
+<p>Derivation works for generic and recursive declarations when the field types support
+the trait. <code>derive(Json)</code> generates a JSON codec; see <a href="json-rust-api.html">JSON</a>. Writing your own
+implementation instead of deriving, and the exact contracts of each trait, are the
+subject of <a href="value-traits.html">Traits</a>.</p>
+<h2 id="how-values-print">How values print</h2>
+<p><code>print</code> and <code>println</code> write <code>Int</code>, <code>Float</code>, <code>Bool</code> and <code>String</code> values directly. Every
+other argument goes through the <code>Show</code> trait, so lists, maps, tuples, options, results
+and derived types print without calling <code>show</code> yourself. Inside a structured value,
+strings render as Morrow literals with <code>&quot;</code> and escapes, which keeps empty and spaced
+strings visible. <code>show(text)</code> returns that literal form; <code>println(text)</code> prints raw
+text.</p>
+<pre><code class="language-morrow"><span class="kw">type</span> <span class="ty">Point</span> <span class="kw">derive</span>(<span class="ty">Show</span>):
+    x: <span class="ty">Int</span>
+    y: <span class="ty">Int</span>
+
+<span class="kw">fn</span> <span class="fn">main</span>():
+    <span class="fn">println</span>(<span class="str">&quot;plain&quot;</span>)
+    <span class="fn">println</span>(<span class="fn">show</span>(<span class="str">&quot;plain&quot;</span>))
+    <span class="fn">println</span>([<span class="str">&quot;&quot;</span>, <span class="str">&quot;say \&quot;hi\&quot;&quot;</span>])
+    <span class="fn">println</span>(<span class="ty">Some</span>(<span class="ty">Point</span>(<span class="num">1</span>, <span class="num">2</span>)))
+    <span class="fn">println</span>(%{<span class="str">&quot;xs&quot;</span>: [<span class="num">1</span>, <span class="num">2</span>]})
+    <span class="fn">println</span>(<span class="ty">List</span>.<span class="fn">zip</span>([<span class="num">1</span>, <span class="num">2</span>], [<span class="str">&quot;x&quot;</span>, <span class="str">&quot;y&quot;</span>]))
+</code></pre>
+<pre><code class="language-output">plain
+&quot;plain&quot;
+[&quot;&quot;, &quot;say \&quot;hi\&quot;&quot;]
+Some(Point(x: 1, y: 2))
+%{&quot;xs&quot;: [1, 2]}
+[(1, &quot;x&quot;), (2, &quot;y&quot;)]
+</code></pre>
+<p>A declared type without <code>Show</code> is rejected at check time. For a <code>Point</code> record declared
+without <code>derive</code> in <code>shapes.mr</code>:</p>
+<pre><code class="language-text">shapes.mr:6:13: error: type shapes.Point has no implementation of Show; add derive(Show) to its declaration or write an impl
+      println(Point(1, 2))
+</code></pre>
+<p>Type names in diagnostics carry their module prefix, here the file name <code>shapes</code>.</p>
+<p>Functions, <code>Set(a)</code>, <code>Ordering</code> and unnarrowed unions have no <code>Show</code> implementation.
+Convert them first, for example with <code>Set.to_list</code> or a <code>match</code> on the <code>Ordering</code>.
+Unit implements <code>Show</code>, but direct printing still requires <code>show(())</code> first.</p>
+</article>
+<footer class="footer">Generated by <code>morrow doc</code>.</footer>
+</main>
+</div>
+</body>
+</html>
