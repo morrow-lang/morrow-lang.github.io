@@ -1,0 +1,9 @@
+(function() {
+    const implementors = Object.fromEntries([["morrow",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html\" title=\"trait core::ops::drop::Drop\">Drop</a> for <a class=\"struct\" href=\"morrow/native/struct.Workspace.html\" title=\"struct morrow::native::Workspace\">Workspace</a>",0]]],["morrow_json",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html\" title=\"trait core::ops::drop::Drop\">Drop</a> for <a class=\"struct\" href=\"morrow_json/scope/struct.Scope.html\" title=\"struct morrow_json::scope::Scope\">Scope</a>",0],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html\" title=\"trait core::ops::drop::Drop\">Drop</a> for <a class=\"struct\" href=\"morrow_json/scope/struct.ScopedLimits.html\" title=\"struct morrow_json::scope::ScopedLimits\">ScopedLimits</a>",0]]],["morrow_runtime",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html\" title=\"trait core::ops::drop::Drop\">Drop</a> for <a class=\"struct\" href=\"morrow_runtime/memory/struct.Root.html\" title=\"struct morrow_runtime::memory::Root\">Root</a>",0]]],["xtask",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html\" title=\"trait core::ops::drop::Drop\">Drop</a> for <a class=\"struct\" href=\"xtask/struct.Temporary.html\" title=\"struct xtask::Temporary\">Temporary</a>",0]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":59,"fragment_lengths":[288,583,298,271]}

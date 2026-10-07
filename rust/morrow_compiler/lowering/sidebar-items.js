@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["emit","emit_test","lower","lower_library","lower_test"]};

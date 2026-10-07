@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["load","load_documentation_sources","load_editor_sources","load_with_sources","source_identity"],"struct":["Error","Loaded","ModuleSymbols","SourceDiagnostic","SourceView"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["MAX_STEPS","VERSION"],"enum":["ClockError"],"fn":["advance_clock","enable_clock","fail_next_clock","run","snapshot"],"struct":["Config","Failure","Report","Snapshot"]};

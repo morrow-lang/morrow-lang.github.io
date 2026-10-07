@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ASSETS"],"fn":["asset_digest","build","integrity_manifest","validate_static_linux","worker_script"],"mod":["acceptance","publication"]};

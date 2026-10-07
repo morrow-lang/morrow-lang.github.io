@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="morrow doc">
+<title>Full-stack Morrow: actors and a reactive WebAssembly client — Morrow</title>
+<link rel="stylesheet" href="morrow-docs.css">
+<script src="morrow-search.js" defer></script>
+<script src="morrow-docs.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+<button class="menu" id="menu" type="button" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">&#9776;</button>
+<a class="topbar-title" href="index.html">Morrow</a>
+<button class="theme" id="theme" type="button" aria-label="Toggle dark mode">&#9681;</button>
+</header>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Documentation">
+<div class="brand"><a href="index.html">Morrow</a> <span class="version">v0.1.0</span></div>
+<div class="search"><input id="search" type="search" placeholder="Search" aria-label="Search documentation" autocomplete="off"><kbd>/</kbd></div>
+<ul id="search-results" class="results" hidden></ul>
+<div id="nav-lists">
+<section class="nav-group">
+<h2>Guides</h2>
+<ul>
+<li><a href="index.html">Morrow</a></li>
+<li><a href="readme.html">Morrow documentation</a></li>
+<li><a href="actor-cleanup.html">Actor-owned deferred cleanup</a></li>
+<li><a href="actor-continuations.html">Actor continuations</a></li>
+<li><a href="actor-runtime.html">Actor runtime status and contracts</a></li>
+<li><a href="actor-simulation.html">Deterministic native actor simulation</a></li>
+<li><a href="admin-dashboard.html">System dashboard</a></li>
+<li><a href="cluster.html">Connected Morrow servers</a></li>
+<li><a href="compatibility-policy.html">Compatibility and deprecation policy</a></li>
+<li><a href="comptime.html">Compile-time constants</a></li>
+<li><a href="continue-actor-parity.html">Actor parity handoff — 2026-09-19</a></li>
+<li><a href="custom-json.html">Custom JSON codecs</a></li>
+<li><a href="deploy.html">Deploy the demo and publish the docs</a></li>
+<li><a href="deterministic-simulation.html">Deterministic simulation and a Morrow demo</a></li>
+<li><a href="development-environment.html">Development environment</a></li>
+<li><a href="documentation.html">Writing and publishing documentation</a></li>
+<li><a href="ffi.html">Native foreign functions</a></li>
+<li><a href="file-text-io.html">File text IO</a></li>
+<li class="current"><a href="full-stack-architecture.html">Full-stack Morrow: actors and a reactive WebAssembly client</a>
+<ul class="members">
+<li><a href="#product-direction">Product direction</a></li>
+<li><a href="#implemented-preview-boundary">Implemented preview boundary</a></li>
+<li><a href="#decisions-to-preserve-while-implementing">Decisions to preserve while implementing</a></li>
+<li><a href="#current-gaps-and-complete-morrow-application-delivery">Current gaps and complete Morrow application delivery</a></li>
+</ul>
+</li>
+<li><a href="history.html">HISTORY</a></li>
+<li><a href="json-native-core.html">Immutable JSON native core (J1)</a></li>
+<li><a href="json-rust-api.html">Rust native JSON API</a></li>
+<li><a href="json-typed-codecs.html">Typed JSON codecs in the Rust compiler</a></li>
+<li><a href="labeled-calls.html">Source call labels</a></li>
+<li><a href="language-guide.html">Start writing Morrow</a></li>
+<li><a href="language-parity.html">Executable language compatibility</a></li>
+<li><a href="language-status.html">Executable language status</a></li>
+<li><a href="liveview-study.html">LiveView source study and Morrow&#39;s local preview</a></li>
+<li><a href="memory-management.html">Runtime memory</a></li>
+<li><a href="network-protocol.html">Morrow network protocol: decision and measurements</a></li>
+<li><a href="newtypes.html">Distinct newtypes in the Rust frontend</a></li>
+<li><a href="process-execution.html">Bounded process execution</a></li>
+<li><a href="process-model.html">Typed local processes</a></li>
+<li><a href="release-readiness.html">Morrow release readiness</a></li>
+<li><a href="repl-actors.html">Interactive actors and source simulation</a></li>
+<li><a href="result-handling.html">Result handling in the Rust compiler</a></li>
+<li><a href="rust-actors.html">Rust native actor execution</a></li>
+<li><a href="rust-workspace.html">RUST WORKSPACE</a></li>
+<li><a href="sets.html">Immutable sets</a></li>
+<li><a href="sql-lifecycle.html">SQL connection lifecycle</a></li>
+<li><a href="stdlib-api-reference.html">Morrow Standard Library API Reference (Gate C)</a></li>
+<li><a href="string-decimal.html">Decimal text classification</a></li>
+<li><a href="test-runner.html">Rust unit tests and documentation examples</a></li>
+<li><a href="tooling-parity.html">Compiler tooling contracts</a></li>
+<li><a href="traits.html">Traits and explicit structural derivation</a></li>
+<li><a href="unions.html">Finite unions in the Rust frontend</a></li>
+<li><a href="wasm-language.html">Portable Morrow language execution</a></li>
+<li><a href="web-application-acceptance.html">WEB APPLICATION ACCEPTANCE</a></li>
+<li><a href="web-preview.html">Morrow web preview</a></li>
+<li><a href="web-workers.html">Web actor workers</a></li>
+<li><a href="wire-standard-proposal.html">Adopted Morrow live wire standard</a></li>
+<li><a href="error-handling.html">Error handling</a></li>
+<li><a href="getting-started.html">Getting started</a></li>
+<li><a href="overview.html">Morrow language guide</a></li>
+<li><a href="syntax-and-values.html">Syntax and values</a></li>
+<li><a href="types.html">Types</a></li>
+<li><a href="value-traits.html">Traits</a></li>
+<li><a href="design.html">Morrow Language Design Document</a></li>
+<li><a href="roadmap.html">Morrow Roadmap</a></li>
+<li><a href="2026-01-26-192328363-python-style-indentation-syntax.html">2026 01 26 192328363 python style indentation syntax</a></li>
+<li><a href="2026-01-26-192328373-implementing-compiler-in-c-with-safety-libraries.html">2026 01 26 192328373 implementing compiler in c with safety libraries</a></li>
+<li><a href="2026-01-26-192328383-compiling-to-c-via-qbe.html">2026 01 26 192328383 compiling to c via qbe</a></li>
+<li><a href="2026-01-27-192328294-using-operator-instead-of.html">2026 01 27 192328294 using operator instead of</a></li>
+<li><a href="2026-01-27-192328303-no-panics-or-crashes.html">2026 01 27 192328303 no panics or crashes</a></li>
+<li><a href="2026-01-27-192328311-actor-based-concurrency-model.html">2026 01 27 192328311 actor based concurrency model</a></li>
+<li><a href="2026-01-27-192328326-labeled-arguments-for-clarity.html">2026 01 27 192328326 labeled arguments for clarity</a></li>
+<li><a href="2026-01-27-192328336-with-expression-for-complex-error-handling.html">2026 01 27 192328336 with expression for complex error handling</a></li>
+<li><a href="2026-01-27-192328345-defer-statement-for-resource-cleanup.html">2026 01 27 192328345 defer statement for resource cleanup</a></li>
+<li><a href="2026-01-27-192328354-doc-tests-for-reliability.html">2026 01 27 192328354 doc tests for reliability</a></li>
+<li><a href="2026-01-28-192328215-deterministic-simulation-testing-for-actors-fernsim.html">2026 01 28 192328215 deterministic simulation testing for actors fernsim</a></li>
+<li><a href="2026-01-28-192328224-hexdocs-style-documentation-generation.html">2026 01 28 192328224 hexdocs style documentation generation</a></li>
+<li><a href="2026-01-28-192328232-unicode-and-emoji-identifiers.html">2026 01 28 192328232 unicode and emoji identifiers</a></li>
+<li><a href="2026-01-28-192328242-adopting-tigerbeetle-inspired-fern-style.html">2026 01 28 192328242 adopting tigerbeetle inspired fern style</a></li>
+<li><a href="2026-01-28-192328251-no-named-tuples-use-records-for-named-fields.html">2026 01 28 192328251 no named tuples use records for named fields</a></li>
+<li><a href="2026-01-28-192328259-no-unless-keyword.html">2026 01 28 192328259 no unless keyword</a></li>
+<li><a href="2026-01-28-192328267-no-while-or-loop-constructs-gleam-style.html">2026 01 28 192328267 no while or loop constructs gleam style</a></li>
+<li><a href="2026-01-28-192328276-elixir-style-record-update-syntax.html">2026 01 28 192328276 elixir style record update syntax</a></li>
+<li><a href="2026-01-28-192328285-using-operator-for-result-propagation.html">2026 01 28 192328285 using operator for result propagation</a></li>
+<li><a href="2026-01-29-192328142-perceus-style-reference-counting-for-wasm-support.html">2026 01 29 192328142 perceus style reference counting for wasm support</a></li>
+<li><a href="2026-01-29-192328151-four-pillars-philosophy-joy-one-way-no-surprises-jetpack.html">2026 01 29 192328151 four pillars philosophy joy one way no surprises jetpack</a></li>
+<li><a href="2026-01-29-192328160-tui-nested-module-namespace-for-terminal-ui.html">2026 01 29 192328160 tui nested module namespace for terminal ui</a></li>
+<li><a href="2026-01-29-192328170-embedded-qbe-compiler-backend.html">2026 01 29 192328170 embedded qbe compiler backend</a></li>
+<li><a href="2026-01-29-192328180-boehm-gc-for-automatic-memory-management.html">2026 01 29 192328180 boehm gc for automatic memory management</a></li>
+<li><a href="2026-01-29-192328199-built-in-module-syntax-for-standard-functions.html">2026 01 29 192328199 built in module syntax for standard functions</a></li>
+<li><a href="2026-01-29-192328207-optional-return-type-for-main-rust-style.html">2026 01 29 192328207 optional return type for main rust style</a></li>
+<li><a href="2026-02-06-192328020-erlang-pattern-hardening-pass-explicit-link-context-determin.html">2026 02 06 192328020 erlang pattern hardening pass explicit link context determin</a></li>
+<li><a href="2026-02-06-192328028-erlang-style-process-lifecycle-baseline-exited-pids-become-d.html">2026 02 06 192328028 erlang style process lifecycle baseline exited pids become d</a></li>
+<li><a href="2026-02-06-192328037-erlang-inspired-actor-monitoring-baseline-down-notifications.html">2026 02 06 192328037 erlang inspired actor monitoring baseline down notifications</a></li>
+<li><a href="2026-02-06-192328045-milestone-8-supervision-baseline-with-spawn-link-and-linked.html">2026 02 06 192328045 milestone 8 supervision baseline with spawn link and linked</a></li>
+<li><a href="2026-02-06-192328053-civetweb-runtime-backend-for-http-get-http-post-ship-now.html">2026 02 06 192328053 civetweb runtime backend for http get http post ship now</a></li>
+<li><a href="2026-02-06-192328062-sqlite-first-sql-runtime-backend-with-libsql-compatible-api.html">2026 02 06 192328062 sqlite first sql runtime backend with libsql compatible api</a></li>
+<li><a href="2026-02-06-192328070-gate-c-actor-runtime-core-baseline-fifo-mailbox-round-robin.html">2026 02 06 192328070 gate c actor runtime core baseline fifo mailbox round robin</a></li>
+<li><a href="2026-02-06-192328079-step-d-memory-path-selection-for-first-wasm-target.html">2026 02 06 192328079 step d memory path selection for first wasm target</a></li>
+<li><a href="2026-02-06-192328088-constrained-step-c-dup-drop-insertion-in-codegen.html">2026 02 06 192328088 constrained step c dup drop insertion in codegen</a></li>
+<li><a href="2026-02-06-192328097-perceus-object-header-contract-for-core-runtime-heap-values.html">2026 02 06 192328097 perceus object header contract for core runtime heap values</a></li>
+<li><a href="2026-02-06-192328105-runtime-memory-api-alloc-dup-drop-abstraction-with-boehm-bri.html">2026 02 06 192328105 runtime memory api alloc dup drop abstraction with boehm bri</a></li>
+<li><a href="2026-02-06-192328114-stabilize-gate-c-placeholder-runtime-behavior-with-error-ret.html">2026 02 06 192328114 stabilize gate c placeholder runtime behavior with error ret</a></li>
+<li><a href="2026-02-06-192328123-standardize-stdlib-entry-points-to-fs-json-http-sql-actors.html">2026 02 06 192328123 standardize stdlib entry points to fs json http sql actors</a></li>
+<li><a href="2026-02-06-192328132-wasm-memory-strategy-perceus-target-boehm-bridge.html">2026 02 06 192328132 wasm memory strategy perceus target boehm bridge</a></li>
+<li><a href="2026-09-05-192327726-expose-typed-rust-json-values-through-explicit-native-adapte.html">2026 09 05 192327726 expose typed rust json values through explicit native adapte</a></li>
+<li><a href="2026-09-05-192327733-preserve-resolved-global-references-as-explicit-ast-identiti.html">2026 09 05 192327733 preserve resolved global references as explicit ast identiti</a></li>
+<li><a href="2026-09-05-192327742-expand-transparent-aliases-before-nominal-checking-with-shar.html">2026 09 05 192327742 expand transparent aliases before nominal checking with shar</a></li>
+<li><a href="2026-09-05-192327750-publish-checked-source-facts-for-editor-hover.html">2026 09 05 192327750 publish checked source facts for editor hover</a></li>
+<li><a href="2026-09-05-192327758-generate-bounded-directory-documentation-as-one-searchable-a.html">2026 09 05 192327758 generate bounded directory documentation as one searchable a</a></li>
+<li><a href="2026-09-05-192327766-replace-the-json-string-copy-baseline-with-opaque-json-value.html">2026 09 05 192327766 replace the json string copy baseline with opaque json value</a></li>
+<li><a href="2026-09-05-192327774-represent-delayed-inference-shapes-with-non-executable-probe.html">2026 09 05 192327774 represent delayed inference shapes with non executable probe</a></li>
+<li><a href="2026-09-05-192327781-generalize-private-signatures-by-recursive-component.html">2026 09 05 192327781 generalize private signatures by recursive component</a></li>
+<li><a href="2026-09-05-192327789-generate-source-documentation-with-the-rust-parser.html">2026 09 05 192327789 generate source documentation with the rust parser</a></li>
+<li><a href="2026-09-05-192327797-validate-generic-bodies-with-rigid-equality-and-capability-r.html">2026 09 05 192327797 validate generic bodies with rigid equality and capability r</a></li>
+<li><a href="2026-09-05-192327805-index-editor-symbols-by-source-identity-and-lexical-scope.html">2026 09 05 192327805 index editor symbols by source identity and lexical scope</a></li>
+<li><a href="2026-09-05-192327813-infer-private-parameter-types-from-complete-pattern-evidence.html">2026 09 05 192327813 infer private parameter types from complete pattern evidence</a></li>
+<li><a href="2026-09-05-192327821-eliminate-eligible-self-tail-calls-without-changing-cleanup.html">2026 09 05 192327821 eliminate eligible self tail calls without changing cleanup</a></li>
+<li><a href="2026-09-05-192327828-normalize-adjacent-function-clauses-through-the-shared-patte.html">2026 09 05 192327828 normalize adjacent function clauses through the shared patte</a></li>
+<li><a href="2026-09-05-192327836-preserve-indentation-for-block-expressions-inside-delimiters.html">2026 09 05 192327836 preserve indentation for block expressions inside delimiters</a></li>
+<li><a href="2026-09-05-192327844-share-bounded-sequence-patterns-across-language-constructs.html">2026 09 05 192327844 share bounded sequence patterns across language constructs</a></li>
+<li><a href="2026-09-05-192327851-infer-private-return-schemes-before-concrete-specialization.html">2026 09 05 192327851 infer private return schemes before concrete specialization</a></li>
+<li><a href="2026-09-05-192327860-preserve-utf-8-strings-at-slicing-and-splitting-boundaries.html">2026 09 05 192327860 preserve utf 8 strings at slicing and splitting boundaries</a></li>
+<li><a href="2026-09-05-192327868-define-entry-errors-and-guard-legacy-runtime-preconditions.html">2026 09 05 192327868 define entry errors and guard legacy runtime preconditions</a></li>
+<li><a href="2026-09-05-192327877-define-numeric-domains-and-unwind-runtime-faults-through-cle.html">2026 09 05 192327877 define numeric domains and unwind runtime faults through cle</a></li>
+<li><a href="2026-09-05-192327886-preserve-literal-contents-and-document-unicode-identifier-sp.html">2026 09 05 192327886 preserve literal contents and document unicode identifier sp</a></li>
+<li><a href="2026-09-05-192327895-keep-iteration-lazy-and-error-handlers-concretely-typed.html">2026 09 05 192327895 keep iteration lazy and error handlers concretely typed</a></li>
+<li><a href="2026-09-05-192327902-preserve-abrupt-control-flow-and-function-exit-cleanup.html">2026 09 05 192327902 preserve abrupt control flow and function exit cleanup</a></li>
+<li><a href="2026-09-05-192327912-preserve-immutable-map-and-record-update-semantics.html">2026 09 05 192327912 preserve immutable map and record update semantics</a></li>
+<li><a href="2026-09-05-192327929-lift-typed-closures-with-explicit-environments.html">2026 09 05 192327929 lift typed closures with explicit environments</a></li>
+<li><a href="2026-09-05-192327936-make-directory-listing-failures-explicit-in-the-source-api.html">2026 09 05 192327936 make directory listing failures explicit in the source api</a></li>
+<li><a href="2026-09-05-192327944-execute-argument-vectors-without-shell-reconstruction.html">2026 09 05 192327944 execute argument vectors without shell reconstruction</a></li>
+<li><a href="2026-09-05-192327953-preserve-ieee-float-values-across-native-and-payload-boundar.html">2026 09 05 192327953 preserve ieee float values across native and payload boundar</a></li>
+<li><a href="2026-09-05-192327961-specialize-generic-code-and-preserve-nominal-type-layouts.html">2026 09 05 192327961 specialize generic code and preserve nominal type layouts</a></li>
+<li><a href="2026-09-05-192327970-extend-rust-through-typed-collections-and-built-in-sum-types.html">2026 09 05 192327970 extend rust through typed collections and built in sum types</a></li>
+<li><a href="2026-09-05-192327979-evaluate-a-safe-rust-frontend-with-typed-ir-and-the-existing.html">2026 09 05 192327979 evaluate a safe rust frontend with typed ir and the existing</a></li>
+<li><a href="2026-09-05-192327988-verify-native-diagnostics-before-replacing-the-reference-che.html">2026 09 05 192327988 verify native diagnostics before replacing the reference che</a></li>
+<li><a href="2026-09-05-192327996-actor-invariants-and-explicit-executable-feature-boundaries.html">2026 09 05 192327996 actor invariants and explicit executable feature boundaries</a></li>
+<li><a href="2026-09-05-192328004-relocatable-compiler-bundles-and-isolated-run-artifacts.html">2026 09 05 192328004 relocatable compiler bundles and isolated run artifacts</a></li>
+<li><a href="2026-09-05-192328012-deterministic-terminal-ui-composition-and-interactive-editin.html">2026 09 05 192328012 deterministic terminal ui composition and interactive editin</a></li>
+<li><a href="2026-09-06-192327451-integrate-cranelift-through-shared-typed-machine-lowering.html">2026 09 06 192327451 integrate cranelift through shared typed machine lowering</a></li>
+<li><a href="2026-09-06-192327459-use-an-explicitly-dated-nightly-for-fern-development-and-ci.html">2026 09 06 192327459 use an explicitly dated nightly for fern development and ci</a></li>
+<li><a href="2026-09-06-192327466-package-the-rust-frontend-as-an-explicit-relocatable-preview.html">2026 09 06 192327466 package the rust frontend as an explicit relocatable preview</a></li>
+<li><a href="2026-09-06-192327473-execute-bounded-typed-actors-through-explicit-native-continu.html">2026 09 06 192327473 execute bounded typed actors through explicit native continu</a></li>
+<li><a href="2026-09-06-192327479-preserve-common-cli-controls-during-rust-migration.html">2026 09 06 192327479 preserve common cli controls during rust migration</a></li>
+<li><a href="2026-09-06-192327486-incremental-rust-lint-and-benchmark-guidance.html">2026 09 06 192327486 incremental rust lint and benchmark guidance</a></li>
+<li><a href="2026-09-06-192327493-reproducible-development-tasks-with-mise.html">2026 09 06 192327493 reproducible development tasks with mise</a></li>
+<li><a href="2026-09-06-192327501-reevaluate-native-backends-with-measured-user-workflows.html">2026 09 06 192327501 reevaluate native backends with measured user workflows</a></li>
+<li><a href="2026-09-06-192327510-encode-explicitly-derived-sums-with-stable-source-tags.html">2026 09 06 192327510 encode explicitly derived sums with stable source tags</a></li>
+<li><a href="2026-09-06-192327518-retain-native-test-identity-until-descendant-cleanup-is-comp.html">2026 09 06 192327518 retain native test identity until descendant cleanup is comp</a></li>
+<li><a href="2026-09-06-192327526-respect-apple-arm64-reserved-registers-in-the-shared-backend.html">2026 09 06 192327526 respect apple arm64 reserved registers in the shared backend</a></li>
+<li><a href="2026-09-06-192327533-build-finite-recursive-json-plans-and-extend-explicit-deriva.html">2026 09 06 192327533 build finite recursive json plans and extend explicit deriva</a></li>
+<li><a href="2026-09-06-192327541-expose-canonical-formatting-through-the-editor-protocol.html">2026 09 06 192327541 expose canonical formatting through the editor protocol</a></li>
+<li><a href="2026-09-06-192327548-format-source-directories-after-complete-input-validation.html">2026 09 06 192327548 format source directories after complete input validation</a></li>
+<li><a href="2026-09-06-192327554-derive-explicit-typed-json-codecs-with-bounded-shared-execut.html">2026 09 06 192327554 derive explicit typed json codecs with bounded shared execut</a></li>
+<li><a href="2026-09-06-192327562-stop-supervised-descendants-before-fallible-exit-notificatio.html">2026 09 06 192327562 stop supervised descendants before fallible exit notificatio</a></li>
+<li><a href="2026-09-06-192327569-concentrate-new-language-features-in-rust-and-retain-c-as-a.html">2026 09 06 192327569 concentrate new language features in rust and retain c as a</a></li>
+<li><a href="2026-09-06-192327576-prove-result-handling-on-reachable-paths-before-publication.html">2026 09 06 192327576 prove result handling on reachable paths before publication</a></li>
+<li><a href="2026-09-06-192327583-check-formatting-without-modifying-source-files.html">2026 09 06 192327583 check formatting without modifying source files</a></li>
+<li><a href="2026-09-06-192327591-stage-a-verified-zed-component-with-an-immutable-grammar-rev.html">2026 09 06 192327591 stage a verified zed component with an immutable grammar rev</a></li>
+<li><a href="2026-09-06-192327599-launch-the-native-checker-through-a-content-validated-c-boot.html">2026 09 06 192327599 launch the native checker through a content validated c boot</a></li>
+<li><a href="2026-09-06-192327606-pin-decimal-text-classification-to-unicode-16-with-bounded-w.html">2026 09 06 192327606 pin decimal text classification to unicode 16 with bounded w</a></li>
+<li><a href="2026-09-06-192327613-preserve-source-label-interfaces-and-written-argument-evalua.html">2026 09 06 192327613 preserve source label interfaces and written argument evalua</a></li>
+<li><a href="2026-09-06-192327621-complete-file-text-io-before-publishing-successful-results.html">2026 09 06 192327621 complete file text io before publishing successful results</a></li>
+<li><a href="2026-09-06-192327629-port-quality-workflows-through-bounded-native-process-apis.html">2026 09 06 192327629 port quality workflows through bounded native process apis</a></li>
+<li><a href="2026-09-06-192327636-report-stderr-failures-without-changing-global-signal-policy.html">2026 09 06 192327636 report stderr failures without changing global signal policy</a></li>
+<li><a href="2026-09-06-192327643-preserve-signed-64-bit-int-through-the-c-frontend-abi.html">2026 09 06 192327643 preserve signed 64 bit int through the c frontend abi</a></li>
+<li><a href="2026-09-06-192327651-capture-bounded-literal-processes-with-explicit-cleanup-owne.html">2026 09 06 192327651 capture bounded literal processes with explicit cleanup owne</a></li>
+<li><a href="2026-09-06-192327658-generate-the-indentation-aware-editor-grammar-from-authored.html">2026 09 06 192327658 generate the indentation aware editor grammar from authored</a></li>
+<li><a href="2026-09-06-192327665-directional-finite-unions-and-typed-narrowing.html">2026 09 06 192327665 directional finite unions and typed narrowing</a></li>
+<li><a href="2026-09-06-192327673-separate-module-type-and-value-namespaces.html">2026 09 06 192327673 separate module type and value namespaces</a></li>
+<li><a href="2026-09-06-192327680-run-source-owned-unit-tests-alongside-documentation-examples.html">2026 09 06 192327680 run source owned unit tests alongside documentation examples</a></li>
+<li><a href="2026-09-06-192327688-preserve-distinct-newtype-identities-without-wrapper-allocat.html">2026 09 06 192327688 preserve distinct newtype identities without wrapper allocat</a></li>
+<li><a href="2026-09-06-192327695-publish-checked-inferred-documentation-without-executing-exa.html">2026 09 06 192327695 publish checked inferred documentation without executing exa</a></li>
+<li><a href="2026-09-06-192327703-complete-one-incomplete-member-using-independent-current-sou.html">2026 09 06 192327703 complete one incomplete member using independent current sou</a></li>
+<li><a href="2026-09-06-192327711-evaluate-immutable-json-in-the-repl-with-explicit-aggregate.html">2026 09 06 192327711 evaluate immutable json in the repl with explicit aggregate</a></li>
+<li><a href="2026-09-06-192327718-execute-documentation-examples-as-checked-native-tests.html">2026 09 06 192327718 execute documentation examples as checked native tests</a></li>
+<li><a href="2026-09-12-192327362-deliver-a-bounded-rust-hosted-web-preview-while-retaining-fu.html">2026 09 12 192327362 deliver a bounded rust hosted web preview while retaining fu</a></li>
+<li><a href="2026-09-12-192327369-prioritize-supervised-native-actors-and-reactive-fern-webass.html">2026 09 12 192327369 prioritize supervised native actors and reactive fern webass</a></li>
+<li><a href="2026-09-12-192327376-preserve-safe-native-service-boundaries-during-the-rust-rewr.html">2026 09 12 192327376 preserve safe native service boundaries during the rust rewr</a></li>
+<li><a href="2026-09-12-192327383-replace-the-legacy-implementation-with-a-rust-workspace.html">2026 09 12 192327383 replace the legacy implementation with a rust workspace</a></li>
+<li><a href="2026-09-12-192327389-preserve-bounded-inline-value-match-arms.html">2026 09 12 192327389 preserve bounded inline value match arms</a></li>
+<li><a href="2026-09-12-192327397-preserve-consistent-tab-indentation-during-compiler-migratio.html">2026 09 12 192327397 preserve consistent tab indentation during compiler migratio</a></li>
+<li><a href="2026-09-12-192327404-preserve-lookup-accountability-across-denied-directory-searc.html">2026 09 12 192327404 preserve lookup accountability across denied directory searc</a></li>
+<li><a href="2026-09-12-192327410-retain-separate-measured-compiler-budgets-during-default-mig.html">2026 09 12 192327410 retain separate measured compiler budgets during default mig</a></li>
+<li><a href="2026-09-12-192327417-ship-the-rust-compiler-as-fern-with-explicit-native-componen.html">2026 09 12 192327417 ship the rust compiler as fern with explicit native componen</a></li>
+<li><a href="2026-09-12-192327423-preserve-executable-c-source-operations-through-typed-rust-l.html">2026 09 12 192327423 preserve executable c source operations through typed rust l</a></li>
+<li><a href="2026-09-12-192327429-complete-cli-and-interactive-tool-compatibility-with-safe-ru.html">2026 09 12 192327429 complete cli and interactive tool compatibility with safe ru</a></li>
+<li><a href="2026-09-12-192327436-prove-bounded-recursive-result-builder-contracts.html">2026 09 12 192327436 prove bounded recursive result builder contracts</a></li>
+<li><a href="2026-09-12-192327444-close-sqlite-handles-explicitly-and-bound-live-connections.html">2026 09 12 192327444 close sqlite handles explicitly and bound live connections</a></li>
+<li><a href="2026-09-13-192327249-keep-actor-cleanup-attached-to-logical-function-activations.html">2026 09 13 192327249 keep actor cleanup attached to logical function activations</a></li>
+<li><a href="2026-09-13-192327256-run-source-actors-interactively-under-deterministic-virtual.html">2026 09 13 192327256 run source actors interactively under deterministic virtual</a></li>
+<li><a href="2026-09-13-192327263-execute-custom-json-methods-inside-a-shared-codec-boundary.html">2026 09 13 192327263 execute custom json methods inside a shared codec boundary</a></li>
+<li><a href="2026-09-13-192327270-preserve-logical-call-and-loop-state-in-typed-actor-continua.html">2026 09 13 192327270 preserve logical call and loop state in typed actor continua</a></li>
+<li><a href="2026-09-13-192327277-refine-json-unions-with-bounded-structural-evidence.html">2026 09 13 192327277 refine json unions with bounded structural evidence</a></li>
+<li><a href="2026-09-13-192327284-keep-foreign-abi-and-pointer-ownership-explicit.html">2026 09 13 192327284 keep foreign abi and pointer ownership explicit</a></li>
+<li><a href="2026-09-13-192327291-run-portable-language-values-in-bounded-wasm-memory.html">2026 09 13 192327291 run portable language values in bounded wasm memory</a></li>
+<li><a href="2026-09-13-192327298-implement-immutable-sets-over-the-existing-traced-collection.html">2026 09 13 192327298 implement immutable sets over the existing traced collection</a></li>
+<li><a href="2026-09-13-192327307-evaluate-constants-with-the-checked-language-and-no-host-cap.html">2026 09 13 192327307 evaluate constants with the checked language and no host cap</a></li>
+<li><a href="2026-09-13-192327315-resolve-coherent-traits-statically-and-derive-value-behavior.html">2026 09 13 192327315 resolve coherent traits statically and derive value behavior</a></li>
+<li><a href="2026-09-13-192327321-observe-pinned-workers-without-queuing-behind-their-callback.html">2026 09 13 192327321 observe pinned workers without queuing behind their callback</a></li>
+<li><a href="2026-09-13-192327328-exercise-production-boundaries-under-seeded-virtual-time.html">2026 09 13 192327328 exercise production boundaries under seeded virtual time</a></li>
+<li><a href="2026-09-13-192327335-reuse-actor-slots-and-suspend-recursive-unit-tail-paths.html">2026 09 13 192327335 reuse actor slots and suspend recursive unit tail paths</a></li>
+<li><a href="2026-09-13-192327342-pin-room-runtimes-to-workers-with-shared-admission-and-durab.html">2026 09 13 192327342 pin room runtimes to workers with shared admission and durab</a></li>
+<li><a href="2026-09-13-192327348-execute-complete-fern-application-logic-through-explicit-bro.html">2026 09 13 192327348 execute complete fern application logic through explicit bro</a></li>
+<li><a href="2026-09-13-192327355-commit-bounded-room-checkpoints-before-acknowledging-shared.html">2026 09 13 192327355 commit bounded room checkpoints before acknowledging shared</a></li>
+<li><a href="2026-09-14-192327141-generate-hexdocs-style-documentation-sites-from-moduledoc-do.html">2026 09 14 192327141 generate hexdocs style documentation sites from moduledoc do</a></li>
+<li><a href="2026-09-14-192327148-sort-structured-elements-through-ord-with-a-runtime-driven-m.html">2026 09 14 192327148 sort structured elements through ord with a runtime driven m</a></li>
+<li><a href="2026-09-14-192327155-print-structured-values-through-show-with-an-on-demand-prelu.html">2026 09 14 192327155 print structured values through show with an on demand prelu</a></li>
+<li><a href="2026-09-14-192327163-report-argument-type-mismatches-before-missing-labels-add-so.html">2026 09 14 192327163 report argument type mismatches before missing labels add so</a></li>
+<li><a href="2026-09-14-192327169-provide-non-faulting-positional-list-access-and-exact-intege.html">2026 09 14 192327169 provide non faulting positional list access and exact intege</a></li>
+<li><a href="2026-09-14-192327183-name-the-nearest-known-symbol-and-the-missing-cases-in-diagn.html">2026 09 14 192327183 name the nearest known symbol and the missing cases in diagn</a></li>
+<li><a href="2026-09-14-192327198-expose-safe-constant-arithmetic-and-retain-integer-tail-para.html">2026 09 14 192327198 expose safe constant arithmetic and retain integer tail para</a></li>
+<li><a href="2026-09-14-192327208-optimize-native-list-callbacks-under-explicit-scope-and-allo.html">2026 09 14 192327208 optimize native list callbacks under explicit scope and allo</a></li>
+<li><a href="2026-09-14-192327215-reuse-native-callback-root-registrations-without-changing-im.html">2026 09 14 192327215 reuse native callback root registrations without changing im</a></li>
+<li><a href="2026-09-14-192327222-standardize-live-browser-and-peer-messages-on-a-bounded-prot.html">2026 09 14 192327222 standardize live browser and peer messages on a bounded prot</a></li>
+<li><a href="2026-09-14-192327228-measure-codecs-separately-from-transport-and-delivery-semant.html">2026 09 14 192327228 measure codecs separately from transport and delivery semant</a></li>
+<li><a href="2026-09-14-192327235-connect-fixed-room-owners-through-authenticated-bounded-forw.html">2026 09 14 192327235 connect fixed room owners through authenticated bounded forw</a></li>
+<li><a href="2026-09-14-192327242-compose-actor-functions-through-typed-returns-and-ordinary-c.html">2026 09 14 192327242 compose actor functions through typed returns and ordinary c</a></li>
+<li><a href="2026-09-15-192327121-finish-the-language-guides-and-support-richer-documentation.html">2026 09 15 192327121 finish the language guides and support richer documentation</a></li>
+<li><a href="2026-09-15-192327128-move-heap-ownership-from-thread-local-storage-to-an-explicit.html">2026 09 15 192327128 move heap ownership from thread local storage to an explicit</a></li>
+<li><a href="2026-09-15-192327135-rename-the-language-to-morrow.html">2026 09 15 192327135 rename the language to morrow</a></li>
+<li><a href="2026-09-19-192327032-account-for-removed-self-calls-in-bounded-actor-tail-batches.html">2026 09 19 192327032 account for removed self calls in bounded actor tail batches</a></li>
+<li><a href="2026-09-19-192327039-elide-immediately-consumed-send-result-allocations.html">2026 09 19 192327039 elide immediately consumed send result allocations</a></li>
+<li><a href="2026-09-19-192327045-defer-combined-small-copy-storage-after-repeated-stealing-re.html">2026 09 19 192327045 defer combined small copy storage after repeated stealing re</a></li>
+<li><a href="2026-09-19-192327051-add-typed-links-cooperative-exit-signals-and-first-cause-ret.html">2026 09 19 192327051 add typed links cooperative exit signals and first cause ret</a></li>
+<li><a href="2026-09-19-192327057-scan-initialized-actor-payload-roots-and-full-width-message.html">2026 09 19 192327057 scan initialized actor payload roots and full width message</a></li>
+<li><a href="2026-09-19-192327063-cache-immutable-actor-descriptors-with-unchanged-work-accoun.html">2026 09 19 192327063 cache immutable actor descriptors with unchanged work accoun</a></li>
+<li><a href="2026-09-19-192327069-add-isolated-native-processes-with-typed-monitor-identities.html">2026 09 19 192327069 add isolated native processes with typed monitor identities</a></li>
+<li><a href="2026-09-19-192327075-reuse-private-actor-frames-and-consume-sparse-allocation-map.html">2026 09 19 192327075 reuse private actor frames and consume sparse allocation map</a></li>
+<li><a href="2026-09-19-192327081-select-heap-transfer-validation-by-the-live-graph-and-foreig.html">2026 09 19 192327081 select heap transfer validation by the live graph and foreig</a></li>
+<li><a href="2026-09-19-192327087-remove-measured-actor-scheduling-and-continuation-overhead-w.html">2026 09 19 192327087 remove measured actor scheduling and continuation overhead w</a></li>
+<li><a href="2026-09-19-192327095-bound-native-actor-turns-and-transfer-eligible-heaps-between.html">2026 09 19 192327095 bound native actor turns and transfer eligible heaps between</a></li>
+<li><a href="2026-09-19-192327101-execute-pinned-actors-on-independent-schedulers-with-copied.html">2026 09 19 192327101 execute pinned actors on independent schedulers with copied</a></li>
+<li><a href="2026-09-19-192327107-retain-actor-control-records-outside-collected-program-heaps.html">2026 09 19 192327107 retain actor control records outside collected program heaps</a></li>
+<li><a href="2026-09-19-192327114-domain-ownership-is-checked-on-tokens-and-on-actor-control-r.html">2026 09 19 192327114 domain ownership is checked on tokens and on actor control r</a></li>
+<li><a href="2026-09-20-011538473-carry-live-viewer-counts-on-room-snapshots-and-publish-the-d.html">2026 09 20 011538473 carry live viewer counts on room snapshots and publish the d</a></li>
+<li><a href="2026-09-20-011538473-keep-otp-supervisor-strategies-in-a-pure-driver-owned-engine.html">2026 09 20 011538473 keep otp supervisor strategies in a pure driver owned engine</a></li>
+<li><a href="2026-09-20-022249155-issue-same-origin-sessions-from-get-session-and-create-missi.html">2026 09 20 022249155 issue same origin sessions from get session and create missi</a></li>
+<li><a href="2026-09-20-024254281-hide-the-system-dashboard-on-public-origins.html">2026 09 20 024254281 hide the system dashboard on public origins</a></li>
+<li><a href="2026-09-20-115542263-serve-the-system-dashboard-on-public-origins.html">2026 09 20 115542263 serve the system dashboard on public origins</a></li>
+<li><a href="2026-09-20-122219920-suspend-the-fly-demo-machine-when-idle.html">2026 09 20 122219920 suspend the fly demo machine when idle</a></li>
+<li><a href="build.html">Build and develop Morrow</a></li>
+<li><a href="morrow-style.html">Morrow Rust style and safety</a></li>
+</ul>
+</section>
+<section class="nav-group">
+<h2>Modules</h2>
+<ul>
+<li><a href="actor_app.html">actor_app</a></li>
+<li><a href="add.html">add</a></li>
+<li><a href="conditionals.html">conditionals</a></li>
+<li><a href="data_processing.html">data_processing</a></li>
+<li><a href="factorial.html">factorial</a></li>
+<li><a href="fibonacci.html">fibonacci</a></li>
+<li><a href="file_io.html">file_io</a></li>
+<li><a href="hello.html">hello</a></li>
+<li><a href="http_api.html">http_api</a></li>
+<li><a href="language_tour.html">language_tour</a></li>
+<li><a href="list_advanced.html">list_advanced</a></li>
+<li><a href="list_ops.html">list_ops</a></li>
+<li><a href="print_test.html">print_test</a></li>
+<li><a href="string_advanced.html">string_advanced</a></li>
+<li><a href="string_interpolation.html">string_interpolation</a></li>
+<li><a href="string_ops.html">string_ops</a></li>
+<li><a href="supervised_workers.html">supervised_workers</a></li>
+<li><a href="tiny_cli.html">tiny_cli</a></li>
+<li><a href="tui_demo.html">tui_demo</a></li>
+<li><a href="tui_project.html">tui_project</a></li>
+<li><a href="checklist.html">checklist</a></li>
+<li><a href="server.html">server</a></li>
+</ul>
+</section>
+<section class="nav-group">
+<h2>Links</h2>
+<ul>
+<li><a href="https://github.com/morrow-lang/morrow" rel="noopener">GitHub</a></li>
+<li><a href="rust/morrow_compiler/index.html" rel="noopener">Rust API (rustdoc)</a></li>
+</ul>
+</section>
+</div>
+</nav>
+<main id="content" class="content">
+<article class="guide">
+<header class="page-header"><h1 class="page-title">Full-stack Morrow: actors and a reactive WebAssembly client</h1></header>
+<p>Date: 2026-09-12. Decision124 adopts this direction; Decision125 records the first
+implemented foundations. This document is the full architecture and acceptance
+plan. The <a href="web-preview.html">web preview guide</a> describes what runs today; the earlier
+<a href="rust-workspace.html">Rust workspace acceptance</a> records the native migration scope.</p>
+<h2 id="product-direction">Product direction</h2>
+<p>Build a coherent alternative for applications that would otherwise use
+Elixir/Phoenix: native Morrow actors own server state, Morrow compiled to WebAssembly
+owns browser interaction and rendering, and typed messages connect the two over
+WebSocket. Keep the small native CLI use case supported.</p>
+<p>The application author writes Morrow and shares suitable data types and pure
+functions between targets. Compiler, runtime, browser host, renderer and build
+tooling remain Rust-authored. A first-party web/UI framework owns routing,
+components and application conventions; these do not become special cases in
+the language type checker or mandatory dependencies of every CLI executable.</p>
+<p>Phoenix LiveView retains state on the server and updates the browser through its
+rendering protocol. Morrow&#39;s selected starting model puts a reactive UI program in
+the browser, exchanging application data with the server. This is a different
+rendering architecture with a similar goal of one coherent development experience.
+See <a href="https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html">LiveView&#39;s lifecycle</a>.</p>
+<pre><code class="language-mermaid">flowchart LR
+    Shared[Shared Morrow types and pure functions] --&gt; Native[Native server build]
+    Shared --&gt; Browser[Morrow WebAssembly build]
+    Native --&gt; Actors[Supervised domain actors]
+    Actors &lt;--&gt; Session[Authenticated session gateway]
+    Session &lt;--&gt;|Versioned commands and snapshots| Browser
+    Browser --&gt; Update[Local model and update function]
+    Update --&gt; View[View and keyed DOM renderer]
+    View --&gt; Events[Browser input events]
+    Events --&gt; Update
+</code></pre>
+<p>Shared source does not imply shared memory, shared authority or remote function
+calls. Native actor messages, browser events and network messages have different
+ownership and delivery contracts.</p>
+<h2 id="implemented-preview-boundary">Implemented preview boundary</h2>
+<p>The collaborative checklist runs its complete typed domain, local model,
+event update and keyed view in compiled Morrow. A generic Rust browser host supplies
+DOM, storage and transport capabilities. On the server, a native compiled Morrow
+actor owns each room, reached through explicitly rooted host sessions and typed
+reply ports on pinned owner threads. Stable room placement shares global
+admission and resource limits across configurable workers; a separate
+authentication owner can revoke queued work while a room is busy. Optional local
+room checkpoints commit through one shared Rust writer before acknowledgement
+and restore into actors under fresh incarnations. See the
+<a href="web-workers.html">worker contract</a> for the implemented concurrency boundary.</p>
+<p>The bounded command/snapshot protocol implements revision conflicts, sequence
+high-water marks, retained duplicate outcomes, distinct resource/namespace/socket
+identities, expiry and reset handling. The transport adds authentication, Origin
+and CSRF checks, revocation, bounded admission/queues and socket deadlines. Offline
+loading restores cached assets, confirmed state and a local draft; shared changes
+require connectivity and uncertain mutations are not blindly replayed.</p>
+<p><code>cargo xtask web-build</code> embeds all browser assets and dependency notices in a
+server executable. ARM64 Linux musl execution has been exercised unprivileged in
+an empty chroot with two real browser clients, including offline reload and
+reconnect. x86-64 musl ELF structure has been validated, without x86-64 execution.
+These checks establish a useful preview, not all acceptance cases below.
+The final macOS browser acceptance additionally passed cold service-worker restart,
+offline draft/filter recovery, 320-pixel mobile layout and rejection of a tampered
+HTTP-200 asset update while retaining the prior offline cache. Fresh macOS native
+quality checks and equivalent Linux coverage across resumed runs also passed;
+the <a href="web-preview.html#verification">verification record</a> gives their exact scope.</p>
+<p>Separately, native Morrow actors now own payload heaps and copy message/capture
+graphs. Compiler root frames and scoped runtime roots are explicit, while ordinary
+native collection still conservatively scans stack/register state and heap words.
+The WASM backend branches from semantic IR and supports bounded records, tagged
+sums, lists, tuples, Option/Result and UTF-8 strings with precise child tracing.
+Managed host values use type-checked, nonwrapping i64/BigInt handles. Native and
+browser modules share source, not linear memory. Maps, closures, indirect calls,
+native capabilities, generic wire-schema generation and application-independent
+packaging remain open. See <a href="memory-management.html">memory management</a>.</p>
+<h2 id="decisions-to-preserve-while-implementing">Decisions to preserve while implementing</h2>
+<h3 id="automatic-memory-with-explicit-ownership-inside-the-runtime">Automatic memory with explicit ownership inside the runtime</h3>
+<p>Do not introduce mandatory borrow checking, move syntax or lifetime annotations
+into ordinary Morrow application code. For this actor-oriented workload, prioritize
+isolation and bounded scheduling over replacing all collection with reference
+counting. Inferred ownership, borrowing and allocation reuse remain internal
+optimizations, subject to semantic and performance tests.</p>
+<p>The server target is <strong>actor-owned tracing heaps</strong>, initially nonmoving with
+precise roots. A collector for one actor must not trace another actor&#39;s heap.
+Every suspended continuation, mailbox and native handle has a known owner and a
+defined cleanup path. Actor termination releases its heap and closes/cancels
+owned resources; GC finalization is not a substitute for reliable resource close.</p>
+<p>Messages and spawned captures must be copied into receiver-owned storage, or into
+an owned message fragment that the receiver adopts. Preserve sharing within the
+copied graph, enforce deterministic traversal/byte bounds, and publish only a
+complete copy. Allocation failure must leave both actors&#39; observable state intact.
+Ordinary actors cannot retain pointers into another actor&#39;s heap. A later shared
+immutable binary facility may use reference counting with explicit accounting;
+this is an optimization, not a prerequisite for the first implementation.</p>
+<p>This choice draws on Erlang&#39;s use of process-local tracing heaps and its separation
+of ordinary message copying from shared large binaries. It does not adopt every
+BEAM collector detail. <a href="https://www.erlang.org/doc/apps/erts/garbagecollection.html">Erlang GC</a>,
+<a href="https://www.erlang.org/doc/system/eff_guide_processes.html#sending-messages">message ownership</a>.</p>
+<p>Per-actor heaps alone do not guarantee low latency. Collection, allocation,
+message copying and mailbox searches must be charged to explicit work budgets.
+Start with bounded heaps and measure worst-case collection; incremental or
+generational collection requires its own evidence. Do not advertise pause-free
+execution or a hard real-time guarantee.</p>
+<h3 id="fair-execution-before-multicore-claims">Fair execution before multicore claims</h3>
+<p>Native actor code must yield through compiler-defined safepoints, with a work
+budget analogous in purpose to reductions. Loops, recursion and actor-reachable
+helper calls must preserve all live state in resumable continuations. A poll that
+cannot suspend the call chain is not a fairness mechanism. Root information must
+be valid at every allocation, yield and callback boundary.</p>
+<p>Readiness-driven network IO wakes actors through an external event loop. A server
+waiting for registered external events is idle, not deadlocked. Unavoidable
+blocking file, database and process work runs in a bounded worker facility. Such
+jobs exchange Rust-owned requests/results, never borrowed Morrow heap pointers.
+Cancellation and late completion must respect actor identity generations.</p>
+<p>Prove isolation and fairness on one scheduler worker first. Then pin actors to
+multiple workers with single execution ownership and owned cross-worker messages.
+Migration and work stealing come later, after suspended heaps and continuations
+can transfer safely. Do not add <code>Send</code> implementations around the current TLS heap
+or hold a global runtime lock across IO as a shortcut to parallelism.</p>
+<h3 id="typed-supervision-and-durable-state-are-separate-contracts">Typed supervision and durable state are separate contracts</h3>
+<p>Supervision must wrap the actors that actually execute typed Morrow functions.
+Define child startup, failure, cancellation, restart policy, restart intensity,
+subtree shutdown and fresh identity explicitly. Recoverable actor failures do not
+stop unrelated actors. Ordinary recoverable native-runtime faults must propagate
+through actor failure handling. Generated checked source calls already carry an
+actor fault cell; legacy unchecked <code>abi::fault</code> entry points can still terminate
+the process. A supervisor cannot recover after the whole process has exited.
+Runtime corruption or an unsafe implementation defect may
+still terminate the OS process; native actors are not security sandboxes.</p>
+<p>Restart reconstructs state from a declared initializer or durable store. It does
+not resurrect the previous heap or make effects exactly once. Durable mutation,
+acknowledgement and deduplication need an application transaction boundary.
+<a href="https://hexdocs.pm/elixir/Supervisor.html">Elixir supervision</a> is a behavioral
+reference, not evidence that those guarantees exist in Morrow today.</p>
+<h3 id="a-browser-target-with-its-own-abi">A browser target with its own ABI</h3>
+<p>Share the parser, checker, semantic type identities and portable typed IR. Branch
+the WebAssembly backend before native lowering erases pointers, handles and
+callback identities into 64-bit words. Cranelift remains the native backend;
+targeting browsers requires a separate WebAssembly emitter.</p>
+<p>The initial implementation target is <strong>wasm32 linear memory with a small precise
+tracing runtime and compiler-maintained roots</strong>. Keep language <code>Int</code> as i64 while
+making pointer width, layout, alignment and handle representation target-specific.
+Do not truncate native addresses or copy native ABI records into browser memory.
+Calls use validated function/table identities rather than native code addresses.</p>
+<p>Native stack/register scanning cannot supply browser roots. Keep every live
+managed reference visible to the browser collector across allocations, callbacks
+and event-loop yields. Start with one browser execution context and bounded event
+processing; workers and shared browser memory require separate acceptance.</p>
+<p>WasmGC is a real alternative to evaluate using the same programs. It is not
+rejected as unavailable, and it is not the initial backend dependency. The choice
+must be revisited if bundle size, pause time or interop measurements show an
+advantage sufficient to justify a different representation. Compare both before
+stabilizing the browser ABI. Automatic memory semantics should remain stable
+across targets even when collectors differ.
+<a href="https://webassembly.org/features/">WebAssembly feature status</a> and
+<a href="https://webassembly.org/news/2025-09-17-wasm-3.0/">WebAssembly 3.0</a>.</p>
+<p>Prove how generated Morrow code calls the Rust browser runtime early: a versioned
+module import/export boundary may precede single-module packaging. There must be
+one explicit memory/allocator owner, nonoverlapping static-data regions and tested
+initialization order. A general WebAssembly linker is not a prerequisite for the
+first UI. The native static archive is not a browser runtime artifact.</p>
+<p>Browser APIs require host imports. A Rust-authored browser host and generated
+bindings provide DOM, events, timers, networking and asset loading. Generated
+JavaScript loading/interop glue is a build artifact; handwritten JavaScript is
+not part of Morrow&#39;s implementation or application-author workflow. This does not
+restore the removed Tree-sitter integration. WASI is not a substitute for browser
+DOM integration. <a href="https://webassembly.org/docs/web/">WebAssembly browser embedding</a>.</p>
+<p>Host handles have explicit lifetime and release rules. Unmount must remove event
+subscriptions and release DOM references so cross-language cycles do not retain
+an application indefinitely. Never retain a stale view into linear memory across
+memory growth. Browser-unavailable APIs such as native filesystem/process APIs
+and SQLite native handles must be rejected by target capability checking, even
+in imported modules reached indirectly from the application.</p>
+<h3 id="a-local-reactive-ui-and-an-authoritative-server">A local reactive UI and an authoritative server</h3>
+<p>Start with an explicit model/update/view architecture: browser events and server
+messages update immutable local state, and a keyed renderer updates the DOM.
+Effects run through explicit commands. Typing, focus and local validation must
+remain responsive without a network round trip. Server-owned business state is
+authoritative; client state may contain drafts, selections and pending commands.</p>
+<p>Use ordinary accessible DOM elements, preserve focus and text selection, and
+release handlers on unmount. Do not require a canvas-only UI. The first version
+uses confirmed server state rather than optimistic durable mutations; later
+optimism needs reconciliation rules. Routing, server rendering/hydration and
+fine-grained reactive optimizations follow the first functional client.</p>
+<h3 id="a-typed-wire-protocol-not-remote-actor-pointers">A typed wire protocol, not remote actor pointers</h3>
+<p>The server validates every browser message against the authenticated principal
+and selected resource. Shared types improve development but do not make the
+network trustworthy. Never serialize heap addresses, closures, native handles
+or local PIDs. A session gateway maps authorized requests to domain actors.</p>
+<p>Start with bounded, versioned JSON command/snapshot envelopes. Generate both
+ends&#39; wire codecs from an explicitly supported shared type subset. This is a
+separate wire contract, not a silent change to ordinary <code>derive(Json)</code> behavior.
+Use canonical decimal strings for full-width integers and revisions so browser
+host code cannot round them through JavaScript numbers; reject nonfinite floats.
+Test malformed, oversized, recursive and schema-incompatible messages before effects.</p>
+<p>Keep three identities distinct: server/resource incarnation, resumable client
+command namespace, and physical connection generation. Reconnect negotiates the
+protocol and reauthorizes access; it may resume a still-valid command namespace
+but always obtains a fresh connection generation and snapshot. Commands carry
+the resource incarnation, expected revision and monotonic client sequence;
+snapshots carry incarnation and revision. Ordering is per resource, not global.
+Within one incarnation, clients ignore stale revisions; complete snapshots can
+safely skip intermediate revisions. A later delta protocol must request a
+snapshot when its required base revision is missing. Protocol mismatches require
+a visible upgrade/reload response.</p>
+<p>WebSocket delivery within one connection does not provide exactly-once effects
+across reconnects. Start with one outstanding mutation per client command
+namespace. Retain a sequence high-water mark and bounded recent outcomes;
+requests at or below the mark can never execute again, even after their cached
+outcome expires. Reject reuse of a retained command ID with a different payload.
+After authorization, resolve duplicate outcomes before testing expected revision.
+An expired outcome yields an explicit unknown result and resync. Expired
+server-issued namespaces are invalid; they cannot be recreated by client input.
+Automatic retry after a process restart requires durable idempotency information
+committed with the mutation. Otherwise report uncertain completion and refresh
+state without blindly retrying a non-idempotent command.</p>
+<p>An ephemeral domain actor restart creates a new resource incarnation even when
+the server and socket remain alive. Gateways invalidate its old outcome cache;
+clients accept an explicit reset, replace state and invalidate pending commands
+from the old incarnation. A restarted server also invalidates old client command
+namespaces. Neither reset silently replays mutations into the replacement state.</p>
+<p>Bound per-connection input, queued commands, output bytes and subscriptions.
+Also impose process-wide admission limits on handshakes, connections, rooms,
+queued bytes and retained resumable-session/deduplication metadata. Expire retained
+metadata explicitly and expose overload rejection; connection churn cannot evade
+aggregate limits.
+Coalesce replaceable snapshots; never discard command outcomes as if they were
+snapshots. Slow consumers are resynchronized or disconnected under documented
+limits. Enforce browser output thresholds as well as server queues. Define heartbeat
+expiry, reconnect backoff with jitter and reconnect-storm admission limits.
+Authenticate the upgrade, validate browser origins and authorize
+each resource operation; cookie-authenticated upgrades need CSRF protection and
+active sessions must react to revocation. Use WSS outside loopback development.
+Cancellation and disconnect close socket resources and subscriptions. Bounded
+resumable command metadata survives disconnect only until its declared expiry;
+logout/revocation invalidates its namespace.</p>
+<h3 id="scale-in-stages">Scale in stages</h3>
+<p>One node must first demonstrate sustained work on multiple cores with bounded
+memory and fair progress. Shard state by room, tenant or another explicit key;
+one hot actor still serializes its work. <a href="cluster.html">Fixed multi-node placement and routing</a>
+now connect gateways to native room owners through authenticated TLS. Local
+checkpoint recovery and explicit uncertain completion are tested across real
+processes. Dynamic ownership epochs, replicated failover and distributed recovery
+remain separate milestones. A WebSocket connection is not durable application state.</p>
+<p>Embedded SQLite remains useful for local/single-node state. Adding server nodes
+does not turn independent SQLite files into a shared transactional database.
+The deployment model must choose partitioned local ownership or a suitable shared
+durable store before claiming transparent horizontal scaling.</p>
+<p>Record actor identity/generation, trace and command IDs, mailbox depth, rejected
+work, scheduler delay, heap/GC work, restart counts, socket backlog and reconnects.
+No speed, connection-count or Phoenix parity claim is accepted without a pinned
+workload, hardware description and latency/memory distributions.</p>
+<p>Measure compiler latency and generated server executable size separately from
+runtime performance. For browser builds, report compressed WASM plus required
+glue/assets, cold load to usable UI, local input latency, GC pauses and memory
+after repeated mount/unmount. For the full stack, record acknowledged-command
+latency and throughput under slow clients, reconnects and a saturated actor.
+Compare with Phoenix using the same application behavior and resource limits;
+native code or WebAssembly alone is not evidence of a faster user experience.</p>
+<h2 id="current-gaps-and-complete-morrow-application-delivery">Current gaps and complete Morrow application delivery</h2>
+<p>Actor-owned payload heaps and copied messages are implemented. Native callbacks
+still run cooperatively. Eligible recursive Unit-tail paths yield through rooted
+continuations; numeric/non-tail calls and collection loops remain synchronous.
+Opt-in typed supervision restarts supported checked faults while unsupervised
+faults can stop their invocation. Reusable slots preserve immutable generations
+and stale-PID semantics. Rooted native host sessions can remain idle for external
+input. General preemption, complete precise root/layout coverage and bounded
+blocking-service scheduling remain open. See
+<a href="rust-actors.html">current actor contracts</a>.</p>
+<p>The <strong>two-browser collaborative checklist</strong> now executes its compiled domain
+actor and complete Morrow model/update/view. Pinned worker threads own independent
+room runtimes behind authorized gateways. The process shares admission and
+resource limits, and optionally commits room checkpoints before acknowledgement.
+Server or domain-actor restart creates a fresh incarnation; configured durable
+state is restored, while pending commands are not automatically replayed into
+the new incarnation. Transactional external effects and multi-node durable
+ownership remain later gates. The application-specific wire schema and build
+paths still need a general framework contract and packaging API.</p>
+<p>Implementation gates are ordered in the <a href="roadmap.html">roadmap</a>. Browser and
+server foundations can progress independently after shared type/layout contracts.
+Independent room-worker progress does not establish general actor preemption,
+work stealing or distributed execution. Sustained scaling retains its own gate.</p>
+<p>The complete Morrow demo is accepted only when real browser tests demonstrate
+all of the following. The current preview covers part of this list; protocol unit
+tests do not replace real typed-actor failure or aggregate browser ABI acceptance:</p>
+<ol>
+<li>Both browser instances agree after concurrent commands, with independent
+expected state and no lost acknowledged updates.</li>
+<li>Local typing stays responsive during delayed, disconnected or reconnecting
+transport. State-changing commands are visibly pending/rejected, not silently lost.</li>
+<li>Duplicate commands, expired outcomes/namespaces, stale revisions, reconnects
+and incompatible versions produce the declared outcomes. Server and domain
+actor restart explicitly declare reset; neither pretends an acknowledgement
+persisted when it did not.</li>
+<li>Invalid/oversized/unauthorized input has no application effects. A slow consumer
+cannot create unbounded mailboxes, browser queues or server output buffers.
+Reconnect churn respects aggregate session and retained-metadata limits.</li>
+<li>Actor failure and session teardown preserve unrelated work, release handles
+and respect restart budgets. Browser unmount/reload releases subscriptions.</li>
+<li>Target ABI and wire tests preserve i64 extremes, Unicode, tagged values and
+nested collections; GC under pressure preserves suspended and shared values.</li>
+<li>Browser output is compiled Morrow WebAssembly, with Rust-authored host support,
+reproducible generated glue and execution tests of the generated module.</li>
+</ol>
+<p>Later release gates add sustained multi-worker churn, fair progress during CPU
+and blocking-IO pressure, stable memory, network disruption and durable failover.
+Budget values must be fixed alongside their independent tests before each gate
+is marked complete; the current native quotas are not inherited as web defaults.</p>
+</article>
+<footer class="footer">Generated by <code>morrow doc</code>.</footer>
+</main>
+</div>
+</body>
+</html>

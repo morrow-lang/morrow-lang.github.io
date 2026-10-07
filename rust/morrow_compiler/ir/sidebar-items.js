@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ActorExpr","Builtin","CallTarget","ExprKind","LayoutStorage","Pattern","Stmt"],"struct":["Capture","CodecTemplateToken","EditorHoleToken","Expr","Function","FunctionId","LocalId","MatchArm","Param","ProbeToken","Program","TypeLayout","WithHandler","WithStep"]};

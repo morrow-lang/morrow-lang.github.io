@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ASSETS"],"fn":["asset_integrities","cache_path"]};

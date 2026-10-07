@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="morrow doc">
+<title>Morrow Roadmap — Morrow</title>
+<link rel="stylesheet" href="morrow-docs.css">
+<script src="morrow-search.js" defer></script>
+<script src="morrow-docs.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+<button class="menu" id="menu" type="button" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">&#9776;</button>
+<a class="topbar-title" href="index.html">Morrow</a>
+<button class="theme" id="theme" type="button" aria-label="Toggle dark mode">&#9681;</button>
+</header>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Documentation">
+<div class="brand"><a href="index.html">Morrow</a> <span class="version">v0.1.0</span></div>
+<div class="search"><input id="search" type="search" placeholder="Search" aria-label="Search documentation" autocomplete="off"><kbd>/</kbd></div>
+<ul id="search-results" class="results" hidden></ul>
+<div id="nav-lists">
+<section class="nav-group">
+<h2>Guides</h2>
+<ul>
+<li><a href="index.html">Morrow</a></li>
+<li><a href="readme.html">Morrow documentation</a></li>
+<li><a href="actor-cleanup.html">Actor-owned deferred cleanup</a></li>
+<li><a href="actor-continuations.html">Actor continuations</a></li>
+<li><a href="actor-runtime.html">Actor runtime status and contracts</a></li>
+<li><a href="actor-simulation.html">Deterministic native actor simulation</a></li>
+<li><a href="admin-dashboard.html">System dashboard</a></li>
+<li><a href="cluster.html">Connected Morrow servers</a></li>
+<li><a href="compatibility-policy.html">Compatibility and deprecation policy</a></li>
+<li><a href="comptime.html">Compile-time constants</a></li>
+<li><a href="continue-actor-parity.html">Actor parity handoff — 2026-09-19</a></li>
+<li><a href="custom-json.html">Custom JSON codecs</a></li>
+<li><a href="deploy.html">Deploy the demo and publish the docs</a></li>
+<li><a href="deterministic-simulation.html">Deterministic simulation and a Morrow demo</a></li>
+<li><a href="development-environment.html">Development environment</a></li>
+<li><a href="documentation.html">Writing and publishing documentation</a></li>
+<li><a href="ffi.html">Native foreign functions</a></li>
+<li><a href="file-text-io.html">File text IO</a></li>
+<li><a href="full-stack-architecture.html">Full-stack Morrow: actors and a reactive WebAssembly client</a></li>
+<li><a href="history.html">HISTORY</a></li>
+<li><a href="json-native-core.html">Immutable JSON native core (J1)</a></li>
+<li><a href="json-rust-api.html">Rust native JSON API</a></li>
+<li><a href="json-typed-codecs.html">Typed JSON codecs in the Rust compiler</a></li>
+<li><a href="labeled-calls.html">Source call labels</a></li>
+<li><a href="language-guide.html">Start writing Morrow</a></li>
+<li><a href="language-parity.html">Executable language compatibility</a></li>
+<li><a href="language-status.html">Executable language status</a></li>
+<li><a href="liveview-study.html">LiveView source study and Morrow&#39;s local preview</a></li>
+<li><a href="memory-management.html">Runtime memory</a></li>
+<li><a href="network-protocol.html">Morrow network protocol: decision and measurements</a></li>
+<li><a href="newtypes.html">Distinct newtypes in the Rust frontend</a></li>
+<li><a href="process-execution.html">Bounded process execution</a></li>
+<li><a href="process-model.html">Typed local processes</a></li>
+<li><a href="release-readiness.html">Morrow release readiness</a></li>
+<li><a href="repl-actors.html">Interactive actors and source simulation</a></li>
+<li><a href="result-handling.html">Result handling in the Rust compiler</a></li>
+<li><a href="rust-actors.html">Rust native actor execution</a></li>
+<li><a href="rust-workspace.html">RUST WORKSPACE</a></li>
+<li><a href="sets.html">Immutable sets</a></li>
+<li><a href="sql-lifecycle.html">SQL connection lifecycle</a></li>
+<li><a href="stdlib-api-reference.html">Morrow Standard Library API Reference (Gate C)</a></li>
+<li><a href="string-decimal.html">Decimal text classification</a></li>
+<li><a href="test-runner.html">Rust unit tests and documentation examples</a></li>
+<li><a href="tooling-parity.html">Compiler tooling contracts</a></li>
+<li><a href="traits.html">Traits and explicit structural derivation</a></li>
+<li><a href="unions.html">Finite unions in the Rust frontend</a></li>
+<li><a href="wasm-language.html">Portable Morrow language execution</a></li>
+<li><a href="web-application-acceptance.html">WEB APPLICATION ACCEPTANCE</a></li>
+<li><a href="web-preview.html">Morrow web preview</a></li>
+<li><a href="web-workers.html">Web actor workers</a></li>
+<li><a href="wire-standard-proposal.html">Adopted Morrow live wire standard</a></li>
+<li><a href="error-handling.html">Error handling</a></li>
+<li><a href="getting-started.html">Getting started</a></li>
+<li><a href="overview.html">Morrow language guide</a></li>
+<li><a href="syntax-and-values.html">Syntax and values</a></li>
+<li><a href="types.html">Types</a></li>
+<li><a href="value-traits.html">Traits</a></li>
+<li><a href="design.html">Morrow Language Design Document</a></li>
+<li class="current"><a href="roadmap.html">Morrow Roadmap</a>
+<ul class="members">
+<li><a href="#current-status-snapshot">Current Status Snapshot</a></li>
+<li><a href="#canonical-documents">Canonical Documents</a></li>
+<li><a href="#completed-foundations">Completed Foundations</a></li>
+<li><a href="#rust-frontend-evaluation-2026-09-05">Rust Frontend Evaluation (2026-09-05)</a></li>
+<li><a href="#active-priorities">Active Priorities</a></li>
+<li><a href="#user-workflow-closure-2026-09-05">User Workflow Closure (2026-09-05)</a></li>
+<li><a href="#remaining-language-completion-requirements">Remaining Language Completion Requirements</a></li>
+<li><a href="#next-session-start-here">Next Session Start Here</a></li>
+</ul>
+</li>
+<li><a href="2026-01-26-192328363-python-style-indentation-syntax.html">2026 01 26 192328363 python style indentation syntax</a></li>
+<li><a href="2026-01-26-192328373-implementing-compiler-in-c-with-safety-libraries.html">2026 01 26 192328373 implementing compiler in c with safety libraries</a></li>
+<li><a href="2026-01-26-192328383-compiling-to-c-via-qbe.html">2026 01 26 192328383 compiling to c via qbe</a></li>
+<li><a href="2026-01-27-192328294-using-operator-instead-of.html">2026 01 27 192328294 using operator instead of</a></li>
+<li><a href="2026-01-27-192328303-no-panics-or-crashes.html">2026 01 27 192328303 no panics or crashes</a></li>
+<li><a href="2026-01-27-192328311-actor-based-concurrency-model.html">2026 01 27 192328311 actor based concurrency model</a></li>
+<li><a href="2026-01-27-192328326-labeled-arguments-for-clarity.html">2026 01 27 192328326 labeled arguments for clarity</a></li>
+<li><a href="2026-01-27-192328336-with-expression-for-complex-error-handling.html">2026 01 27 192328336 with expression for complex error handling</a></li>
+<li><a href="2026-01-27-192328345-defer-statement-for-resource-cleanup.html">2026 01 27 192328345 defer statement for resource cleanup</a></li>
+<li><a href="2026-01-27-192328354-doc-tests-for-reliability.html">2026 01 27 192328354 doc tests for reliability</a></li>
+<li><a href="2026-01-28-192328215-deterministic-simulation-testing-for-actors-fernsim.html">2026 01 28 192328215 deterministic simulation testing for actors fernsim</a></li>
+<li><a href="2026-01-28-192328224-hexdocs-style-documentation-generation.html">2026 01 28 192328224 hexdocs style documentation generation</a></li>
+<li><a href="2026-01-28-192328232-unicode-and-emoji-identifiers.html">2026 01 28 192328232 unicode and emoji identifiers</a></li>
+<li><a href="2026-01-28-192328242-adopting-tigerbeetle-inspired-fern-style.html">2026 01 28 192328242 adopting tigerbeetle inspired fern style</a></li>
+<li><a href="2026-01-28-192328251-no-named-tuples-use-records-for-named-fields.html">2026 01 28 192328251 no named tuples use records for named fields</a></li>
+<li><a href="2026-01-28-192328259-no-unless-keyword.html">2026 01 28 192328259 no unless keyword</a></li>
+<li><a href="2026-01-28-192328267-no-while-or-loop-constructs-gleam-style.html">2026 01 28 192328267 no while or loop constructs gleam style</a></li>
+<li><a href="2026-01-28-192328276-elixir-style-record-update-syntax.html">2026 01 28 192328276 elixir style record update syntax</a></li>
+<li><a href="2026-01-28-192328285-using-operator-for-result-propagation.html">2026 01 28 192328285 using operator for result propagation</a></li>
+<li><a href="2026-01-29-192328142-perceus-style-reference-counting-for-wasm-support.html">2026 01 29 192328142 perceus style reference counting for wasm support</a></li>
+<li><a href="2026-01-29-192328151-four-pillars-philosophy-joy-one-way-no-surprises-jetpack.html">2026 01 29 192328151 four pillars philosophy joy one way no surprises jetpack</a></li>
+<li><a href="2026-01-29-192328160-tui-nested-module-namespace-for-terminal-ui.html">2026 01 29 192328160 tui nested module namespace for terminal ui</a></li>
+<li><a href="2026-01-29-192328170-embedded-qbe-compiler-backend.html">2026 01 29 192328170 embedded qbe compiler backend</a></li>
+<li><a href="2026-01-29-192328180-boehm-gc-for-automatic-memory-management.html">2026 01 29 192328180 boehm gc for automatic memory management</a></li>
+<li><a href="2026-01-29-192328199-built-in-module-syntax-for-standard-functions.html">2026 01 29 192328199 built in module syntax for standard functions</a></li>
+<li><a href="2026-01-29-192328207-optional-return-type-for-main-rust-style.html">2026 01 29 192328207 optional return type for main rust style</a></li>
+<li><a href="2026-02-06-192328020-erlang-pattern-hardening-pass-explicit-link-context-determin.html">2026 02 06 192328020 erlang pattern hardening pass explicit link context determin</a></li>
+<li><a href="2026-02-06-192328028-erlang-style-process-lifecycle-baseline-exited-pids-become-d.html">2026 02 06 192328028 erlang style process lifecycle baseline exited pids become d</a></li>
+<li><a href="2026-02-06-192328037-erlang-inspired-actor-monitoring-baseline-down-notifications.html">2026 02 06 192328037 erlang inspired actor monitoring baseline down notifications</a></li>
+<li><a href="2026-02-06-192328045-milestone-8-supervision-baseline-with-spawn-link-and-linked.html">2026 02 06 192328045 milestone 8 supervision baseline with spawn link and linked</a></li>
+<li><a href="2026-02-06-192328053-civetweb-runtime-backend-for-http-get-http-post-ship-now.html">2026 02 06 192328053 civetweb runtime backend for http get http post ship now</a></li>
+<li><a href="2026-02-06-192328062-sqlite-first-sql-runtime-backend-with-libsql-compatible-api.html">2026 02 06 192328062 sqlite first sql runtime backend with libsql compatible api</a></li>
+<li><a href="2026-02-06-192328070-gate-c-actor-runtime-core-baseline-fifo-mailbox-round-robin.html">2026 02 06 192328070 gate c actor runtime core baseline fifo mailbox round robin</a></li>
+<li><a href="2026-02-06-192328079-step-d-memory-path-selection-for-first-wasm-target.html">2026 02 06 192328079 step d memory path selection for first wasm target</a></li>
+<li><a href="2026-02-06-192328088-constrained-step-c-dup-drop-insertion-in-codegen.html">2026 02 06 192328088 constrained step c dup drop insertion in codegen</a></li>
+<li><a href="2026-02-06-192328097-perceus-object-header-contract-for-core-runtime-heap-values.html">2026 02 06 192328097 perceus object header contract for core runtime heap values</a></li>
+<li><a href="2026-02-06-192328105-runtime-memory-api-alloc-dup-drop-abstraction-with-boehm-bri.html">2026 02 06 192328105 runtime memory api alloc dup drop abstraction with boehm bri</a></li>
+<li><a href="2026-02-06-192328114-stabilize-gate-c-placeholder-runtime-behavior-with-error-ret.html">2026 02 06 192328114 stabilize gate c placeholder runtime behavior with error ret</a></li>
+<li><a href="2026-02-06-192328123-standardize-stdlib-entry-points-to-fs-json-http-sql-actors.html">2026 02 06 192328123 standardize stdlib entry points to fs json http sql actors</a></li>
+<li><a href="2026-02-06-192328132-wasm-memory-strategy-perceus-target-boehm-bridge.html">2026 02 06 192328132 wasm memory strategy perceus target boehm bridge</a></li>
+<li><a href="2026-09-05-192327726-expose-typed-rust-json-values-through-explicit-native-adapte.html">2026 09 05 192327726 expose typed rust json values through explicit native adapte</a></li>
+<li><a href="2026-09-05-192327733-preserve-resolved-global-references-as-explicit-ast-identiti.html">2026 09 05 192327733 preserve resolved global references as explicit ast identiti</a></li>
+<li><a href="2026-09-05-192327742-expand-transparent-aliases-before-nominal-checking-with-shar.html">2026 09 05 192327742 expand transparent aliases before nominal checking with shar</a></li>
+<li><a href="2026-09-05-192327750-publish-checked-source-facts-for-editor-hover.html">2026 09 05 192327750 publish checked source facts for editor hover</a></li>
+<li><a href="2026-09-05-192327758-generate-bounded-directory-documentation-as-one-searchable-a.html">2026 09 05 192327758 generate bounded directory documentation as one searchable a</a></li>
+<li><a href="2026-09-05-192327766-replace-the-json-string-copy-baseline-with-opaque-json-value.html">2026 09 05 192327766 replace the json string copy baseline with opaque json value</a></li>
+<li><a href="2026-09-05-192327774-represent-delayed-inference-shapes-with-non-executable-probe.html">2026 09 05 192327774 represent delayed inference shapes with non executable probe</a></li>
+<li><a href="2026-09-05-192327781-generalize-private-signatures-by-recursive-component.html">2026 09 05 192327781 generalize private signatures by recursive component</a></li>
+<li><a href="2026-09-05-192327789-generate-source-documentation-with-the-rust-parser.html">2026 09 05 192327789 generate source documentation with the rust parser</a></li>
+<li><a href="2026-09-05-192327797-validate-generic-bodies-with-rigid-equality-and-capability-r.html">2026 09 05 192327797 validate generic bodies with rigid equality and capability r</a></li>
+<li><a href="2026-09-05-192327805-index-editor-symbols-by-source-identity-and-lexical-scope.html">2026 09 05 192327805 index editor symbols by source identity and lexical scope</a></li>
+<li><a href="2026-09-05-192327813-infer-private-parameter-types-from-complete-pattern-evidence.html">2026 09 05 192327813 infer private parameter types from complete pattern evidence</a></li>
+<li><a href="2026-09-05-192327821-eliminate-eligible-self-tail-calls-without-changing-cleanup.html">2026 09 05 192327821 eliminate eligible self tail calls without changing cleanup</a></li>
+<li><a href="2026-09-05-192327828-normalize-adjacent-function-clauses-through-the-shared-patte.html">2026 09 05 192327828 normalize adjacent function clauses through the shared patte</a></li>
+<li><a href="2026-09-05-192327836-preserve-indentation-for-block-expressions-inside-delimiters.html">2026 09 05 192327836 preserve indentation for block expressions inside delimiters</a></li>
+<li><a href="2026-09-05-192327844-share-bounded-sequence-patterns-across-language-constructs.html">2026 09 05 192327844 share bounded sequence patterns across language constructs</a></li>
+<li><a href="2026-09-05-192327851-infer-private-return-schemes-before-concrete-specialization.html">2026 09 05 192327851 infer private return schemes before concrete specialization</a></li>
+<li><a href="2026-09-05-192327860-preserve-utf-8-strings-at-slicing-and-splitting-boundaries.html">2026 09 05 192327860 preserve utf 8 strings at slicing and splitting boundaries</a></li>
+<li><a href="2026-09-05-192327868-define-entry-errors-and-guard-legacy-runtime-preconditions.html">2026 09 05 192327868 define entry errors and guard legacy runtime preconditions</a></li>
+<li><a href="2026-09-05-192327877-define-numeric-domains-and-unwind-runtime-faults-through-cle.html">2026 09 05 192327877 define numeric domains and unwind runtime faults through cle</a></li>
+<li><a href="2026-09-05-192327886-preserve-literal-contents-and-document-unicode-identifier-sp.html">2026 09 05 192327886 preserve literal contents and document unicode identifier sp</a></li>
+<li><a href="2026-09-05-192327895-keep-iteration-lazy-and-error-handlers-concretely-typed.html">2026 09 05 192327895 keep iteration lazy and error handlers concretely typed</a></li>
+<li><a href="2026-09-05-192327902-preserve-abrupt-control-flow-and-function-exit-cleanup.html">2026 09 05 192327902 preserve abrupt control flow and function exit cleanup</a></li>
+<li><a href="2026-09-05-192327912-preserve-immutable-map-and-record-update-semantics.html">2026 09 05 192327912 preserve immutable map and record update semantics</a></li>
+<li><a href="2026-09-05-192327929-lift-typed-closures-with-explicit-environments.html">2026 09 05 192327929 lift typed closures with explicit environments</a></li>
+<li><a href="2026-09-05-192327936-make-directory-listing-failures-explicit-in-the-source-api.html">2026 09 05 192327936 make directory listing failures explicit in the source api</a></li>
+<li><a href="2026-09-05-192327944-execute-argument-vectors-without-shell-reconstruction.html">2026 09 05 192327944 execute argument vectors without shell reconstruction</a></li>
+<li><a href="2026-09-05-192327953-preserve-ieee-float-values-across-native-and-payload-boundar.html">2026 09 05 192327953 preserve ieee float values across native and payload boundar</a></li>
+<li><a href="2026-09-05-192327961-specialize-generic-code-and-preserve-nominal-type-layouts.html">2026 09 05 192327961 specialize generic code and preserve nominal type layouts</a></li>
+<li><a href="2026-09-05-192327970-extend-rust-through-typed-collections-and-built-in-sum-types.html">2026 09 05 192327970 extend rust through typed collections and built in sum types</a></li>
+<li><a href="2026-09-05-192327979-evaluate-a-safe-rust-frontend-with-typed-ir-and-the-existing.html">2026 09 05 192327979 evaluate a safe rust frontend with typed ir and the existing</a></li>
+<li><a href="2026-09-05-192327988-verify-native-diagnostics-before-replacing-the-reference-che.html">2026 09 05 192327988 verify native diagnostics before replacing the reference che</a></li>
+<li><a href="2026-09-05-192327996-actor-invariants-and-explicit-executable-feature-boundaries.html">2026 09 05 192327996 actor invariants and explicit executable feature boundaries</a></li>
+<li><a href="2026-09-05-192328004-relocatable-compiler-bundles-and-isolated-run-artifacts.html">2026 09 05 192328004 relocatable compiler bundles and isolated run artifacts</a></li>
+<li><a href="2026-09-05-192328012-deterministic-terminal-ui-composition-and-interactive-editin.html">2026 09 05 192328012 deterministic terminal ui composition and interactive editin</a></li>
+<li><a href="2026-09-06-192327451-integrate-cranelift-through-shared-typed-machine-lowering.html">2026 09 06 192327451 integrate cranelift through shared typed machine lowering</a></li>
+<li><a href="2026-09-06-192327459-use-an-explicitly-dated-nightly-for-fern-development-and-ci.html">2026 09 06 192327459 use an explicitly dated nightly for fern development and ci</a></li>
+<li><a href="2026-09-06-192327466-package-the-rust-frontend-as-an-explicit-relocatable-preview.html">2026 09 06 192327466 package the rust frontend as an explicit relocatable preview</a></li>
+<li><a href="2026-09-06-192327473-execute-bounded-typed-actors-through-explicit-native-continu.html">2026 09 06 192327473 execute bounded typed actors through explicit native continu</a></li>
+<li><a href="2026-09-06-192327479-preserve-common-cli-controls-during-rust-migration.html">2026 09 06 192327479 preserve common cli controls during rust migration</a></li>
+<li><a href="2026-09-06-192327486-incremental-rust-lint-and-benchmark-guidance.html">2026 09 06 192327486 incremental rust lint and benchmark guidance</a></li>
+<li><a href="2026-09-06-192327493-reproducible-development-tasks-with-mise.html">2026 09 06 192327493 reproducible development tasks with mise</a></li>
+<li><a href="2026-09-06-192327501-reevaluate-native-backends-with-measured-user-workflows.html">2026 09 06 192327501 reevaluate native backends with measured user workflows</a></li>
+<li><a href="2026-09-06-192327510-encode-explicitly-derived-sums-with-stable-source-tags.html">2026 09 06 192327510 encode explicitly derived sums with stable source tags</a></li>
+<li><a href="2026-09-06-192327518-retain-native-test-identity-until-descendant-cleanup-is-comp.html">2026 09 06 192327518 retain native test identity until descendant cleanup is comp</a></li>
+<li><a href="2026-09-06-192327526-respect-apple-arm64-reserved-registers-in-the-shared-backend.html">2026 09 06 192327526 respect apple arm64 reserved registers in the shared backend</a></li>
+<li><a href="2026-09-06-192327533-build-finite-recursive-json-plans-and-extend-explicit-deriva.html">2026 09 06 192327533 build finite recursive json plans and extend explicit deriva</a></li>
+<li><a href="2026-09-06-192327541-expose-canonical-formatting-through-the-editor-protocol.html">2026 09 06 192327541 expose canonical formatting through the editor protocol</a></li>
+<li><a href="2026-09-06-192327548-format-source-directories-after-complete-input-validation.html">2026 09 06 192327548 format source directories after complete input validation</a></li>
+<li><a href="2026-09-06-192327554-derive-explicit-typed-json-codecs-with-bounded-shared-execut.html">2026 09 06 192327554 derive explicit typed json codecs with bounded shared execut</a></li>
+<li><a href="2026-09-06-192327562-stop-supervised-descendants-before-fallible-exit-notificatio.html">2026 09 06 192327562 stop supervised descendants before fallible exit notificatio</a></li>
+<li><a href="2026-09-06-192327569-concentrate-new-language-features-in-rust-and-retain-c-as-a.html">2026 09 06 192327569 concentrate new language features in rust and retain c as a</a></li>
+<li><a href="2026-09-06-192327576-prove-result-handling-on-reachable-paths-before-publication.html">2026 09 06 192327576 prove result handling on reachable paths before publication</a></li>
+<li><a href="2026-09-06-192327583-check-formatting-without-modifying-source-files.html">2026 09 06 192327583 check formatting without modifying source files</a></li>
+<li><a href="2026-09-06-192327591-stage-a-verified-zed-component-with-an-immutable-grammar-rev.html">2026 09 06 192327591 stage a verified zed component with an immutable grammar rev</a></li>
+<li><a href="2026-09-06-192327599-launch-the-native-checker-through-a-content-validated-c-boot.html">2026 09 06 192327599 launch the native checker through a content validated c boot</a></li>
+<li><a href="2026-09-06-192327606-pin-decimal-text-classification-to-unicode-16-with-bounded-w.html">2026 09 06 192327606 pin decimal text classification to unicode 16 with bounded w</a></li>
+<li><a href="2026-09-06-192327613-preserve-source-label-interfaces-and-written-argument-evalua.html">2026 09 06 192327613 preserve source label interfaces and written argument evalua</a></li>
+<li><a href="2026-09-06-192327621-complete-file-text-io-before-publishing-successful-results.html">2026 09 06 192327621 complete file text io before publishing successful results</a></li>
+<li><a href="2026-09-06-192327629-port-quality-workflows-through-bounded-native-process-apis.html">2026 09 06 192327629 port quality workflows through bounded native process apis</a></li>
+<li><a href="2026-09-06-192327636-report-stderr-failures-without-changing-global-signal-policy.html">2026 09 06 192327636 report stderr failures without changing global signal policy</a></li>
+<li><a href="2026-09-06-192327643-preserve-signed-64-bit-int-through-the-c-frontend-abi.html">2026 09 06 192327643 preserve signed 64 bit int through the c frontend abi</a></li>
+<li><a href="2026-09-06-192327651-capture-bounded-literal-processes-with-explicit-cleanup-owne.html">2026 09 06 192327651 capture bounded literal processes with explicit cleanup owne</a></li>
+<li><a href="2026-09-06-192327658-generate-the-indentation-aware-editor-grammar-from-authored.html">2026 09 06 192327658 generate the indentation aware editor grammar from authored</a></li>
+<li><a href="2026-09-06-192327665-directional-finite-unions-and-typed-narrowing.html">2026 09 06 192327665 directional finite unions and typed narrowing</a></li>
+<li><a href="2026-09-06-192327673-separate-module-type-and-value-namespaces.html">2026 09 06 192327673 separate module type and value namespaces</a></li>
+<li><a href="2026-09-06-192327680-run-source-owned-unit-tests-alongside-documentation-examples.html">2026 09 06 192327680 run source owned unit tests alongside documentation examples</a></li>
+<li><a href="2026-09-06-192327688-preserve-distinct-newtype-identities-without-wrapper-allocat.html">2026 09 06 192327688 preserve distinct newtype identities without wrapper allocat</a></li>
+<li><a href="2026-09-06-192327695-publish-checked-inferred-documentation-without-executing-exa.html">2026 09 06 192327695 publish checked inferred documentation without executing exa</a></li>
+<li><a href="2026-09-06-192327703-complete-one-incomplete-member-using-independent-current-sou.html">2026 09 06 192327703 complete one incomplete member using independent current sou</a></li>
+<li><a href="2026-09-06-192327711-evaluate-immutable-json-in-the-repl-with-explicit-aggregate.html">2026 09 06 192327711 evaluate immutable json in the repl with explicit aggregate</a></li>
+<li><a href="2026-09-06-192327718-execute-documentation-examples-as-checked-native-tests.html">2026 09 06 192327718 execute documentation examples as checked native tests</a></li>
+<li><a href="2026-09-12-192327362-deliver-a-bounded-rust-hosted-web-preview-while-retaining-fu.html">2026 09 12 192327362 deliver a bounded rust hosted web preview while retaining fu</a></li>
+<li><a href="2026-09-12-192327369-prioritize-supervised-native-actors-and-reactive-fern-webass.html">2026 09 12 192327369 prioritize supervised native actors and reactive fern webass</a></li>
+<li><a href="2026-09-12-192327376-preserve-safe-native-service-boundaries-during-the-rust-rewr.html">2026 09 12 192327376 preserve safe native service boundaries during the rust rewr</a></li>
+<li><a href="2026-09-12-192327383-replace-the-legacy-implementation-with-a-rust-workspace.html">2026 09 12 192327383 replace the legacy implementation with a rust workspace</a></li>
+<li><a href="2026-09-12-192327389-preserve-bounded-inline-value-match-arms.html">2026 09 12 192327389 preserve bounded inline value match arms</a></li>
+<li><a href="2026-09-12-192327397-preserve-consistent-tab-indentation-during-compiler-migratio.html">2026 09 12 192327397 preserve consistent tab indentation during compiler migratio</a></li>
+<li><a href="2026-09-12-192327404-preserve-lookup-accountability-across-denied-directory-searc.html">2026 09 12 192327404 preserve lookup accountability across denied directory searc</a></li>
+<li><a href="2026-09-12-192327410-retain-separate-measured-compiler-budgets-during-default-mig.html">2026 09 12 192327410 retain separate measured compiler budgets during default mig</a></li>
+<li><a href="2026-09-12-192327417-ship-the-rust-compiler-as-fern-with-explicit-native-componen.html">2026 09 12 192327417 ship the rust compiler as fern with explicit native componen</a></li>
+<li><a href="2026-09-12-192327423-preserve-executable-c-source-operations-through-typed-rust-l.html">2026 09 12 192327423 preserve executable c source operations through typed rust l</a></li>
+<li><a href="2026-09-12-192327429-complete-cli-and-interactive-tool-compatibility-with-safe-ru.html">2026 09 12 192327429 complete cli and interactive tool compatibility with safe ru</a></li>
+<li><a href="2026-09-12-192327436-prove-bounded-recursive-result-builder-contracts.html">2026 09 12 192327436 prove bounded recursive result builder contracts</a></li>
+<li><a href="2026-09-12-192327444-close-sqlite-handles-explicitly-and-bound-live-connections.html">2026 09 12 192327444 close sqlite handles explicitly and bound live connections</a></li>
+<li><a href="2026-09-13-192327249-keep-actor-cleanup-attached-to-logical-function-activations.html">2026 09 13 192327249 keep actor cleanup attached to logical function activations</a></li>
+<li><a href="2026-09-13-192327256-run-source-actors-interactively-under-deterministic-virtual.html">2026 09 13 192327256 run source actors interactively under deterministic virtual</a></li>
+<li><a href="2026-09-13-192327263-execute-custom-json-methods-inside-a-shared-codec-boundary.html">2026 09 13 192327263 execute custom json methods inside a shared codec boundary</a></li>
+<li><a href="2026-09-13-192327270-preserve-logical-call-and-loop-state-in-typed-actor-continua.html">2026 09 13 192327270 preserve logical call and loop state in typed actor continua</a></li>
+<li><a href="2026-09-13-192327277-refine-json-unions-with-bounded-structural-evidence.html">2026 09 13 192327277 refine json unions with bounded structural evidence</a></li>
+<li><a href="2026-09-13-192327284-keep-foreign-abi-and-pointer-ownership-explicit.html">2026 09 13 192327284 keep foreign abi and pointer ownership explicit</a></li>
+<li><a href="2026-09-13-192327291-run-portable-language-values-in-bounded-wasm-memory.html">2026 09 13 192327291 run portable language values in bounded wasm memory</a></li>
+<li><a href="2026-09-13-192327298-implement-immutable-sets-over-the-existing-traced-collection.html">2026 09 13 192327298 implement immutable sets over the existing traced collection</a></li>
+<li><a href="2026-09-13-192327307-evaluate-constants-with-the-checked-language-and-no-host-cap.html">2026 09 13 192327307 evaluate constants with the checked language and no host cap</a></li>
+<li><a href="2026-09-13-192327315-resolve-coherent-traits-statically-and-derive-value-behavior.html">2026 09 13 192327315 resolve coherent traits statically and derive value behavior</a></li>
+<li><a href="2026-09-13-192327321-observe-pinned-workers-without-queuing-behind-their-callback.html">2026 09 13 192327321 observe pinned workers without queuing behind their callback</a></li>
+<li><a href="2026-09-13-192327328-exercise-production-boundaries-under-seeded-virtual-time.html">2026 09 13 192327328 exercise production boundaries under seeded virtual time</a></li>
+<li><a href="2026-09-13-192327335-reuse-actor-slots-and-suspend-recursive-unit-tail-paths.html">2026 09 13 192327335 reuse actor slots and suspend recursive unit tail paths</a></li>
+<li><a href="2026-09-13-192327342-pin-room-runtimes-to-workers-with-shared-admission-and-durab.html">2026 09 13 192327342 pin room runtimes to workers with shared admission and durab</a></li>
+<li><a href="2026-09-13-192327348-execute-complete-fern-application-logic-through-explicit-bro.html">2026 09 13 192327348 execute complete fern application logic through explicit bro</a></li>
+<li><a href="2026-09-13-192327355-commit-bounded-room-checkpoints-before-acknowledging-shared.html">2026 09 13 192327355 commit bounded room checkpoints before acknowledging shared</a></li>
+<li><a href="2026-09-14-192327141-generate-hexdocs-style-documentation-sites-from-moduledoc-do.html">2026 09 14 192327141 generate hexdocs style documentation sites from moduledoc do</a></li>
+<li><a href="2026-09-14-192327148-sort-structured-elements-through-ord-with-a-runtime-driven-m.html">2026 09 14 192327148 sort structured elements through ord with a runtime driven m</a></li>
+<li><a href="2026-09-14-192327155-print-structured-values-through-show-with-an-on-demand-prelu.html">2026 09 14 192327155 print structured values through show with an on demand prelu</a></li>
+<li><a href="2026-09-14-192327163-report-argument-type-mismatches-before-missing-labels-add-so.html">2026 09 14 192327163 report argument type mismatches before missing labels add so</a></li>
+<li><a href="2026-09-14-192327169-provide-non-faulting-positional-list-access-and-exact-intege.html">2026 09 14 192327169 provide non faulting positional list access and exact intege</a></li>
+<li><a href="2026-09-14-192327183-name-the-nearest-known-symbol-and-the-missing-cases-in-diagn.html">2026 09 14 192327183 name the nearest known symbol and the missing cases in diagn</a></li>
+<li><a href="2026-09-14-192327198-expose-safe-constant-arithmetic-and-retain-integer-tail-para.html">2026 09 14 192327198 expose safe constant arithmetic and retain integer tail para</a></li>
+<li><a href="2026-09-14-192327208-optimize-native-list-callbacks-under-explicit-scope-and-allo.html">2026 09 14 192327208 optimize native list callbacks under explicit scope and allo</a></li>
+<li><a href="2026-09-14-192327215-reuse-native-callback-root-registrations-without-changing-im.html">2026 09 14 192327215 reuse native callback root registrations without changing im</a></li>
+<li><a href="2026-09-14-192327222-standardize-live-browser-and-peer-messages-on-a-bounded-prot.html">2026 09 14 192327222 standardize live browser and peer messages on a bounded prot</a></li>
+<li><a href="2026-09-14-192327228-measure-codecs-separately-from-transport-and-delivery-semant.html">2026 09 14 192327228 measure codecs separately from transport and delivery semant</a></li>
+<li><a href="2026-09-14-192327235-connect-fixed-room-owners-through-authenticated-bounded-forw.html">2026 09 14 192327235 connect fixed room owners through authenticated bounded forw</a></li>
+<li><a href="2026-09-14-192327242-compose-actor-functions-through-typed-returns-and-ordinary-c.html">2026 09 14 192327242 compose actor functions through typed returns and ordinary c</a></li>
+<li><a href="2026-09-15-192327121-finish-the-language-guides-and-support-richer-documentation.html">2026 09 15 192327121 finish the language guides and support richer documentation</a></li>
+<li><a href="2026-09-15-192327128-move-heap-ownership-from-thread-local-storage-to-an-explicit.html">2026 09 15 192327128 move heap ownership from thread local storage to an explicit</a></li>
+<li><a href="2026-09-15-192327135-rename-the-language-to-morrow.html">2026 09 15 192327135 rename the language to morrow</a></li>
+<li><a href="2026-09-19-192327032-account-for-removed-self-calls-in-bounded-actor-tail-batches.html">2026 09 19 192327032 account for removed self calls in bounded actor tail batches</a></li>
+<li><a href="2026-09-19-192327039-elide-immediately-consumed-send-result-allocations.html">2026 09 19 192327039 elide immediately consumed send result allocations</a></li>
+<li><a href="2026-09-19-192327045-defer-combined-small-copy-storage-after-repeated-stealing-re.html">2026 09 19 192327045 defer combined small copy storage after repeated stealing re</a></li>
+<li><a href="2026-09-19-192327051-add-typed-links-cooperative-exit-signals-and-first-cause-ret.html">2026 09 19 192327051 add typed links cooperative exit signals and first cause ret</a></li>
+<li><a href="2026-09-19-192327057-scan-initialized-actor-payload-roots-and-full-width-message.html">2026 09 19 192327057 scan initialized actor payload roots and full width message</a></li>
+<li><a href="2026-09-19-192327063-cache-immutable-actor-descriptors-with-unchanged-work-accoun.html">2026 09 19 192327063 cache immutable actor descriptors with unchanged work accoun</a></li>
+<li><a href="2026-09-19-192327069-add-isolated-native-processes-with-typed-monitor-identities.html">2026 09 19 192327069 add isolated native processes with typed monitor identities</a></li>
+<li><a href="2026-09-19-192327075-reuse-private-actor-frames-and-consume-sparse-allocation-map.html">2026 09 19 192327075 reuse private actor frames and consume sparse allocation map</a></li>
+<li><a href="2026-09-19-192327081-select-heap-transfer-validation-by-the-live-graph-and-foreig.html">2026 09 19 192327081 select heap transfer validation by the live graph and foreig</a></li>
+<li><a href="2026-09-19-192327087-remove-measured-actor-scheduling-and-continuation-overhead-w.html">2026 09 19 192327087 remove measured actor scheduling and continuation overhead w</a></li>
+<li><a href="2026-09-19-192327095-bound-native-actor-turns-and-transfer-eligible-heaps-between.html">2026 09 19 192327095 bound native actor turns and transfer eligible heaps between</a></li>
+<li><a href="2026-09-19-192327101-execute-pinned-actors-on-independent-schedulers-with-copied.html">2026 09 19 192327101 execute pinned actors on independent schedulers with copied</a></li>
+<li><a href="2026-09-19-192327107-retain-actor-control-records-outside-collected-program-heaps.html">2026 09 19 192327107 retain actor control records outside collected program heaps</a></li>
+<li><a href="2026-09-19-192327114-domain-ownership-is-checked-on-tokens-and-on-actor-control-r.html">2026 09 19 192327114 domain ownership is checked on tokens and on actor control r</a></li>
+<li><a href="2026-09-20-011538473-carry-live-viewer-counts-on-room-snapshots-and-publish-the-d.html">2026 09 20 011538473 carry live viewer counts on room snapshots and publish the d</a></li>
+<li><a href="2026-09-20-011538473-keep-otp-supervisor-strategies-in-a-pure-driver-owned-engine.html">2026 09 20 011538473 keep otp supervisor strategies in a pure driver owned engine</a></li>
+<li><a href="2026-09-20-022249155-issue-same-origin-sessions-from-get-session-and-create-missi.html">2026 09 20 022249155 issue same origin sessions from get session and create missi</a></li>
+<li><a href="2026-09-20-024254281-hide-the-system-dashboard-on-public-origins.html">2026 09 20 024254281 hide the system dashboard on public origins</a></li>
+<li><a href="2026-09-20-115542263-serve-the-system-dashboard-on-public-origins.html">2026 09 20 115542263 serve the system dashboard on public origins</a></li>
+<li><a href="2026-09-20-122219920-suspend-the-fly-demo-machine-when-idle.html">2026 09 20 122219920 suspend the fly demo machine when idle</a></li>
+<li><a href="build.html">Build and develop Morrow</a></li>
+<li><a href="morrow-style.html">Morrow Rust style and safety</a></li>
+</ul>
+</section>
+<section class="nav-group">
+<h2>Modules</h2>
+<ul>
+<li><a href="actor_app.html">actor_app</a></li>
+<li><a href="add.html">add</a></li>
+<li><a href="conditionals.html">conditionals</a></li>
+<li><a href="data_processing.html">data_processing</a></li>
+<li><a href="factorial.html">factorial</a></li>
+<li><a href="fibonacci.html">fibonacci</a></li>
+<li><a href="file_io.html">file_io</a></li>
+<li><a href="hello.html">hello</a></li>
+<li><a href="http_api.html">http_api</a></li>
+<li><a href="language_tour.html">language_tour</a></li>
+<li><a href="list_advanced.html">list_advanced</a></li>
+<li><a href="list_ops.html">list_ops</a></li>
+<li><a href="print_test.html">print_test</a></li>
+<li><a href="string_advanced.html">string_advanced</a></li>
+<li><a href="string_interpolation.html">string_interpolation</a></li>
+<li><a href="string_ops.html">string_ops</a></li>
+<li><a href="supervised_workers.html">supervised_workers</a></li>
+<li><a href="tiny_cli.html">tiny_cli</a></li>
+<li><a href="tui_demo.html">tui_demo</a></li>
+<li><a href="tui_project.html">tui_project</a></li>
+<li><a href="checklist.html">checklist</a></li>
+<li><a href="server.html">server</a></li>
+</ul>
+</section>
+<section class="nav-group">
+<h2>Links</h2>
+<ul>
+<li><a href="https://github.com/morrow-lang/morrow" rel="noopener">GitHub</a></li>
+<li><a href="rust/morrow_compiler/index.html" rel="noopener">Rust API (rustdoc)</a></li>
+</ul>
+</section>
+</div>
+</nav>
+<main id="content" class="content">
+<article class="guide">
+<header class="page-header"><h1 class="page-title">Morrow Roadmap</h1></header>
+<blockquote>
+<p>Fern was renamed to Morrow on 2026-09-15; historical measurements and acceptance records below retain their original names, paths and results.</p>
+</blockquote>
+<p>Last updated: 2026-09-20</p>
+<p>This file is the only active roadmap. Historical context is in <a href="history.html"><code>docs/HISTORY.md</code></a>.</p>
+<h2 id="current-status-snapshot">Current Status Snapshot</h2>
+<h3 id="documentation-and-visual-identity-2026-09-15-decision157">Documentation and visual identity (2026-09-15, Decision157)</h3>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Finish the five language chapters, verify their examples and links, and include them in the generated site. Getting started, syntax and values, types, error handling and traits total about 2,580 lines; <code>documentation_repository</code> typechecks every <code>morrow</code> fence in them, <code>docs/language</code> joins the xtask extras, and all relative links and image paths resolve.</li>
+<li class="task"><input type="checkbox" disabled checked> Complete the richer Markdown renderer with independent image, sanitized HTML, footnote and URL-rewrite regressions. Fourteen <code>documentation_markdown</code> tests cover images, the raw-HTML allowlist and tag rebalancing, footnote order and back links, reference links, alerts, task lists, setext headings, strikethrough, and the unsafe-rewrite fallback to the original safe destination. A loose task item now carries its checkbox inside its first paragraph; before the fix the checkbox rendered on a line above the text it labels in all 84 loose items across the site. The site theme gained rules for every construct the renderer emits; alert titles measure 7.17:1 (light) and 7.11:1 (dark) contrast against their own background in a real browser.</li>
+<li class="task"><input type="checkbox" disabled checked> Carry a logo through to the generated documentation and verify image delivery. <code>documentation_assets</code> asserts byte-identical image copying across a republish, and the site renders an <code>&lt;img&gt;</code> with its alt text and declared size. The raster dawn logo this task originally added is superseded by the editable sunrise SVG in <code>docs/assets/README.md</code>, which the README loads by canonical raw URL; the delivery path this task built stands for any future relative asset.</li>
+<li class="task"><input type="checkbox" disabled checked> Pass the full repository gate and inspect the generated documentation before committing. The full macOS ARM64 <code>cargo xtask check</code> passes: 2,284 Rust tests, 316 native-output fixtures, 20 examples, 63 dynamic programs, 295 atomic rejections and 64+192+231 fuzz cases. The generated site was then rendered and inspected as images in both themes with headless Chromium, covering the landing page, a language chapter, the roadmap, a guide with tables, a module page and a 420 px mobile width. That pass found two defects that computed-style checks had missed: loose task items broke their checkbox onto its own line, and the disabled checkboxes were greyed by the browser until checked and unchecked items were hard to tell apart. Both are fixed and re-inspected; the theme now draws the task marker itself.</li>
+</ul>
+<h3 id="morrow-rename-2026-09-15-decision155">Morrow rename (2026-09-15, Decision155)</h3>
+<ul>
+<li class="task"><p><input type="checkbox" disabled checked> Rename all 12 workspace packages, component paths, CLI, runtime symbols and Cargo tooling. macOS ARM64 <code>cargo xtask check</code> passes: 2,249 Rust tests, 316 native-output fixtures, 20 examples, 63 dynamic programs, 295 atomic rejections and 64+192+231 fuzz cases; dependency versions and persisted cluster identities remain unchanged.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Rename all 455 source files to <code>.mr</code> and update discovery, module imports, formatter, LSP requests and test/documentation fixtures. An independent discovery test fails before and passes after migration. The full macOS ARM64 <code>cargo xtask check</code> passes; all three standalone benchmark workspaces also pass tests, formatting and Clippy.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Update active documentation, public introductions, canonical URLs, editor settings and <code>MORROW_STYLE.md</code>. The full macOS ARM64 <code>cargo xtask check</code> and generated documentation site build pass. Forty-five historical Markdown records gain only a rename note; preserved data and earlier decision entries remain byte-for-byte unchanged.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Replace old logo usage with a Morrow text mark and update browser/preview branding. The served-page regression fails before and passes after the change; the full macOS ARM64 <code>cargo xtask check</code>, WASM-target Clippy, preview build and real Edge acceptance pass. Desktop and mobile screenshots confirm the text identity and layout; offline restart, reconnect and asset-integrity checks pass.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Transfer and rename the public GitHub repository to <a href="https://github.com/morrow-lang/morrow"><code>morrow-lang/morrow</code></a>, preserving repository identity and default branch <code>main</code>. Set the Morrow description, canonical homepage and SSH origin; create public <a href="https://github.com/morrow-lang/morrow-lang.github.io"><code>morrow-lang/morrow-lang.github.io</code></a> for the docs site. GitHub metadata and local build are verified. Docs deployment and custom-domain setup remain separate follow-up work.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Carry live room viewer counts on the existing snapshot (Decision172). Independent protocol, owner, application and WASM feedback oracles pass; presence updates do not advance the revision. Real Edge acceptance covers two clients, the live count and offline reload. Fly.io and documentation workflows are enabled; first production deploys follow landing on <code>main</code>. A public playground that runs visitor code remains out of scope.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Issue a same-origin session from <code>GET /session</code> so the browser connects without a shared access key, and create missing <code>morrow doc --site</code> parent directories so <code>cargo xtask docs dist/docs</code> publishes (Decision174). Origin, CSRF, cookie flags and admission bounds remain. The public demo is an open room.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Serve the system dashboard on public origins (Decision176). The page is read-only process metrics after a same-origin session; it does not include room contents, credentials or filesystem paths. <code>MORROW_WEB_ADMIN=0</code> hides it.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Suspend the Fly demo Machine when idle (Decision177). <code>auto_stop_machines = &quot;suspend&quot;</code> and <code>min_machines_running = 0</code>; the next request resumes it. Volume checkpoints survive; live sessions and viewer counts do not across a cold start.</p>
+</li>
+<li><p>Owner follow-ups: register both domains, configure the <code>.dev</code> → <code>.org</code> redirect, complete the EUIPO/DPMA classes 9/42 check.</p>
+</li>
+<li><p>Morrow-owned implementation: Rust throughout the compiler, native runtime, language server, supervisor and repository tooling. The old C/QBE/bootstrap setup and Tree-sitter integration are removed. The recorded migration passed complete debug quality gates, selected optimized runtime/ABI checks and actual release archive/installation workflows on macOS/Linux ARM64. <a href="rust-workspace.html">Migration scope and evidence</a>; new actor/web work has separate validation below.</p>
+</li>
+<li><p>Active product direction: supervised native actors and a reactive Morrow WebAssembly client, connected through typed WebSocket messages (Decision124). Actor payload heaps and copied messages, explicit compiler roots, a separate aggregate WASM backend, typed Morrow browser model/update/view and compiled native room actors are implemented. Optional durable room checkpoints pass native restart and real WebSocket acceptance. General framework packaging and scalable actor execution remain open; <a href="web-preview.html">preview scope</a> and Decision125 distinguish them from the completed Rust migration.</p>
+</li>
+<li><p>System observability: a read-only <a href="admin-dashboard.html">dashboard</a> and JSON endpoint expose host/build information, current/peak process memory, admission use and bounded per-worker observations without queuing behind native callbacks (Decision131). Public origins show it after the application opens a session (Decision176). Separate operator roles, CPU utilization and individual actor/GC breakdowns remain open.</p>
+</li>
+</ul>
+<h3 id="full-stack-actor-and-browser-milestones">Full-stack Actor and Browser Milestones</h3>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Add current and peak process RSS to the authenticated dashboard and JSON snapshots. Verify native macOS/Linux samplers with checked unit/parser cases and an isolated touched 32 MiB allocation; inspect the running macOS demo. The complete macOS <code>cargo xtask check</code> passes 1,936 Rust tests across 254 suites, 305 native fixtures, 19 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192 fuzz cases, plus formatting, notices and Clippy. Memory readings describe the whole server process; unavailable observations remain explicit.</li>
+</ul>
+<p>The <a href="full-stack-architecture.html">architecture and acceptance plan</a> defines
+ownership, scheduling, browser ABI and protocol contracts. The completed items
+below describe bounded foundations, not completion of the larger acceptance plan.</p>
+<ul>
+<li class="task"><p><input type="checkbox" disabled checked> Add an authenticated read-only system dashboard and schema-versioned JSON snapshots with bounded worker telemetry, last-observed occupancy, admission usage and host/build information (Decision131). Pass 12 optimized owner tests, nine real HTTP/WebSocket tests, desktop/small-phone inspection and the complete browser suite. Final macOS <code>cargo xtask check</code> passes 1,933 Rust tests across 254 suites, 305 native fixtures, 19 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192 fuzz cases, plus formatting, notices and Clippy.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Adopt automatic memory without mandatory application borrow checking, actor-owned tracing heaps, a separate browser ABI and a Rust-authored first-party web/UI framework (Decision124).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Branch a separate WASM emitter from checked semantic IR, preserve i64 integers, execute scalar exports and reject unsupported types/capabilities through imported code before publishing output.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Add actor-owned payload heaps and bounded message/capture graph copying, with explicit compiler root frames and scoped runtime roots. Conservative native stack/register and heap-word scanning remain enabled.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Add a bounded precise linear-memory String heap to the WASM backend with compiler shadow roots and independent generated-module execution tests.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Build a Rust browser host with keyed accessible DOM updates, local filtering, focus preservation, bounded drafts/snapshots and explicit listener/socket cleanup. Compile and execute the Fern checklist policy in the real browser.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Add Rust HTTP/WebSocket serving and a typed command/snapshot protocol with session authentication, exact Origin/CSRF checks, admission and queue bounds, revision conflicts, bounded deduplication, revocation and explicit reconnect/reset outcomes.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Package the preview with embedded assets, generated bindings and a Rust offline service worker. Exercise two real clients, cached offline reload, drafts, reconnect and logout against the static ARM64 Linux server running unprivileged in an empty chroot. Validate x86-64 static ELF structure; x86-64 execution remains open.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Pass final macOS real-browser acceptance including compiled Fern policy, keyed focus, cold service-worker restart, offline draft/filter recovery, reconnect/revocation, a 320-pixel mobile layout and rejection of a tampered HTTP-200 cache update while retaining the prior offline application. Inspect desktop and mobile screenshots.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Revalidate the new work with macOS ARM64 <code>cargo xtask check</code> and equivalent Linux ARM64 coverage across a workspace check and resumed acceptance tail after storage recovery: formatting, Clippy, notices, workspace tests, 305 native fixtures, 18 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192 fuzz cases. Separately pass 17 WASM, 17 native ABI and four compiler-root cases. Add the static x86-64 browser CI job; its GitHub execution remains unverified.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Pass the 2026-09-13 integrated macOS ARM64 <code>cargo xtask check</code>: formatting, complete notices, workspace Clippy, 1,869 standard Rust tests, 305 native-output fixtures, 18 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192 fuzz cases. Pass the real browser i64-handle/offline/mobile/cache-integrity gate and link native application test executables statically for ARM64/x86-64 Linux. New Linux execution evidence remains separate from earlier preview acceptance.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Reuse actor slots under immutable nonwrapping generations. Pass 66,536 sequential spawn/finish transitions with precise control collection and bounded memory; preserve stale PID rejection, foreign-heap identity roots, supervision lineage and eventual dead-control reclamation (Decision129).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Suspend eligible recursive Unit-tail helper paths through copied, rooted callback frames. Independent native tests prove sibling progress, receive-arm/timeout and aliased-entry coverage, mutual recursion with collection at every handoff, and unchanged ordinary/no-actor CLI calls (Decision129).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Add seeded application simulation using the production protocol/client state machine and compiled native Fern actors, with per-session virtual time, bounded transport faults, actual durable reopen, an independent state oracle and mandatory healthy convergence. Versioned JSON reports replay exactly; forced corruption fails the checker (Decision130).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Add deterministic native callback-ABI scenarios for receive deadline ordering, yielding siblings, supervision, identity churn, clock errors and final managed-heap reclamation. A precise-collection test protects Session construction before host-root publication; simulation controls remain opt-in (Decision130).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Add a visible local draft preview and UTF-8 budget computed by Fern WASM, plus scoped pending save feedback, informed by the pinned LiveView source study. Independent native and Wasmi traces preserve the existing 100-task/two-held-view bound; final real-browser acceptance is recorded separately.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Fix durable recovery after deleting the last task, preserve valid empty decoded collection storage, and copy native map entries using the compiler’s untagged pair layout. Root partial typed JSON values across recursive allocation. Independent checkpoint, compiled Fern UTF-8/full-width map and forced precise-collection regressions pass.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Pass the final 2026-09-13 resilience macOS ARM64 <code>cargo xtask check</code>: formatting, notices, workspace Clippy, 1,924 Rust tests across 254 suites, 305 native fixtures, 19 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192 fuzz cases. Pass final real-browser offline/feedback/mobile/cache-integrity acceptance, exact application/actor simulation replay and static ARM64/x86-64 Linux ELF checks. <a href="deterministic-simulation.html">Measured scenarios and artifact hashes</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Execute the resilience checkpoint <code>3be4025</code> on actual ARM64 Linux: 138 optimized runtime, checkpoint/clock, simulator and backend tests; byte-for-byte cross-platform replay of the macOS application/actor reports; full browser acceptance against the checksum-matched static ARM64 server, with desktop/mobile inspection. Keep x86-64 static validation distinct from execution.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Reproduce and fix CI fixture launch-state failures without weakening their oracles: explicit opener failure configuration and visible, painted screenshot readiness under the existing deadline. Pass the follow-up local gate with 1,927 Rust tests and all native/example/compatibility/fuzz checks; real-browser readiness starts from a hidden page. GitHub CI results are tracked separately from local acceptance.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Build and execute the static x86-64 Linux server in GitHub Actions at <code>a5f13e2</code>; pass the complete real-Chrome browser suite, including offline reload, Fern feedback, reconnect, mobile layout and cache-integrity rejection. <a href="https://github.com/niklas-heer/fern/actions/runs/34773888739/job/103768321541">Job evidence</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Reproduce CI launcher descriptor leakage with an explicitly inherited non-CLOEXEC handle, including a handle above a lowered file limit. Fence inherited descriptors before the supervisor&#39;s <code>posix_spawn</code>, retaining the existing status, stream, descendant and cleanup oracles. All 27 optimized supervisor tests and Clippy pass on macOS ARM64 and actual Linux ARM64.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Pass the final descriptor-fix macOS ARM64 <code>cargo xtask check</code>: formatting, notices, workspace Clippy, 1,928 Rust tests across 254 suites, 305 native fixtures, 19 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192 fuzz cases.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled> Complete precise native root/layout coverage and general suspended-continuation lifetime checks. Charge copying and collection to measured work budgets.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled> Extend resumable work-budget safepoints to arbitrary helper calls and collection loops; add an external-event scheduler and bounded blocking-service workers. Existing typed supervision and Unit-tail progress do not establish general preemption.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Extend WASM to records, tagged sums, Option/Result, lists and tuples with precise child tracing, managed i64/BigInt host handles and bounded UTF-8 transfer. Independent nested/full-width/Unicode/GC oracles and complete shared model/update/view traces pass. Maps, closures and indirect calls were added subsequently; see <a href="wasm-language.html">current target support</a>. Native capabilities and WasmGC evaluation remain separate work.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Move the complete checklist browser model/update/view and server domain model into typed Fern. Link native Fern room actors into the Rust gateway with rooted thread-confined sessions, nonblocking polling and typed String reply ports. Real browser and WebSocket acceptance passes; generic rendering stays Rust. Shared wire-codec generation and application-independent packaging remain open.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Add actual compiled actor supervision with bounded restarts, fresh initializer heaps, cleanup, stale-PID rejection and unrelated actor progress between restart attempts. Add recoverable native embedding exports without process startup or an interpreter.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Pass independent native embedding tests for persistent room state, isolated rooms, full-width values, recoverable faults and 5,000 requests with precise host-root collection.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Add optional single-writer atomic room checkpoints before acknowledgement; recover tasks under fresh incarnations and command namespaces. Native reopen/lock/corruption tests and a real WebSocket server restart pass. This is room-state durability, not durable exactly-once external effects.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Pin rooms to configurable independent workers while sharing global ingress, room, namespace and connection limits. Prove other-worker and authentication progress while one domain callback is blocked, reject revoked queued commands, and preserve cross-worker reconnect at capacity. Share a durable writer with stale-owner rejection and independent concurrent-room recovery tests (Decision128).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Pass the integrated 2026-09-13 worker/lifecycle macOS ARM64 <code>cargo xtask check</code>: formatting, dependency notices, workspace Clippy, 1,890 Rust tests, 305 native fixtures, 18 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192 fuzz cases. Includes canceled login/join/disconnect cleanup, partial worker startup and active ingress-permit ownership.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Rebuild final macOS/ARM64-musl/x86-64-musl web artifacts at <code>f80f55a</code>. Pass macOS browser acceptance and 98 focused optimized tests on actual ARM64 Linux, including six native compiler-tail oracles, plus the full browser suite against the checksum-matched static ARM64 server. Record <a href="web-application-acceptance.html">artifact sizes and exact scope</a>; x86-64 remains statically validated without execution.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled> Pass the full architecture acceptance cases with actual Morrow domain actors, actor failure/reset and independent aggregate ABI/GC oracles. Room sharding and native scheduler groups establish independent-worker progress; general fairness across synchronous native regions and the complete architecture acceptance remain open. Eligible live actor migration is recorded below.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Connect fixed room owners across configured servers with mutual TLS, certificate-bound identities, bounded forwarding streams, fresh-namespace uncertainty and checkpoint placement guards. Pass independent routing/lease simulation, hostile framing/authentication tests and a three-process 10,024-durable-mutation campaign across 32 clients; preserve state through partitions and owner restart. See <a href="cluster.html">cluster contract and measurements</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Establish the initial Decision144 JSON baseline using primary Erlang, Phoenix, WebSocket, WebTransport and codec sources and 46 measured message fixtures with isolated CBOR/protobuf adapters and malformed-input oracles. Binary dependencies stayed outside production during that initial experiment; Decision145 below supersedes the default after browser and application measurements.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Extend the isolated codec comparison to real Chromium/WASM string and byte-array boundaries, with independent wire/value/malformed-input checks, 138 raw fixture rows and recorded artifact sizes. Run 7,650 loopback WebSocket mutations through the actual Hub, compiled Fern actor and optional durable checkpoint path. All exact transition and durable reopen checks pass. Binary messages reduce traffic and browser decode work; the larger application cases show essentially unchanged latency. Stage wall-time fractions do not establish CPU shares. See <a href="network-protocol.html">measurements</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Select protobuf for live browser and peer messages after those measurements (Decision145). Publish explicit application and peer schemas, retaining legacy browser JSON negotiation and separate HTTP/offline/checkpoint formats. This is the architectural selection; the integrated migration gate below remains separate.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Complete protobuf migration acceptance: both explicitly selected browser codecs, binary JS/WASM boundaries, mismatch and hostile-input rejection, cross-codec state convergence, real-browser offline/reconnect behavior, authenticated peer framing, partition/lost-response/restart stress, deterministic simulation and the complete repository gate. Do not treat the earlier JSON cluster stress measurements as a protobuf throughput result. Verified on macOS ARM64: 2,176 Rust tests, 311 native-output fixtures, 20 examples, 63 dynamic compatibility programs, 295 atomic rejections, 64+192+231 fuzz cases, formatting, notices and Clippy; real Edge acceptance includes two clients, offline/reconnect, session revocation and tampered-asset rejection. The separate mixed-gateway test preserves exact outcomes and state across JSON and protobuf clients.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Release checkpoint locks at writer teardown and on initialization failure even when a concurrent child retains a duplicated descriptor. Two independent regressions fail with the old lock lifetime and pass with explicit owned-guard release on macOS and Linux; active-writer exclusion and placement checks remain intact. The follow-up macOS <code>cargo xtask check</code> passes 2,178 Rust tests and the complete native/compatibility/fuzz gates, and the rebuilt server passes real-browser acceptance.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Compare the initial Fern baseline with optimized Rust and Bun 1.4.2/TypeScript 6.0.2 using runtime-input scalar and immutable-model workloads, independent mathematical oracles, compiler mutation diagnostics and positive controls. Preserve 174 performance samples, full-width Number/BigInt observations, process RSS, source build/check timings, binary sizes and first-launch outliers. That baseline uses little memory and checks small sources quickly, but immutable model updates are substantially slower; its generated native code selects Cranelift <code>opt_level=none</code>. See the <a href="benchmarks/language-comparison/README.md">historical experiment report</a>; these tests do not establish developer productivity or whole-language superiority.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Profile immutable callbacks and replace repeated GC frame tree updates with reusable storage and direct range scanning (Decision146). Preserve exact payloads, old versions, heap isolation and fault cleanup with independent native oracles, 8,192 seeded lifetime operations and a failing-before/passing-after allocation regression. The unchanged model is 2.73–2.94× faster with similar RSS. Full macOS gate: 2,183 Rust tests, 311 native fixtures, 20 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192+231 fuzz cases pass; see the <a href="benchmarks/language-comparison/IMMUTABLE.md">paired measurements</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Enable optimized native emission, prove bounded direct list traversal/builders, and inline small statically known list callbacks while retaining dynamic/control/actor fallbacks (Decision147). Preserve 342 staged timing samples: unchanged immutable updates improve another 2.98–3.71×, scalar performance is unchanged, and small-source builds grow about 4%. Full macOS gate passes 2,193 Rust tests, 311 native fixtures, 20 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192+231 fuzz cases, including precise-GC, exact-payload, fault/cleanup, historical-alias and fallback oracles. See <a href="benchmarks/language-comparison/NATIVE_OPTIMIZATION.md">native optimization evidence</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Compare the optimized native implementation with Elixir 1.20.4 on OTP 29.0.6/JIT and optimized Rust. Preserve 224 whole-process and 40 in-VM samples, 1,744 independent result checks, initial immutable aliases, tuple/struct alternatives, startup, RSS and pinned artifact hashes. Separate startup-amortized work from BEAM compute timing; this establishes no actor, scheduler or distributed-system performance parity. See the <a href="benchmarks/language-comparison/BEAM.md">BEAM experiment</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Expose safe constant integer division/remainder and retain eligible all-Int self-tail parameters in SSA (Decision148). Preserve 113,508 independent wide-arithmetic outputs, 357 recurrence/permutation cases, operand/fault/cleanup/root behavior and 246 staged timing samples. The final scalar workload improves 76.60→66.57 ms against Rust&#39;s 57.35 ms; immutable-model timings are essentially unchanged. Retain the slower constant-only experiment and verify both changes are needed with an SSA-only control. Full macOS gate passes 2,202 Rust tests, 311 native fixtures, 20 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192+231 fuzz cases. See <a href="benchmarks/language-comparison/ARITHMETIC.md">arithmetic evidence</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Move heap ownership from thread-local storage into an explicit <code>Domain</code>, leaving the thread-local as a scheduling cursor behind an <code>Activation</code> guard, as step 1 of five toward parallel actor execution (Decision156). Preserve behaviour exactly: the seeded actor scenario reproduces trace hash <code>01a55a0046de5614</code> with identical callbacks, restarts and churn, and zero cleanup residue. The runtime suite grows 99→107 tests, adds a cross-heap edge oracle with a failing negative case, and runs clean under ThreadSanitizer in 2,389.85 s. The full macOS gate passes 316 native-output fixtures, 20 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192+231 fuzz cases. The allocation-heavy immutable model regresses 59.03→59.96 ms (+1.58%) while the scalar control moves +0.09%, locating the cost in the allocation path; the regression is recorded, not rounded off.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Give every <code>Domain</code> a process-unique identity that root and scope tokens carry, as task 1 of step 2 toward parallel actor execution (Decision158; <a href="docs/superpowers/specs/2026-09-19-multi-scheduler-execution-design.md">multi-scheduler design</a>). Slot and root numbering restarts in each domain, so retiring a token under a foreign domain silently unregistered a live root belonging to another; it is now a hard error. Registering an actor control record that lives in a payload heap is rejected for the same reason. Three regressions fail before and pass after — the root case did not panic at all, the scope case panicked with the wrong diagnosis, the control case registered freed-storage-to-be silently — with a positive case pinning that colliding numbers stay independent. The seeded actor scenario is unchanged before and after at two configurations, including trace hash <code>0xd4e402a412f11e2f</code> with 48,739 callbacks and zero cleanup residue. The runtime suite grows 107→111 and stays clean under ThreadSanitizer with zero race reports in 2,430.46 s. Full macOS ARM64 <code>cargo xtask check</code> passes: 2,288 Rust tests across 290 suites, 316 native-output fixtures, 20 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192+231 fuzz cases. Subsequent tasks of step 2 are tracked below.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Lift Session, identity-table, Actor and Supervisor storage out of collected program heaps (Decision159; task 2 of the multi-scheduler design). Reference ownership preserves stale PID lineage and exact final reclamation without cycles, while original ABI layouts and logical admission charges remain unchanged. Remove invocation GC’s scan of actor-heap metadata; retain external controls through callback scopes and charge their bytes to physical accounting and collection pressure. Root the compiler-generated actor entry’s Exec wrapper through source main, scheduler execution and shutdown. Independent lifetime, quota, GC-pressure and compiled precise-GC regressions pass, alongside a new native supervision/restart fixture. The 5,000-step seed <code>0x0046524e</code> reproduces trace hash <code>0xd4e402a412f11e2f</code>, 48,739 callbacks and zero cleanup residue. Full macOS ARM64 <code>cargo xtask check</code> passes: 2,299 Rust tests across 290 suites, 317 native-output fixtures, 20 examples, 63 dynamic programs, 295 atomic rejections and 64+192+231 fuzz cases. Thirty-six focused memory/identity tests pass under ThreadSanitizer; the full ordinary runtime suite has 120 tests. Tasks 3–7 remained open at this checkpoint; Decision160 below completes that work.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Publish immutable actor identity headers with atomic liveness and pending-message counts; validate PIDs without reading foreign scheduler state (Decision160, task 3). Preserve the three-word Exec and four-word PID ABI, original logical record charges, stale identity rejection and supervision lineage. Resolve current supervised children through synchronized weak ownership, retaining them across PID allocation without cycles. GC root ranges exclude concurrent header fields.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Copy captures and messages into exclusively owned off-heap fragments, then adopt them on the receiving scheduler before its next collection (Decision160, task 4). Preserve full-width payloads, graph sharing, deep-copied JSON and retained PID controls; discard failed deliveries exactly once. Keep the original partial-copy root oracle and add receiver collection after adoption. Seed <code>0x0046524e</code>, 5,000 steps, still produces trace <code>0xd4e402a412f11e2f</code>, 48,739 callbacks and zero cleanup residue.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Preserve one exact atomic invocation-wide budget across schedulers: 64 MiB logical bytes, 1,024 actors, 65,536 messages and 4,096 pending plus adopted entries per mailbox (Decision160, task 5). Boundary races, overflow, rollback and integration tests verify the limits without splitting or multiplying them. Generations are global and nonwrapping; send admission still reports error 4.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Give scheduler owners independent run queues, timers and domains, and implement a bounded deterministic scheduler-set driver with recorded-choice replay (Decision160, task 6). The feature-gated Rust APIs run the same transport and owner turns across N domains on one thread, advance virtual time and check heap edges. Actor placement stays fixed for its lifetime.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Execute actor schedulers on real OS threads with opt-in <code>MORROW_SCHEDULERS=1..64</code>, root round-robin placement and explicit host placement (Decision160, task 7). Verify blocked-worker independence; 384 ordered messages from 12 concurrent senders through precise collection; synchronized lineage lookup during restart; exact global limits; late-send shutdown rejection; original fault preservation; quiescent completion across supervision restart; and partial worker startup cleanup. Full macOS ARM64 <code>cargo xtask check</code> passes 2,340 Rust tests across 290 suites, 317 native-output fixtures, 20 examples, 63 dynamic programs, 295 atomic rejections and 64+192+231 fuzz cases. The ordinary runtime suite has 160 tests. ThreadSanitizer passes 158 runtime tests with no race reports in 12.12 s, including every new concurrency regression; the two long lifetime-churn tests pass in the ordinary suite and were excluded from this sanitizer run. A native compiler regression exercises three schedulers, per-sender FIFO, full-width payloads and precise collection. All seven tasks are complete; instruction preemption, work stealing, migration and BEAM actor-performance comparisons remain separate work.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Extend native actor safepoints to oversized finite helpers, transitive finite call trees and strict expressions, using a 32-computation straight-line splitting threshold (Decision161). Add <code>MORROW_REDUCTIONS=1..65536</code>, default 1, with a nonrecursive callback trampoline and receive as an unconditional turn boundary. Independent sibling-progress, operand-order, FIFO quantum and native-stack-depth oracles pass. Native primitives, FFI, sort comparators, cleanup, receive guards and unsupported handle-bearing paths remain synchronous; this establishes no instruction/time bound or WASM actor scheduler.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Add whole-heap migration and opt-in owner-assisted work stealing with <code>MORROW_WORK_STEALING=1</code> (Decision161). Preserve addresses, PID identity, mailbox order, logical cleanup and exact global quotas while assigning fresh owner-local heap and identity slots. Eleven migration regressions cover OS-thread handoff, real idle-worker stealing, deterministic replay, concurrent senders during transit, queued selectors/deadlines, failure and stop cleanup. Six heap-transfer regressions cover roots/scopes/native frames, foreign edges, bounded validation, shared JSON graphs, physical accounting and exact cross-thread finalization. A deterministic send-versus-retirement regression closes a stranded-ingress cycle. A 256-actor-turn cooldown prevents repeated failed detach attempts and immediate migration back before useful execution. Precise collection before transport locking removes dead continuation storage from validation while preserving the complete live actor graph.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Establish conservative migration affinity: host ports and supervised actors remain pinned; arbitrary foreign calls and compatibility actor TLS access pin the active actor before resource use. Scoped guards cover callbacks, receive selectors and cancellation cleanup. The ordinary native helper ABI is preserved, and native embedding can explicitly pin with <code>morrow_managed_pin_current()</code>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Pass integrated macOS ARM64 acceptance for Decision161: <code>cargo xtask check</code> reports 2,369 Rust tests across 291 result suites, 317 native-output fixtures, 20 examples, 63 dynamic programs, 295 atomic rejections and 64+192+231 fuzz cases. ThreadSanitizer passes 182 runtime tests without race reports in 11.12 s; the two long churn tests pass in the ordinary 184-test runtime suite. The 5,000-step default-mode seed <code>0x0046524e</code> retains trace <code>0xd4e402a412f11e2f</code>, 48,739 callbacks and zero cleanup residue. Native FIFO/full-width/precise-GC oracles pass with stealing enabled and an eight-callback quantum. The first benchmark exposed root-driver throttling after every 64-turn poll; the fixed driver never parks with runnable local work, and the exact formerly timed-out workload completes correctly in three bounded release checks.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Publish direct, reproducible Morrow/BEAM actor measurements at one, two and four schedulers: 36 semantic smoke checks and 216 final observations with independent closed-form oracles, bounded capture, exact artifacts and separate startup/work intervals. Preserve the earlier timeout, complete pre-collection matrix and 48-run focused diagnosis. Precise collection improves stealing request/reply throughput 15.4×/12.6× at two/four schedulers, leaving it 11.6%/7.3% below pinned Morrow; stealing lifecycle throughput remains slower. BEAM leads pinned request/reply throughput 4.0×/12.3×/7.5× at one/two/four schedulers. Completion gaps are external observations, not internal mailbox latency, and the lifecycle comparator does not establish OTP parity. See the <a href="benchmarks/language-comparison/ACTORS.md">actor comparison</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Implement and verify the first measured optimization checkpoint (Decision162): redundant scheduler-lock removal with a stopped-drain fence, bounded foreign-allocation indexing, inline graph-validation scratch and bounded pure actor tail batches. Full gate passes 2,380 Rust tests/292 suites, 317 native fixtures, 20 examples, 63 compatibility programs, 295 atomic rejections and all fuzz cases; ThreadSanitizer passes 189 tests and default replay remains bit-identical. The <a href="benchmarks/language-comparison/results/actors-parity-checkpoint1-20260919/PARITY.md">216-observation matrix</a> improves contention 109–117% but reaches no parity cell. Interleaved diagnosis confirms a stealing-specific request/reply regression, which remains an open correction rather than an accepted performance win.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Correct the major eager transfer-index regression using bounded adaptive lookup (Decision163). Preserve the tiny-candidate failing oracle and both direct/index ownership checks. Full gate passes 2,382 Rust tests/292 suites; TSan passes 191 tests and actor replay is unchanged. Two quiet interleaved comparisons retain 288 successful processes: two-scheduler stealing improves 1.58–1.99× against checkpoint1, while short two-scheduler request/reply remains 7.5% below the original baseline. Keep that residual and strict parity open; see the <a href="benchmarks/language-comparison/results/actors-parity-adaptive-baseline-20260919/STATUS.md">correction report</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Reuse eligible private self-tail frames and sweep sparse allocation maps without repeated dead-node removal (Decision164). Preserve precise roots, ordinary immutable closures, transient quota and callback fairness. Full gate passes 2,393 Rust tests/292 suites and every native/example/compatibility/fuzz check; TSan passes 197 runtime tests and actor replay remains exact. The <a href="benchmarks/language-comparison/results/actors-parity-checkpoint2-20260919/PARITY.md">second matrix</a> improves default-stealing contention 4.1–4.9× over checkpoint1 but reaches no parity cell. Preserve the separate 288-process GC/frame diagnostics and their request/reply regressions, plus the two-scheduler lifecycle regression.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Cache immutable registered actor descriptors without changing work accounting (Decision166). Full gate passes 2,397 Rust tests/292 suites, all native/example/compatibility/fuzz checks; TSan passes 201 and replay stays exact. The isolated 144-process diagnostic improves request/reply 1.022–1.221×. The <a href="benchmarks/language-comparison/results/actors-parity-checkpoint3-20260919/PARITY.md">third matrix</a> still passes no strict cell; retain lifecycle regressions. Defer sparse fragment adoption after two inconsistent diagnostics, preserving its patch and all raw evidence.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Evaluate and defer combined tiny-fragment/copy-memo storage (Decision169). Allocation oracles and the full 2,445-test gate pass, but two quiet diagnostics regress long two-scheduler stealing to 0.752× and 0.681×. Preserve all 288 processes and the exact patch. A separate 144-process corrected-monitor baseline comparison places eleven of twelve cells within about 5%, with the remaining long four-scheduler stealing cell at 0.885×. Cross-run variation has no established cause; neither experiment establishes parity.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Elide immediately consumed send Result boxes while preserving the public ABI and shared transport semantics (Decision170). Independent runtime/native allocation oracles pass; the full2447-test gate, TSan232, exact replay and36 release smoke checks pass. The quiet144-process diagnostic improves all twelve request/reply medians1.042–1.292×. Retain the unchanged BEAM acceptance requirement.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Fit three hot-loop iterations into 31/32 work units by accounting for replaced self-calls (Decision171). Full 2451-test gate and 36 release smokes pass; unchanged runtime retains TSan/replay acceptance. All six paired contention cells improve 1.439–1.460×. The <a href="benchmarks/language-comparison/results/actors-parity-checkpoint4-20260919/PARITY.md">fourth matrix</a> still reaches zero of nine strict cells; preserve the S4 request/reply regression and continue allocation/scheduler work.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled> Reach the strict actor-performance targets in the <a href="docs/superpowers/specs/2026-09-19-actor-performance-parity.md">parity plan</a>, preserving the existing nine workload/scheduler cells and independent outputs. Message allocation/copying and remaining scheduler/migration costs are the next measured targets; improvements alone do not establish parity.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Accept isolated Process actors, independent typed monitors, atomic spawn-monitor and ordered event receive (Decision165). Both source-native fixtures pass at one/two/four schedulers with stealing off/on and precise GC. The full gate passes 2,415 Rust tests/295 suites, 317 native fixtures, 20 examples, all compatibility and fuzz cases; ThreadSanitizer passes 212 tests and actor replay is unchanged. Integration with the performance checkpoints passes 2,432 Rust tests/295 suites, TSan 224 and unchanged replay. Preserve independent ABI, cancellation, quota, race and migration oracles. Restore the historical 32-byte ordinary-message header charge independently of the enlarged lifecycle record; literal 39/40-byte scalar admission boundaries pass locally and with shared accounting. The correction passes the full 2,433-test gate, focused TSan and unchanged replay. See <a href="process-model.html">the implemented API</a>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Initialize whole message tag words and scan only the six Actor payload pointers (Decision167). Independent padding regressions reproduce false foreign edges; precise collection and handoff preserve all six payload graphs. Full gate passes 2,436 Rust tests/295 suites and every native/example/compatibility/fuzz check, TSan passes 228, actor replay is unchanged, and 36 release semantic smoke checks pass. Freeze a corrected measurement baseline for the separate small-copy candidate.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Accept links, trapping exits, atomic linked spawn and terminal exit semantics (Decision168). The corrected gate reports2465 Rust passes across297 summaries, all native/example/compatibility/fuzz checks, TSan247, exact actor replay and30 source-native scheduler configurations. Preserve first checked-fault precedence, legacy restart policy, bounded iterative cascades, precise roots and admitted-control cleanup.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Keep OTP supervisor strategies in a pure, clock-free engine the driver owns (Decision173). Forty-two independent traces cover startup order, reverse rollback, one-for-one/one-for-all/rest-for-one, inclusive rolling intensity including zero, failed-restart charging, shutdown deadlines, parent exit, nested branches, dynamic children and significant-child auto-shutdown. The existing <code>supervise</code> API is unchanged. Morrow programs still cannot start a typed <code>Supervisor</code>.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled> Wire that engine through compiler contracts, init acknowledgement, root/actor request adapters and a live-actor driver. Preserve legacy actor behavior and document native-blocking limits. The engine alone does not establish the language feature or performance target.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled> Continue profiling broader inlining, immutable collection representation/allocation, native actor execution, the native JSON bridge and checkpoint work independently. Preserve exact output, rooting/GC and fault oracles when improving measured bottlenecks.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled> Prove sustained multi-worker fairness, lifecycle churn and performance beyond the bounded cluster acceptance workload. Add transactional external-effect recovery, dynamic membership and replicated ownership/failover as separate gates.</p>
+</li>
+</ul>
+<h3 id="rust-workspace-completion">Rust Workspace Completion</h3>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Organize the Cargo workspace under <code>crates/</code> with compiler, core runtime, startup archive, shared JSON engine and supervisor boundaries; keep repository automation in <code>xtask</code>.</li>
+<li class="task"><input type="checkbox" disabled checked> Port full-width values, strings/lists, Unicode16 decimal classification, JSON/codecs, IO, HTTP/SQL/regex, terminal widgets and actors to Rust.</li>
+<li class="task"><input type="checkbox" disabled checked> Replace Boehm with a Rust-owned nonmoving collector. Root/interior-pointer, cycle, pressure and finalized-value checks pass, including a pointer retained only by Cranelift-generated code across collection.</li>
+<li class="task"><input type="checkbox" disabled checked> Root all managed strings held only by a Rust Vec before allocating copies. The regression reproduced corruption before the fix and passes debug/release with forced collection.</li>
+<li class="task"><input type="checkbox" disabled checked> Use Cranelift for all native compilation, including source tests and doctests. Independent output fixtures and optimized ABI/GC tests pass on both ARM64 platforms.</li>
+<li class="task"><input type="checkbox" disabled checked> Replace native process supervision with Rust retained-identity cleanup and a shared bounded parent protocol. Lifecycle, cancellation, descriptor, descendant and terminal tests pass.</li>
+<li class="task"><input type="checkbox" disabled checked> Move building, checking, fuzzing, measurement, packaging, installation and uninstall to Rust tooling. Retire C/Python bootstrap, style and maintenance implementations; preserve executable compatibility assertions in Rust.</li>
+<li class="task"><input type="checkbox" disabled checked> Remove Tree-sitter and its Zed grammar package; keep the Rust LSP. Use static accessible generated documentation with browser Find, removing the authored JavaScript filter.</li>
+<li class="task"><input type="checkbox" disabled checked> Prefer native Rust dependencies while allowing Rust wrappers around third-party native libraries, as explicitly authorized. Preserve SQLite through rusqlite and certificate-verifying HTTP through ureq/rustls; retain complete notices.</li>
+<li class="task"><input type="checkbox" disabled checked> Pass final debug quality gates: 1,752/1,754 standard workspace tests plus five custom IO/PTY cases per macOS/Linux host; 305 independent native fixtures, 18 examples, 63 dynamic applications, 295 atomic rejections, unit-test continuation and 64+192 fuzz cases on each.</li>
+<li class="task"><input type="checkbox" disabled checked> Pass targeted optimized runtime/JSON/supervisor checks (92 standard tests plus five custom protocols per host) and 12 separate object/ABI/GC tests. This does not claim the entire compiler integration suite was run optimized.</li>
+<li class="task"><input type="checkbox" disabled checked> Preserve 26 Rust distribution contracts and 18 negative/two positive lint policy probes. Both platforms pass three compiler-phase fixture tests and ten benchmark smoke phases.</li>
+<li class="task"><input type="checkbox" disabled checked> Complete refreshed release artifact, relocation/install/source-test/uninstall and performance records for both ARM64 platforms. Archive and performance reports identify matching component hashes; no x86-64 execution, complete optimized compiler suite or 1.0 release is implied.</li>
+<li class="task"><input type="checkbox" disabled checked> Refresh the public README around Fern&#39;s purpose, Rust implementation policy, verified platform scope and preview limits. Execute the greeting, quickstart run/build and HTML documentation command; verify local links and contributor guidance.</li>
+</ul>
+<h3 id="previous-compiler-default-acceptance">Previous Compiler-Default Acceptance</h3>
+<ul>
+<li>Rust compiler migration: complete on macOS arm64 and Linux arm64. Build, install and release workflows select Rust as <code>fern</code>; <code>fern-c</code> remains the explicit C bootstrap/reference. <a href="docs/history/RUST_DEFAULT_MIGRATION.md">Acceptance evidence</a>.</li>
+<li>Compiler gates: Rust/QBE passes 1,621/1,624 Cargo tests on macOS/Linux; Cranelift passes 1,633/1,636. Both platforms pass 305 independent backend native-output cases and ten migration programs.</li>
+<li>Quality gate: full clean quality gates pass, including 574 C tests, 18 examples, runtime/native oracles, strict style and 66 workflow parity cases; documentation and real-server LSP checks pass on both platforms.</li>
+<li>Fuzz gate: unchanged 64-case <code>0xC0FFEE</code> smoke passes for both compilers on both platforms; the 512-case compatibility stretch passes for Rust and C on macOS. Rust&#39;s separate 192-mutation corpus passes on both platforms.</li>
+<li>Bootstrap and developer tools: full native style-launcher checks, 18 negative lint contracts and all ten compiler-phase benchmark smoke cases pass on both platforms. Opener and retry-limit fixtures now have deterministic execution/clock inputs.</li>
+<li>Perf gate: combined release builds take 44.21 s on macOS and 44.01 s on Linux. Rust compiler sizes are 3,823,744/3,806,232 bytes and startup p95 is 6.62/0.41 ms; C independently retains its 1,500,000-byte ceiling. All enforced budgets pass.</li>
+<li>Docs gate: documentation consistency, eight snippet-runner regressions and the executable stdlib example pass on both platforms.</li>
+<li>Distribution: nine installation checks and ten checks of each actual relocated release archive pass. Exact compiler/helper/runtime/license inputs and matching source-tree hashes are recorded in the acceptance report.</li>
+<li>Release readiness: QBE remains the default backend; the C runtime, native supervisor and editor parser retain their existing implementations. Generalized actors, remaining language/stdlib/editor work, backend promotion and a 1.0 release have separate exit criteria in <a href="release-readiness.html">release readiness</a>.</li>
+</ul>
+<h2 id="canonical-documents">Canonical Documents</h2>
+<ul>
+<li>Project overview: <a href="index.html"><code>README.md</code></a></li>
+<li>Build guide: <a href="build.html"><code>BUILD.md</code></a></li>
+<li>Design spec: <a href="design.html"><code>DESIGN.md</code></a></li>
+<li>Decision records: <a href="decisions/"><code>decisions/</code></a></li>
+<li>Coding standards: <a href="morrow-style.html"><code>MORROW_STYLE.md</code></a></li>
+<li>Compatibility policy: <a href="compatibility-policy.html"><code>docs/COMPATIBILITY_POLICY.md</code></a></li>
+<li>Documentation index: <a href="readme.html"><code>docs/README.md</code></a></li>
+<li>Writing and publishing documentation: <a href="documentation.html"><code>docs/DOCUMENTATION.md</code></a>; <code>cargo xtask docs</code> builds the repository site</li>
+</ul>
+<h2 id="completed-foundations">Completed Foundations</h2>
+<ul>
+<li>Gate A: Developer experience and language feel</li>
+<li>Gate B: Reliability and regression resistance</li>
+<li>Gate C: Product surface and stdlib quality baseline</li>
+<li>Gate D: Ecosystem and adoption hardening</li>
+</ul>
+<h2 id="rust-frontend-evaluation-2026-09-05">Rust Frontend Evaluation (2026-09-05)</h2>
+<p>Status: Historical bounded prototype checkpoint. Its quality, Rust and documentation gates passed while C was the shipping default (Decision45). The current build and installation select Rust as <code>fern</code>; see Rust Migration Completion below.</p>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Build an independent lexer/parser for a clearly bounded Fern subset (11 parser tests).</li>
+<li class="task"><input type="checkbox" disabled checked> Resolve names and types once into a typed intermediate representation (10 checker tests).</li>
+<li class="task"><input type="checkbox" disabled checked> Generate QBE exclusively from typed IR and reuse the C runtime/backend (17 emitter tests and native execution).</li>
+<li class="task"><input type="checkbox" disabled checked> Add check/emit/build/run commands and specification-grounded differential tests (51 Rust tests, 32 native programs, 5 invalid inputs, literal paths).</li>
+<li class="task"><input type="checkbox" disabled checked> Measure clean/incremental frontend builds, check/emit latency, binary sizes, and native execution.</li>
+<li class="task"><input type="checkbox" disabled checked> Record evidence, gaps, and a migration recommendation before expanding scope (<a href="docs/history/RUST_FRONTEND_EVALUATION.md">evaluation</a>): continue Rust incrementally; require parity before switching defaults.</li>
+</ul>
+<h2 id="active-priorities">Active Priorities</h2>
+<ul>
+<li class="task"><p><input type="checkbox" disabled checked> Add explicit SQLite close with bounded live connections, stale-handle rejection and rollback/lock release (debug/release/sanitizer groups and exact C/Rust native outputs; Decision113).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Preserve optional regex capture positions, including absent versus empty groups and later participating groups (seven shared-runtime native cases; Rust source oracle added).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Promote expired actor timers at every cooperative boundary, preserve deadline/identity wake ordering after timely unmatched or late sends, and retire cached timers without spurious clock faults (2,048 deterministic FernSim timeout dispatches per debug/release/sanitizer mode).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Preserve NaN sign, payload and signaling bits in QBE machine transport, matching Cranelift without decimal canonicalization (18 independently specified native bit-pattern outputs and serializer regression).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Showcase native string interpolation in the README greeting; exact <code>Hello, Fern!</code> output verified on both C and Rust compilers.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Refresh the public README around runnable onboarding, accurate feature boundaries and a dedicated Fern logo; greeting and quickstart outputs verified on both compilers, with light/dark presentation checked.</p>
+</li>
+</ul>
+<h3 id="development-environment-and-rust-review-guidance">Development Environment and Rust Review Guidance</h3>
+<ul>
+<li class="task"><p><input type="checkbox" disabled checked> Adopt nightly-2026-09-06 across mise, direct Cargo, CI and developer jobs; verify component identities and drift, 18 negative lint contracts, complete macOS/Linux Rust/native/C/docs/nextest gates and all ten benchmark smoke cases. Bacon check/Clippy and watchexec initial/source-change jobs select nightly (Decision111).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Replace Justfile with pinned mise tools/tasks and platform checksums; preserve sequential native builds and explicit Zed toolchain scope (Decision106).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Verify optional nextest, Bacon and watchexec without adding application dependencies (initial Rust1.75 checkpoint; nightly migration above supersedes the project pin).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Lock all three Python reference-script dependency graphs and reject metadata drift before execution.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Preserve quoted native compiler flags and pkg-config paths through bounded literal decoding; cover all build helpers and 128 generated argument roundtrips.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Add the strict incremental Rust lint policy and initial-path fix, with 17 negative/two positive lint contracts, three fixture tests, ten Criterion phase smoke cases and the review-guidance adoption matrix (Decision107).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Audit native linker-argument and test-frame boundaries under strict lints; preserve Unicode paths, reject malformed/oversized records and validate complete status/payload domains.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Preserve literal pkg-config library-directory metadata and reject malformed successful records before archive lookup, fallback or link publication.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled> Extend audited strict modules and collect quiet-host comparative phase measurements.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Verify the combined environment/compiler gates on macOS and freshly provisioned Linux tools: full Rust/native/C/cache/docs gates, 1409/1410 nextest tests without skips, 23 workflow/flag/lock tests, lint contracts and Criterion smoke.</p>
+</li>
+</ul>
+<h3 id="rust-migration-completion">Rust Migration Completion</h3>
+<ul>
+<li class="task"><p><input type="checkbox" disabled checked> Make the native supervisor retry-limit oracle independent of elapsed wall time, retaining exact retry counts and real deadline coverage (complete debug/release/sanitizer protocol matrices pass on macOS/Linux).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Remove executable-write races from documentation opener tests using immutable scripts and private symlinks; retain literal non-UTF-8 argv and timeout assertions (six complete parallel Linux binary-suite runs pass).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Restore bounded inline match arms with guarded patterns, canonical formatting and explicit nested/caller comma ownership (37 focused parser/formatter checks, ten native migration programs, 512 unchanged seeded parser/formatter cases per compiler; Decision121).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Preserve consistent tab indentation, eight-column layout and byte-correct spans while rejecting mixed styles; canonical formatting uses spaces (24 focused parser/formatter tests and Clippy; Decision120).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Validate documentation snippets with the actual Rust default without rewriting Result obligations or literal source structure; restore current opaque JSON signatures and complete fallible-API examples (eight extractor/default-compiler regressions and docs gate pass).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Keep cold bootstrap files private under permissive caller masks and inventory inaccessible system-library subtrees without hiding searchable files (both-platform debug/release/sanitizer permission and caller-mask matrices; Linux cold/warm cache regression; Decision119).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Make the offline Python lock-drift oracle independent of registry cache state, retaining exact lock rejection and an unlocked execution control (25 workflow checks pass).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Synchronize release version updates across C/Rust and benchmark locks, publish complete readiness bundles, and measure the compiler named in memory reports (four CI/release regressions, actual release-please updater verification, 12 mise tests and three benchmark fixtures).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Implement actual checked local LSP rename and canonical formatting code actions, with versioned UTF-16 edits, capture rejection and explicit scope bounds (18 action/negotiation regressions, existing LSP checks and fresh-binary protocol smoke; Decision115).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Inventory and bundle exact third-party license notices for all default Unix Cargo dependencies and compiled native components; locked closure and native-license checks pass.</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Restore CLI literal-path delimiters, default documentation cwd, public fern identity and REPL type/help/clear commands; real PTY editing, completion, persistent history and cancellation pass with bounded history import (Decision115).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Audit every shipping C builtin name and executable construct against typed Rust lowering (212-name inventory, 48 focused checks, six independent language migration programs and two C-reference outputs; docs/LANGUAGE_PARITY.md).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Build a tested Rust-default publication path preserving the explicit C reference and prior default on Cargo failure (eight debug/release/helper/artifact-selection/failure workflow cases, including directory destinations; final macOS/Linux acceptance recorded below).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Disable development component fallback in installed Rust distributions, even with damaged markers (native component-selection regressions; explicit sibling/override behavior retained).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Require complete default Rust release components and validate exact typed package identity, executable helpers and regular archive members (eight independent distribution tests, exact marker types and owner-executable helpers; nine installation checks include sixteen directory-destination failures).</p>
+</li>
+<li class="task"><p><input type="checkbox" disabled checked> Restore 14 shipping service aliases, bracket list indexing and infix membership through typed operations (four parser/checker/formatter/REPL tests and four native programs covering full-width values, Float/NaN, source order and deferred bounds-fault cleanup).</p>
+</li>
+</ul>
+<p>Status: Compiler migration acceptance is complete on macOS arm64 and Linux arm64.
+Rust is the default <code>fern</code>; <code>fern-c</code> remains the explicit C bootstrap/reference.
+Executable baseline parity, tooling, native components, installation, packaging,
+fuzz and separate compiler performance gates pass. Future language and runtime
+features retain their own milestones below.</p>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Custom algebraic/record types, generic functions, nested patterns and guards (41 checker and 36 emitter tests; native recursive values and guarded matching).</li>
+<li class="task"><input type="checkbox" disabled checked> Modules/imports/visibility and a realistic application spanning multiple files (13 loader tests including visibility bypass regressions, native project execution).</li>
+<li class="task"><input type="checkbox" disabled checked> Verify executable C-baseline language parity through typed Rust operations and independent native outputs, with intentional JSON/Option/error corrections documented (212-name inventory, docs/LANGUAGE_PARITY.md; QBE and Cranelift gates on macOS/Linux).</li>
+<li class="task"><input type="checkbox" disabled checked> Replace reference-only Result checks with bounded reachable-path handling, call/alias provenance, complete collection coverage and deferred cleanup (Decision95).</li>
+<li class="task"><input type="checkbox" disabled checked> Prove direct recursive nominal Result handlers, complete List/Map child traversals, exact recursive callbacks and deferred child handling (Decision95 R1–R2).</li>
+<li class="task"><input type="checkbox" disabled checked> Prove complete mutual structural handler groups over actual nominal descendants, including typed List/Map traversal and transparent wrapped children, with independent source-order and unsafe-path probes (Decision95 R3).</li>
+<li class="task"><input type="checkbox" disabled checked> Verify the combined boundary/CLI/Result checkpoint on macOS and Linux: full Rust/native/C/docs gates, 1447/1449 nextest tests without skips, separate doctests and Criterion smoke.</li>
+<li class="task"><input type="checkbox" disabled checked> Complete bounded recursive builder contracts and mutual-summary widening without unproved handling credit (90 focused integrations, 76 internal obligation checks; independent empty-subtree cardinality exploit rejected; conservative equations documented in docs/RESULT_HANDLING.md, Decision114).</li>
+<li class="task"><input type="checkbox" disabled checked> Verify standard-library/native ABI compatibility and executable applications on both platforms, including runtime debug/release/sanitizer oracles and 305 independent backend outputs.</li>
+<li class="task"><input type="checkbox" disabled checked> Complete diagnostics, formatting, terminal REPL, negotiated LSP edits, documentation and developer-command parity (docs/TOOLING_PARITY.md; real PTY/RPC and literal-source documentation regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Preserve common quiet/verbose/color controls, literal forwarded argv, visible failures and missing-command status in the Rust CLI (Decision108A).</li>
+<li class="task"><input type="checkbox" disabled checked> Add bounded source-only lex/parse inspection with byte spans, escaped dumps, no import/type/backend execution and atomic parser/limit failure (Decision108B).</li>
+<li class="task"><input type="checkbox" disabled checked> Open retained HTML documentation only after complete atomic generation, with literal platform argv, visible best-effort failures and consistent byte limits (Decision108C).</li>
+<li class="task"><input type="checkbox" disabled checked> Verify the 1006-test expanded Rust checkpoint, C quality gate and documentation on Linux arm64 with Rust 1.75; expose POSIX test APIs under glibc strict C11 without hiding Darwin extensions.</li>
+<li class="task"><input type="checkbox" disabled checked> Package explicit Rust/native inputs as a relocatable opt-in preview, with deterministic bounded archives, atomic publication, strict verification and missing-helper isolation (Decision110).</li>
+<li class="task"><input type="checkbox" disabled checked> Complete Rust-default acceptance on macOS/Linux arm64: full quality, Rust/QBE, Cranelift, documentation, LSP, native style-launcher, fuzz, installation, release packaging and separate Rust/C performance gates pass (docs/RUST_DEFAULT_MIGRATION.md).</li>
+</ul>
+<p>Compiler migration acceptance is complete. Historical checkpoints and remaining
+language, runtime, editor and backend work below retain their own exit criteria.</p>
+<h3 id="rust-migration-expanded-language-and-tools">Rust Migration: Expanded Language and Tools</h3>
+<p>Status: Verified expanded-language checkpoint, incorporated into the Rust default compiler. Remaining planned features are tracked separately from executable baseline migration.</p>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Custom records/sums, generic specialization, guarded nested matches and modules.</li>
+<li class="task"><input type="checkbox" disabled checked> IEEE Float values, structural tuples/destructuring, pipelines and interpolation.</li>
+<li class="task"><input type="checkbox" disabled checked> Registry-driven runtime signatures and full-width/native-object adapters.</li>
+<li class="task"><input type="checkbox" disabled checked> Formatter preserving syntax/comments and persistent typed-IR interactive evaluation.</li>
+<li class="task"><input type="checkbox" disabled checked> Add non-writing Rust <code>fmt --check</code> for CI, with both flag positions, stable status/diagnostics and preserved literal-path/symlink/file metadata (six CLI regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Module-aware LSP diagnostics over unsaved buffers and UTF-16 edits.</li>
+<li class="task"><input type="checkbox" disabled checked> Replace unsafe argv shell reconstruction with literal process spawning (nine native regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Return explicit directory listing errors in both frontends and migrate native callers (four ABI, eight native, two binder and two alias checks).</li>
+<li class="task"><input type="checkbox" disabled checked> Preserve complete C lexer state across lookahead and speculative rollback, including bracket nesting, interpolation and pending indentation (three replay regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Preserve semantic C argument/payload widths and multiline match-arm scope; parser errors terminate (seven parser regressions and native bootstrap parity).</li>
+<li class="task"><input type="checkbox" disabled checked> Preserve signed 64-bit C Int through literals, arithmetic, inferred returns, containers, typed function values and native calls; guard MIN/-1 and inclusive MAX endpoints (16 native programs in debug/release).</li>
+<li class="task"><input type="checkbox" disabled checked> Canonicalize C Unit annotations/empty patterns, unify contextual if branches and expose the existing packed Int Option fallback for checker workflows (annotation, pattern, ABI and branch regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Verify the complete expanded checkpoint and record test counts (Rust/C/docs/fuzz/native style parity).</li>
+<li class="task"><input type="checkbox" disabled checked> Functions/closures and ten higher-order collection/error operations (287 Rust tests, six new native programs, six negative cases; delayed Result-bearing captures remain restricted).</li>
+<li class="task"><input type="checkbox" disabled checked> Retain originating compiled code for interactive closures, preserve capture/effect order and bound unique retained programs (interactive closure and storage regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Immutable maps and record updates with semantic keys, persistent aliases and source-order evaluation (six native programs, nine invalid programs and interactive regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Early returns, postfix conditionals, condition matches, let-else and function-exit deferred cleanup (nine native programs, ten invalid cases and eight interactive control regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> With error handling, List/Map/range iteration and loop control (14 native programs, 14 invalid cases and ten interactive regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Numeric operators, full-width literal forms, multiline strings/comments/documentation and Unicode identifiers (seven native programs, eight controlled-fault programs, 12 invalid inputs and seven interactive regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Bound shared runtime String.repeat allocations before multiplication; empty-input fast path (eight native ABI regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Replace shared runtime list access assertions with defined failures before access (six native ABI regressions; preserves full-width successful values).</li>
+<li class="task"><input type="checkbox" disabled checked> Publish complete bounded File.read text and require buffered write/append completion, with shared REPL text policy (eight source-native cases per frontend and five runtime groups in debug/release/sanitizer builds on macOS/Linux arm64).</li>
+<li class="task"><input type="checkbox" disabled checked> Classify decimal text using checksum-pinned Unicode 16 tables in C/Rust/REPL; preserve size-fault cleanup and charge aggregate interactive work (exhaustive native Unicode oracle and source callback/failure tests).</li>
+<li class="task"><input type="checkbox" disabled checked> Private return inference with bounded recursive constraints, explicit public return signatures and concrete Result-valued entry points (17 checker regressions, bounded type-work checks and native execution).</li>
+<li class="task"><input type="checkbox" disabled checked> Guard Rust list access, repetition and UTF-8 slicing/splitting through deferred cleanup, including native malformed-byte input (21 native programs, 26 shared-runtime UTF-8 cases and interactive regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Shared exact list and list/tuple rest patterns, bounded coverage and Result discard checks; native length guards and atomic interactive bindings.</li>
+<li class="task"><input type="checkbox" disabled checked> Embedded multiline match/if/for/with/callback suites inside calls, lists and tuples, preserving inline separators and closers (ten native sequence programs, 15 invalid inputs and formatter equivalence).</li>
+<li class="task"><input type="checkbox" disabled checked> Native direct self-tail-call elimination with full-width parameter updates, entry-only scratch storage and preserved cleanup exclusions (million-step native recursion, effects and fault cases).</li>
+<li class="task"><input type="checkbox" disabled checked> Atomic REPL paste entries for complete function clause groups; unfinished input and rejected definitions preserve prior state.</li>
+<li class="task"><input type="checkbox" disabled checked> Typed adjacent function clauses, guards and arrow bodies through shared dispatch, generic inference, modules/formatting and 255-parameter coverage (seven native programs and 11 invalid inputs).</li>
+<li class="task"><input type="checkbox" disabled checked> Optional source-call labels with stable external pattern interfaces, written evaluation order, labeled pipe holes and module/formatter metadata (18 Rust regressions, four native and four atomic invalid programs).</li>
+<li class="task"><input type="checkbox" disabled checked> Require labels for exact Bool and repeated finalized declared scheme types, with bounded work and valid source metadata; migrate source fixtures without changing effect order (ten additional Rust regressions; five native and eight atomic invalid programs).</li>
+<li class="task"><input type="checkbox" disabled checked> Add exact source-label definition/hover across current module overlays and verify labeled grammar/highlights in native/WASM (12 protocol cases and 80/27/27 editor corpus); preserve required labels during member recovery.</li>
+<li class="task"><input type="checkbox" disabled checked> Complete source-label suggestions for closed and EOF-open calls, respecting current modules, supplied arguments, lexical shadowing and exact UTF-16 edits (20 Rust protocol regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Parse binary/octal/hexadecimal integer and exponent-only Float spellings in the editor, with exact numeric tokens and incremental radix/range edits (93 valid, 33 recovered malformed and 33 incremental native/WASM cases).</li>
+<li class="task"><input type="checkbox" disabled> Complete remaining editor syntax.</li>
+<li class="task"><input type="checkbox" disabled checked> Private parameter inference from all clause patterns and supplied annotations, including delayed tuple-rest arity and nominal payload evidence; public boundaries and ambiguity diagnostics retained (seven native programs, nine invalid inputs and interactive regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Validate every generic body before specialization using rigid type equality and intrinsic capability requirements; propagate requirements through callbacks/recursive helpers and nominal Map fields (four native programs, 16 invalid programs and interactive regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Source-based LSP go-to-definition and scoped completion over current overlays, with module visibility, shadowing, UTF-16 edits and bounded output (21 navigation and three source-index regressions; executable protocol smoke).</li>
+<li class="task"><input type="checkbox" disabled checked> Parser-based documentation for individual source files: clause groups, original signatures, types and literal @doc metadata; bounded Markdown/HTML output and atomic CLI writes (15 documentation/CLI regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Directory documentation with deterministic module navigation and local HTML search; bounded discovery, escaping and atomic source-safe publication (seven new library/CLI regressions and browser search/navigation checks).</li>
+<li class="task"><input type="checkbox" disabled checked> Rust executable documentation tests with checked pattern expectations, original module scope, isolated processes, bounded time/output and explicit library checking (20 Rust regressions and native execution scenarios).</li>
+<li class="task"><input type="checkbox" disabled checked> Regular source-owned unit tests alongside documentation examples, with checked nongeneric entries, failure continuation and test-only process-exit rejection (15 Rust regressions and 15 native cases plus import/directory/doc-mode scenarios).</li>
+<li class="task"><input type="checkbox" disabled checked> Checked inferred documentation signatures from one finalized source-scheme pass per module graph, retaining original headers and protecting all source dependencies (ten Rust regressions and browser search/layout checks).</li>
+<li class="task"><input type="checkbox" disabled checked> HexDocs-style documentation sites (Decision154): <code>@moduledoc</code> through parser, formatter, preflight budget and doctests; a bounded in-tree Markdown renderer with Fern highlighting, safe links and declaration cross-references; <code>fern doc --site</code> with summary tables, sidebar, client-side search, themes, guides, <code>--title</code>/<code>--version</code>/<code>--link</code> and atomic source-safe publication; <code>cargo xtask docs</code> renders the repository guides, examples and embedded <code>cargo doc</code> output (22 new Rust regressions across <code>moduledoc</code>, <code>documentation_markdown</code>, <code>documentation_site</code> and <code>documentation_site_cli</code>, plus a generated-method omission case in <code>documentation_inferred</code>; the 2026-09-14 macOS ARM64 <code>cargo xtask check</code> passes formatting, notices, workspace Clippy, 2,261 Rust tests across 278 suites, 316 native fixtures, 20 examples, 63 dynamic compatibility programs, 295 atomic rejections and 64+192 fuzz cases; light/dark module, guide and search pages inspected in a real browser).</li>
+<li class="task"><input type="checkbox" disabled checked> Whole private-signature inference and SCC generalization, including delayed shape constraints.</li>
+<li class="task"><input type="checkbox" disabled checked> Core private-signature generalization from patterns and bodies, with callee-first recursive components, rigid annotations and intrinsic requirements (eight native programs, 14 invalid programs and three interactive regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Delayed shape obligations using later body evidence for fields, updates, tuple-rest and iteration; non-executable probes rejected at publication boundaries (seven native programs, eight invalid programs and two interactive regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Typed hover and valid-source record/tuple/member completion from final checked source facts, with instantiated uses, inferred requirements, exact doc ownership and separate type/value namespaces (26 new metadata/editor regressions).</li>
+<li class="task"><input type="checkbox" disabled checked> Incomplete member completion from independent concrete receiver evidence in current source, with exact edits and no executable hole IR (22 new Rust regressions including library source identity).</li>
+<li class="task"><input type="checkbox" disabled checked> Preserve global module reference identity when an unrelated local shadows its canonical module name (eight Rust regressions, four native programs and four invalid inputs).</li>
+<li class="task"><input type="checkbox" disabled checked> Transparent scalar/generic type aliases with bounded capture-free expansion, module privacy, original source tooling and native execution (26 new Rust regressions, seven native programs and 12 invalid inputs).</li>
+<li class="task"><input type="checkbox" disabled checked> Distinct generic newtypes with unboxed full-width native representation, explicit projection/patterns, scalar capabilities, Result obligations and source tooling (45 Rust regressions, 13 native programs and 14 invalid cases).</li>
+<li class="task"><input type="checkbox" disabled checked> Independent module type/value declarations and visibility, selected/wildcard reexports, lexical receiver resolution and exact source navigation (19 Rust regressions, 12 native programs and 12 atomic invalid cases).</li>
+<li class="task"><input type="checkbox" disabled checked> Canonical finite unions, contextual member/subset conversion, typed narrowing and full-width native/REPL carriers, preserving generic equality and Result obligations (87 Rust regressions, 27 native programs, 23 atomic invalid cases and unit/main entry checks).</li>
+<li class="task"><input type="checkbox" disabled> Union constructor refinements, variance, implicit joins and lifted capabilities.</li>
+<li class="task"><input type="checkbox" disabled> Remaining function/type syntax and complete native-language audit.</li>
+<li class="task"><input type="checkbox" disabled checked> Track Result duties beyond local references; metadata, partial searches and incomplete branch handling do not acknowledge entire values (Decision95).</li>
+</ul>
+<h3 id="rust-migration-collections-and-error-values">Rust Migration: Collections and Error Values</h3>
+<p>Status: Complete and incorporated into the Rust default compiler. Decisions 45–46 describe the historical collections/error-value checkpoint; see <a href="docs/history/RUST_DEFAULT_MIGRATION.md">completed migration acceptance</a>.</p>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Parse recursive List/Option/Result types, list literals, and match expressions (24 isolated parser tests, including all native fixtures).</li>
+<li class="task"><input type="checkbox" disabled checked> Infer constructor/empty-list types and resolve compound values to concrete typed IR.</li>
+<li class="task"><input type="checkbox" disabled checked> Enforce exhaustive matches and consistent payload/branch types.</li>
+<li class="task"><input type="checkbox" disabled checked> Propagate Result errors with postfix <code>?</code>, preserving the enclosing error type.</li>
+<li class="task"><input type="checkbox" disabled checked> Lower immutable lists and full-width Option/Result values through the existing runtime.</li>
+<li class="task"><input type="checkbox" disabled checked> Verify native collections, errors, nested payloads, scoped patterns, and invalid programs (31 native programs, 22 negative cases; includes retained pointers across 1,500 allocations).</li>
+<li class="task"><input type="checkbox" disabled checked> Update the supported-feature guide and pass Rust/C/documentation gates (94 Rust tests, 542 C tests, clippy/format, exact native output, docs).</li>
+</ul>
+<h3 id="priority-1-repository-hygiene-and-release-flow">Priority 1: Repository Hygiene and Release Flow</h3>
+<p>Status: Complete for the tracked hygiene tasks</p>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Fix release staging validation mismatch (<code>release-package-check</code> now stages and validates <code>dist/staging</code>)</li>
+<li class="task"><input type="checkbox" disabled checked> Keep generated outputs out of source control by default (release artifacts, benchmark binaries)</li>
+<li class="task"><input type="checkbox" disabled checked> Keep documentation cross-linked and remove stale process instructions</li>
+<li class="task"><input type="checkbox" disabled checked> Add a lightweight docs consistency check to CI (link + key status marker validation)</li>
+</ul>
+<p>Exit criteria:</p>
+<ul>
+<li>Working tree does not accumulate tracked generated binaries during normal benchmark/release flows.</li>
+<li>Every top-level process document links to canonical docs and active roadmap.</li>
+</ul>
+<h3 id="priority-2-milestone-8-follow-through-actor-runtime-semantics">Priority 2: Milestone 8 Follow-Through (Actor Runtime Semantics)</h3>
+<p>Status: Active</p>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Enforce restart budgets at time zero, single replacement lineage, acyclic ownership, invalid PID rejection, and stopped-sibling semantics (six runtime scenarios, 1,536 seeded crash steps)</li>
+<li class="task"><input type="checkbox" disabled checked> Preserve runtime <code>send</code> Result values through native codegen (success and invalid-PID execution regressions)</li>
+<li class="task"><input type="checkbox" disabled checked> Stop owned descendants before fallible exit notifications, reject restarts under dead owners, and prepare name/monitor storage before publishing actors (ten subtree/failure groups plus all six prior scenarios in debug/release/sanitizers on macOS/Linux arm64).</li>
+<li class="task"><input type="checkbox" disabled> Close remaining supervision/runtime behavior gaps not yet modeled end-to-end</li>
+<li class="task"><input type="checkbox" disabled> Expand deterministic MorrowSim scenarios for supervision trees and failure policies</li>
+<li class="task"><input type="checkbox" disabled checked> Add stronger actor runtime invariants to regression suites (seeded native-runtime scenarios)</li>
+</ul>
+<p>Exit criteria:</p>
+<ul>
+<li>Actor runtime semantics are deterministic, regression-covered, and documented as compatibility commitments.</li>
+</ul>
+<h3 id="priority-3-milestone-9-bootstrapping">Priority 3: Milestone 9 Bootstrapping</h3>
+<p>Status: Complete for the native quality-checker bootstrap workflow</p>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Compare exact diagnostics, severity, messages, and exits on pinned failing fixtures and all <code>src</code>/<code>lib</code> sources (strict, lenient, summary, nested paths)</li>
+<li class="task"><input type="checkbox" disabled checked> Port the Fern checker to immutable returned state and verify exact diagnostics, file counts and exits under both C and Rust frontends, including continuation after a failed build.</li>
+<li class="task"><input type="checkbox" disabled checked> Capture bounded literal processes through both native frontends with full-width limits, distinct normal/error results and owned cleanup (31 native scenarios and five atomic rejections per frontend; 21 runtime groups in debug/release/sanitizer builds).</li>
+<li class="task"><input type="checkbox" disabled checked> Add fallible exact stderr output with thread-local SIGPIPE preservation (nine native groups in debug/release/sanitizer builds; six source-native cases and two atomic rejections per frontend).</li>
+<li class="task"><input type="checkbox" disabled checked> Accept interpolated strings as indented C-parser body expressions (three AST regressions), including final branches followed by else.</li>
+<li class="task"><input type="checkbox" disabled checked> Run the native build/test/example/Git workflow through literal bounded argv, preserve stderr CLI failures and compare 47 scenarios under both frontends.</li>
+<li class="task"><input type="checkbox" disabled checked> Reach pinned diagnostic/workflow parity for <code>scripts/check_style.py</code> in <code>scripts/check_style.fn</code>, including Unicode numeric-path prefix classification (66 reference-first workflow cases under both frontends).</li>
+<li class="task"><input type="checkbox" disabled checked> Add parity assertions to CI (<code>mise run style-parity</code> as a required gate)</li>
+<li class="task"><input type="checkbox" disabled checked> Make the Fern-native checker the default through a content-validated C-bootstrap launcher; verify cold/warm caches, source and external inputs, concurrency, failure, ownership and independent Python parity on macOS/Linux (Decision93).</li>
+</ul>
+<p>Exit criteria:</p>
+<ul>
+<li>Style checks can run without Python for normal developer workflows.</li>
+</ul>
+<h3 id="priority-4-milestone-10-tui-completion">Priority 4: Milestone 10 TUI Completion</h3>
+<p>Status: Complete for the tracked TUI scope</p>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Finish prompt line editing and richer terminal cursor controls</li>
+<li class="task"><input type="checkbox" disabled checked> Implement tree/log modules for structured CLI UX</li>
+<li class="task"><input type="checkbox" disabled checked> Add canonical TUI examples with deterministic test coverage</li>
+</ul>
+<p>Validation: 13 native and PTY tests cover input/password editing, Unicode, EOF/cancellation, terminal restoration, cursor controls, immutable trees, log escaping, and the canonical Fern example. Other prompt variants retain line-based input.</p>
+<p>Exit criteria:</p>
+<ul>
+<li>TUI surface is complete enough to support first-party tooling UX needs.</li>
+</ul>
+<h3 id="priority-5-milestone-11-polish-and-optimization">Priority 5: Milestone 11 Polish and Optimization</h3>
+<p>Status: Active</p>
+<ul>
+<li class="task"><input type="checkbox" disabled> Reduce binary size and startup variance further while preserving ergonomics</li>
+<li class="task"><input type="checkbox" disabled checked> Tighten release checklist and pre-1.0 readiness criteria</li>
+<li class="task"><input type="checkbox" disabled checked> Expand user-facing docs (language guide/tutorial) for adoption</li>
+</ul>
+<p>Exit criteria:</p>
+<ul>
+<li>Pre-1.0 release checklist is explicit, measurable, and continuously validated.</li>
+</ul>
+<h2 id="user-workflow-closure-2026-09-05">User Workflow Closure (2026-09-05)</h2>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Validate real release archive names and reject unsafe version/platform metadata.</li>
+<li class="task"><input type="checkbox" disabled checked> Install the runtime with the compiler; support local <code>PREFIX</code> and staging <code>DESTDIR</code>.</li>
+<li class="task"><input type="checkbox" disabled checked> Resolve relocated/PATH/symlinked compiler bundles and quote toolchain paths.</li>
+<li class="task"><input type="checkbox" disabled checked> Isolate <code>fern run</code> artifacts; never overwrite basename-derived files in <code>/tmp</code>.</li>
+<li class="task"><input type="checkbox" disabled checked> Accept build flags before or after the source file.</li>
+<li class="task"><input type="checkbox" disabled checked> Reject unsupported autonomous spawn/receive execution with actionable diagnostics.</li>
+<li class="task"><input type="checkbox" disabled checked> Preserve quoted, escaped, Unicode, and long string literals through native codegen.</li>
+<li class="task"><input type="checkbox" disabled checked> Print declared String/Bool function results and conditional/comparison expressions correctly.</li>
+<li class="task"><input type="checkbox" disabled checked> Execute canonical examples and four tutorial programs with exact output assertions.</li>
+<li class="task"><input type="checkbox" disabled checked> Replace the stale HTTP placeholder example with deterministic client error handling.</li>
+</ul>
+<h2 id="remaining-language-completion-requirements">Remaining Language Completion Requirements</h2>
+<p>The design document is broader than the executable implementation. See
+<a href="release-readiness.html">release readiness</a> and <a href="actor-runtime.html">actor contracts</a>.
+Do not interpret the historical Gate A–D labels as language completion.</p>
+<ul>
+<li class="task"><input type="checkbox" disabled checked> Reproducible Tree-sitter aliases/newtypes/function-clause checkpoint: native/WASM accepted/recovery/incremental corpus, executable editor queries, bounded scanner and pinned generated artifacts (Decision 84).</li>
+<li class="task"><input type="checkbox" disabled checked> Extend the pinned editor grammar to finite unions, function-type precedence and typed narrowing; verify 38 accepted, 12 recovery and 13 incremental sources with native/WASM structural equivalence.</li>
+<li class="task"><input type="checkbox" disabled checked> Verify control/collection editor syntax against 69 Rust-checked programs, 20 malformed inputs and 22 native/WASM edits; isolate parser caches and enforce the exact 1 MiB scanner boundary.</li>
+<li class="task"><input type="checkbox" disabled checked> Recover the following declaration after malformed inline for/with headers, preserving the original sources and genuine errors (85 valid, all 33 malformed recovered, 30 native/WASM edits).</li>
+<li class="task"><input type="checkbox" disabled checked> Verify Zed grammar registration, pinned Preview2 component packaging, reproducible staged archives and actual isolated Rust LSP startup through discovery and explicit paths.</li>
+<li class="task"><input type="checkbox" disabled checked> Repin the locally staged Zed package to the verified label/recovery grammar, test exact label captures and reproducible archives, and rerun both actual-editor LSP discovery/override smokes.</li>
+<li class="task"><input type="checkbox" disabled checked> Repin the locally verified Zed package to the numeric-literal grammar and rerun package/actual-editor checks.</li>
+<li class="task"><input type="checkbox" disabled checked> Format explicit source directories and check all dirty paths without writes; validate all inputs and stage all replacements before publication (Decision99).</li>
+<li class="task"><input type="checkbox" disabled checked> Expose canonical full-document formatting through Rust LSP over current unsaved buffers, with UTF-16 edits, no server-side publication and explicit syntax/parameter errors (Decision100).</li>
+<li class="task"><input type="checkbox" disabled checked> Retire Tree-sitter integration under the explicit Rust-only scope; retain Rust LSP. Historical grammar parity/publication work is no longer planned.</li>
+<li class="task"><input type="checkbox" disabled checked> Execute bounded Rust native actor functions with typed mailboxes, selective receive/timeouts, explicit continuation frames, invocation-owned quotas and fault cleanup (Decision105A; native20-program and independent lifecycle/sanitizer gates).</li>
+<li class="task"><input type="checkbox" disabled checked> Suspend direct recursive helpers and List/Map/Range loops through typed return frames, preserving operand order, lexical exits and ordinary native entry points (Decision138).</li>
+<li class="task"><input type="checkbox" disabled checked> Preserve logical actor defer scopes across suspension, faults and cancellation; validate LIFO cleanup, original-fault precedence, precise roots and bounded retained state with native/REPL tests and a 64-by-256-operation stack model (Decision141).</li>
+<li class="task"><input type="checkbox" disabled checked> Execute checked source actors in persistent REPL sessions and replay bounded virtual-time transcripts through FernSim, including selective receives, deadlines, supervision, stale identities and explicit cleanup (Decision140).</li>
+<li class="task"><input type="checkbox" disabled checked> Compose typed receiving returns, transitive mailbox inference, with/? and ordinary captured callbacks; suspend six List and four Option/Result combinators while preserving Result provenance, selection order and cleanup. Native/REPL/GC and independent seeded models pass (Decision142).</li>
+<li class="task"><input type="checkbox" disabled> Implement external-event/instruction fairness, first-class actor-effect callbacks and typed ancestor escalation/descendant subtree reconstruction beyond the documented continuation boundaries.</li>
+<li class="task"><input type="checkbox" disabled checked> Immutable native JSON parser/accessors/stringifier with exact numbers, Unicode validation and bounded resources (14,309 API checks, 24 budget checks and 6,000 numeric oracle cases in debug/release/sanitizer builds).</li>
+<li class="task"><input type="checkbox" disabled checked> Migrate Rust native JSON to opaque values/errors, immutable builders and bounded lossless collection adapters (ten native programs, twelve semantic rejections, eight Rust integration tests and 248 native builder checks per build).</li>
+<li class="task"><input type="checkbox" disabled checked> Evaluate dynamic JSON in the Rust REPL with exact native semantics, independent cleanup budgets and bounded shared storage (22 new Rust regressions and 12,000 numeric/formatting oracles).</li>
+<li class="task"><input type="checkbox" disabled checked> Implement concrete typed JSON codecs: explicit derive(Json), static targets, native/REPL shared plans, strict fields and bounded error paths (Decision98 J4; 4 native programs, 14 atomic invalids and runtime debug/release/sanitizer boundaries).</li>
+<li class="task"><input type="checkbox" disabled checked> Verify record derivations and static JSON targets in native/WASM editor grammar (98 valid sources, 34 malformed cases recovered, 36 incremental edits).</li>
+<li class="task"><input type="checkbox" disabled checked> Repin the Zed package to the typed JSON grammar and verify reproducible archives, hostile-package rejection and both actual-editor startup modes with derived-record codec source.</li>
+<li class="task"><input type="checkbox" disabled checked> Support regular recursive JSON records through finite indexed plans, with a charged finite-value proof and native/REPL depth boundaries (Decision101 J5a).</li>
+<li class="task"><input type="checkbox" disabled checked> Derive transparent JSON codecs for newtypes, preserving full-width payloads without wrapper allocations and distinguishing nullable fields from optional fields (Decision101 J5b).</li>
+<li class="task"><input type="checkbox" disabled checked> Verify newtype derivation syntax, the 32-trait limit, recovery, queries and incremental edits in native/WASM editor grammar (102 valid, 38 malformed and 41 edits).</li>
+<li class="task"><input type="checkbox" disabled checked> Repin Zed to the newtype grammar commit 5b02ec6; verify reproducible packages, 102/38/41 grammar cases and actual-editor LSP startup in override/discovery modes.</li>
+<li class="task"><input type="checkbox" disabled checked> Extend typed JSON with conditional generic codec requirements, exact specialization, private template boundaries and phantom-field semantics (Decision101 J5c; 13 native programs, 22 atomic invalids, native/REPL parity).</li>
+<li class="task"><input type="checkbox" disabled checked> Implement explicitly derived tagged JSON sums, finite constructor-choice proof and shared native/REPL resource accounting (Decision103 J6a).</li>
+<li class="task"><input type="checkbox" disabled checked> Implement conservative disjoint JSON unions, allocation-free member selection and whole-union conditional requirements (Decision103 J6b).</li>
+<li class="task"><input type="checkbox" disabled checked> Accept inline union-bearing JSON decoder targets with bounded linear recognition, exact type identities and native/interactive parity; preserve ordinary parsing/formatting.</li>
+<li class="task"><input type="checkbox" disabled checked> Verify the library-path/inline-codec checkpoint on macOS and Linux: full Rust/native/C/docs gates, 1470/1472 nextest tests without skips, separate doctests and all ten Criterion smoke phases.</li>
+<li class="task"><input type="checkbox" disabled checked> Distinguish JSON unions through nested required record fields, tuple positions and shared-tag sum payloads under shared proof/runtime limits. Six compiler/REPL groups, independent seeded native selection/precise-GC tests and an expected-output native fixture pass (Decision137).</li>
+<li class="task"><input type="checkbox" disabled checked> Execute custom Json implementations and generic bridges in native and REPL structural codecs, with opaque wire profiles, composed error paths, shared callback quotas and original-fault cleanup. Independent callback ABI, forced-GC and seeded full-width round trips pass (Decision139; <a href="custom-json.html">custom JSON</a>).</li>
+<li class="task"><input type="checkbox" disabled checked> Reassess QBE/Cranelift using current primary sources and an independent native AOT experiment; correct the original QBE rationale (Decision109).</li>
+<li class="task"><input type="checkbox" disabled checked> Trial Cranelift through shared lowering and promote it as the sole native backend under the Rust workspace migration (Decision122). ARM64 native/ABI and recorded performance acceptance pass; source debugging, controlled optimization comparisons and x86-64 execution remain separate work.</li>
+<li class="task"><input type="checkbox" disabled checked> Extract shared typed machine lowering and replace handwritten QBE helper text with structured Rust builders; preserve existing QBE boundary tests (Decision112).</li>
+<li class="task"><input type="checkbox" disabled checked> Add canonical native signatures, fixed Float runtime boundaries and explicit Cranelift build/run selection; selected builds emit objects without invoking QBE or an assembler.</li>
+<li class="task"><input type="checkbox" disabled checked> Preserve the complete default Rust/QBE gate on macOS/Linux ARM64 after shared lowering (1,548/1,551 Cargo tests, native and packaging/workflow oracles, 192 fuzz mutations).</li>
+<li class="task"><input type="checkbox" disabled checked> Revalidate the full C quality and documentation gates on macOS/Linux ARM64; add Cranelift native acceptance to the Linux/macOS CI matrix with bounded test artifact profiles.</li>
+<li class="task"><input type="checkbox" disabled checked> Pass the complete Cranelift feature gate on macOS/Linux ARM64: 293 independent native output oracles per platform, 1,559/1,562 Cargo tests, feature Clippy, and mixed-argument ABI, relocation, phi and forced-GC regressions. Source debugger, controlled performance, x86-64 and default-promotion gates remain separate.</li>
+<li class="task"><input type="checkbox" disabled checked> Reserve an ABI-permitted Apple arm64 QBE scratch register, verify swaps/calls/spills and independent native outputs, and preserve generic Linux assembly (Decision104).</li>
+<li class="task"><input type="checkbox" disabled checked> Remove newly written executable races from native capture tests; preserve timeout/stream/descendant coverage and add 160 concurrent per-run output/status assertions.</li>
+<li class="task"><input type="checkbox" disabled checked> Retain direct-child ownership through native unit/doc test cleanup and validate the framed safe-Rust adapter (Decision102).</li>
+<li class="task"><input type="checkbox" disabled checked> Verify default-command migration to Rust on macOS/Linux, retaining <code>fern-c</code> as the explicit bootstrap/reference and documenting its legacy JSON contract (Decision96; docs/RUST_DEFAULT_MIGRATION.md).</li>
+<li class="task"><input type="checkbox" disabled> Expose HTTP serving to compiled Morrow applications beyond the Rust preview server, and implement the broader SQL query/resource APIs described in the design.</li>
+<li class="task"><input type="checkbox" disabled checked> Implement coherent static traits, defaults and parent bounds, explicit where requirements, generic implementations and structural Show/Eq/Ord/Clone derivation. Native, REPL, WASM and deterministic semantic oracles pass (Decision132; <a href="traits.html">traits</a>).</li>
+<li class="task"><input type="checkbox" disabled> Complete the remaining syntax audit and ergonomic inference refinements beyond the documented traits, function, alias/newtype and union contracts.</li>
+<li class="task"><input type="checkbox" disabled checked> Implement nominal immutable Sets with 13 APIs, membership syntax, generic/alias/first-class support, native/REPL model-based simulations and forced precise-GC collection at map helper boundaries; see <a href="sets.html">Sets</a>.</li>
+<li class="task"><input type="checkbox" disabled checked> Evaluate closed compile-time constants using bounded pure Fern execution, embed typed data, preserve public/module/editor conventions and reject effects even in unused initializers. Seeded arithmetic, aggregate/closure, visibility and actual native-output tests pass (Decision133; <a href="comptime.html">Comptime</a>).</li>
+<li class="task"><input type="checkbox" disabled checked> Implement source-level native C FFI with exact scalar ABI, checked narrowing, sealed pointer handles, retained string owners and literal library linking. Independent ABI, seeded conversion, module/CLI and forced-GC tests pass (Decision136; <a href="ffi.html">FFI</a>).</li>
+<li class="task"><input type="checkbox" disabled checked> Extend WASM with captured/indirect functions, maps/sets, collection callbacks, ranges/loops, unions, Result handlers and fault-aware deferred cleanup. Pass 34 Wasmi and four CLI tests, including seeded map, closure/GC and cleanup oracles (Decision135; <a href="wasm-language.html">portable language</a>).</li>
+<li class="task"><input type="checkbox" disabled checked> Add non-faulting <code>List.at/first/last/take/drop</code> and exact <code>Int.parse</code> with full-width heap Options; independent runtime ABI, native output, REPL and symbol-inventory tests pass (Decision150; <a href="stdlib-api-reference.html">stdlib reference</a>).</li>
+<li class="task"><input type="checkbox" disabled checked> Name the nearest known symbol in unknown name/function/field/type/module-member diagnostics, list missing constructors in exhaustiveness errors and retire &quot;Rust prototype&quot; parser wording (Decision149).</li>
+<li class="task"><input type="checkbox" disabled checked> Add <code>List.sort/zip/range/sum</code> and <code>Int.checked_add/sub/mul/div/rem/neg</code>; report argument type mismatches before missing labels. Independent runtime ABI, native output (<code>sequences/utilities.fn</code>, <code>numeric/checked.fn</code>), REPL and inventory tests pass (Decision151).</li>
+<li class="task"><input type="checkbox" disabled checked> Print lists, maps, options, results, tuples and <code>derive(Show)</code> types directly through <code>println</code> with an on-demand trait prelude; missing <code>Show</code> reports the type with a derive hint (Decision152; <code>traits/printing.fn</code>).</li>
+<li class="task"><input type="checkbox" disabled checked> Sort structured and generic elements through <code>Ord</code> (<code>List.sort</code>) or an explicit comparator (<code>List.sort_by</code>) with a stable runtime-driven merge that never crosses the callback ABI; render nested strings as quoted literals (<code>String.quote</code>) natively, in the REPL and in wasm; print generic parameters through <code>Show</code>. Independent runtime state-machine, native output (<code>sequences/sort_by.fn</code>, <code>traits/printing.fn</code>), REPL, Wasmi and checker tests pass (Decision153).</li>
+<li class="task"><input type="checkbox" disabled> Complete the specified standard modules, including data formats, testing/utilities, IO/system, cryptography and compression.</li>
+<li class="task"><input type="checkbox" disabled> Audit all specified syntax and stdlib calls for complete typecheck-to-native behavior; reject unsupported execution paths.</li>
+<li class="task"><input type="checkbox" disabled> Complete precise actor memory, fair scheduling and full typed browser application support above. Inferred ownership/reuse remains an optimization, not a mandatory application borrow checker (Decision124).</li>
+</ul>
+<h2 id="next-session-start-here">Next Session Start Here</h2>
+<p>The Rust-only workspace migration is complete within its recorded acceptance
+scope. The active direction is the full-stack actor/browser plan above. Continue
+using the Rust runtime and Cranelift through <code>cargo xtask check</code>; historical
+compiler-default evidence does not validate new runtime or browser features.</p>
+<ol>
+<li>Complete native root/layout coverage and resumable actor continuations; establish independent fairness, actor failure and resource-cleanup oracles before adding workers. Preserve full-width values and bounded lifecycle contracts.</li>
+<li>Extend the aggregate WASM backend beyond the tested application surface; derive shared wire schemas and add application-independent framework packaging. Preserve actual Morrow model/update/view and native actor acceptance.</li>
+<li>Preserve the working static/offline application, fixed-owner clusters and durable room recovery while extending measured progress and transactional external-effect recovery. Treat dynamic membership and replicated failover as separate milestones.</li>
+<li>Close supporting language/stdlib gaps in <a href="release-readiness.html">release readiness</a>, maintain the Rust LSP, and collect fresh native/browser correctness and performance evidence. Tree-sitter remains removed.</li>
+</ol>
+</article>
+<footer class="footer">Generated by <code>morrow doc</code>.</footer>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["MAX_FRAME_BYTES","MAX_LABEL_BYTES","VERSION"],"enum":["ClientMessage","Error","Mutation","ServerMessage","Status"],"fn":["decode","encode"],"mod":["binary"],"struct":["Budget","Client","Command","Connected","Decimal","DomainChange","Hub","Limits","Outcome","Snapshot","Task"],"trait":["Domain"]};

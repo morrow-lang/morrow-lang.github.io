@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Constructor","Type"],"mod":["ast","check","cranelift","doctest","documentation","ffi","format","ir","json_codec","lowering","lsp","machine","modules","native_library","parse","presentation","processes","repl","runtime","runtime_abi","suggest","unit_test","wasm"],"struct":["Diagnostic","Span"]};

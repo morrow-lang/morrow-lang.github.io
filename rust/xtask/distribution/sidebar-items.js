@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["MARKER","REQUIRED"],"fn":["install","package","uninstall","verify","verify_layout","write_marker"]};

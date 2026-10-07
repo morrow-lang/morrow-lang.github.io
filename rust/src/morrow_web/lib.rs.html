@@ -1,0 +1,443 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/morrow-web/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-203241e4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="morrow_web" data-themes="" data-resource-suffix="" data-rustdoc-version="1.100.0-nightly (f248f4038 2026-09-05)" data-channel="nightly" data-search-js="search-b167f383.js" data-stringdex-js="stringdex-b5109af9.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-1814ead3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-9f56287d.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">morrow_web/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Bounded HTTP and WebSocket gateway for native Morrow room actors.
+<a href=#2 id=2 data-nosnippet>2</a></span><span class="attr">#![forbid(unsafe_code)]
+<a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">mod </span>admin;
+<a href=#4 id=4 data-nosnippet>4</a><span class="kw">mod </span>listener;
+<a href=#5 id=5 data-nosnippet>5</a><span class="kw">mod </span>owner;
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">mod </span>peer;
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">mod </span>socket;
+<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>axum::{
+<a href=#9 id=9 data-nosnippet>9</a>    Json, Router,
+<a href=#10 id=10 data-nosnippet>10</a>    extract::{DefaultBodyLimit, Request, State, WebSocketUpgrade},
+<a href=#11 id=11 data-nosnippet>11</a>    http::{HeaderMap, HeaderValue, StatusCode, Uri, header},
+<a href=#12 id=12 data-nosnippet>12</a>    middleware::{<span class="self">self</span>, Next},
+<a href=#13 id=13 data-nosnippet>13</a>    response::{IntoResponse, Response},
+<a href=#14 id=14 data-nosnippet>14</a>    routing::{get, post},
+<a href=#15 id=15 data-nosnippet>15</a>};
+<a href=#16 id=16 data-nosnippet>16</a><span class="kw">pub use </span>listener::BoundedListener;
+<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span>serde::{Deserialize, Serialize};
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>std::{sync::Arc, time::Duration};
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>tokio::sync::{Semaphore, oneshot};
+<a href=#20 id=20 data-nosnippet>20</a>
+<a href=#21 id=21 data-nosnippet>21</a><span class="doccomment">/// Explicit preview authentication and admission settings.
+<a href=#22 id=22 data-nosnippet>22</a></span><span class="attr">#[derive(Clone)]
+<a href=#23 id=23 data-nosnippet>23</a></span><span class="kw">pub struct </span>Config {
+<a href=#24 id=24 data-nosnippet>24</a>    <span class="doccomment">/// Optional authenticated fixed-membership routing. Omit for a standalone node.
+<a href=#25 id=25 data-nosnippet>25</a>    </span><span class="kw">pub </span>cluster: <span class="prelude-ty">Option</span>&lt;morrow_cluster::NodeSettings&gt;,
+<a href=#26 id=26 data-nosnippet>26</a>    <span class="doccomment">/// Fixed number of pinned Morrow room workers. Room state never migrates live.
+<a href=#27 id=27 data-nosnippet>27</a>    </span><span class="kw">pub </span>workers: usize,
+<a href=#28 id=28 data-nosnippet>28</a>    <span class="doccomment">/// Optional single-writer checkpoint directory. Omit for ephemeral rooms.
+<a href=#29 id=29 data-nosnippet>29</a>    </span><span class="kw">pub </span>data_dir: <span class="prelude-ty">Option</span>&lt;std::path::PathBuf&gt;,
+<a href=#30 id=30 data-nosnippet>30</a>    <span class="kw">pub </span>origin: String,
+<a href=#31 id=31 data-nosnippet>31</a>    <span class="doccomment">/// Optional shared login secret. Empty disables POST `/session`; GET still issues a cookie.
+<a href=#32 id=32 data-nosnippet>32</a>    </span><span class="kw">pub </span>access_key: String,
+<a href=#33 id=33 data-nosnippet>33</a>    <span class="doccomment">/// Serve `/admin` and the footer link. Defaults on; `MORROW_WEB_ADMIN=0` hides it.
+<a href=#34 id=34 data-nosnippet>34</a>    </span><span class="kw">pub </span>admin: bool,
+<a href=#35 id=35 data-nosnippet>35</a>    <span class="kw">pub </span>max_sessions: usize,
+<a href=#36 id=36 data-nosnippet>36</a>    <span class="kw">pub </span>session_ttl: std::time::Duration,
+<a href=#37 id=37 data-nosnippet>37</a>    <span class="kw">pub </span>write_timeout: std::time::Duration,
+<a href=#38 id=38 data-nosnippet>38</a>    <span class="kw">pub </span>max_tcp_connections: usize,
+<a href=#39 id=39 data-nosnippet>39</a>    <span class="kw">pub </span>handshake_timeout: std::time::Duration,
+<a href=#40 id=40 data-nosnippet>40</a>    <span class="kw">pub </span>limits: morrow_web_protocol::Limits,
+<a href=#41 id=41 data-nosnippet>41</a>}
+<a href=#42 id=42 data-nosnippet>42</a><span class="kw">impl </span>Config {
+<a href=#43 id=43 data-nosnippet>43</a>    <span class="kw">pub fn </span>new(origin: String, access_key: String) -&gt; <span class="self">Self </span>{
+<a href=#44 id=44 data-nosnippet>44</a>        <span class="self">Self </span>{
+<a href=#45 id=45 data-nosnippet>45</a>            cluster: <span class="prelude-val">None</span>,
+<a href=#46 id=46 data-nosnippet>46</a>            workers: std::thread::available_parallelism().map_or(<span class="number">1</span>, |count| count.get().min(<span class="number">4</span>)),
+<a href=#47 id=47 data-nosnippet>47</a>            data_dir: <span class="prelude-val">None</span>,
+<a href=#48 id=48 data-nosnippet>48</a>            origin,
+<a href=#49 id=49 data-nosnippet>49</a>            access_key,
+<a href=#50 id=50 data-nosnippet>50</a>            admin: <span class="bool-val">true</span>,
+<a href=#51 id=51 data-nosnippet>51</a>            max_sessions: <span class="number">256</span>,
+<a href=#52 id=52 data-nosnippet>52</a>            session_ttl: std::time::Duration::from_secs(<span class="number">3600</span>),
+<a href=#53 id=53 data-nosnippet>53</a>            write_timeout: std::time::Duration::from_secs(<span class="number">2</span>),
+<a href=#54 id=54 data-nosnippet>54</a>            max_tcp_connections: <span class="number">512</span>,
+<a href=#55 id=55 data-nosnippet>55</a>            handshake_timeout: std::time::Duration::from_secs(<span class="number">10</span>),
+<a href=#56 id=56 data-nosnippet>56</a>            limits: Default::default(),
+<a href=#57 id=57 data-nosnippet>57</a>        }
+<a href=#58 id=58 data-nosnippet>58</a>    }
+<a href=#59 id=59 data-nosnippet>59</a>}
+<a href=#60 id=60 data-nosnippet>60</a><span class="doccomment">/// Compile-time browser assets. An empty collection explicitly serves build instructions.
+<a href=#61 id=61 data-nosnippet>61</a></span><span class="kw">pub type </span>Assets = <span class="kw-2">&amp;</span><span class="lifetime">'static </span>[(<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, <span class="kw-2">&amp;</span><span class="lifetime">'static </span>[u8])];
+<a href=#62 id=62 data-nosnippet>62</a><span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/assets.rs"</span>));
+<a href=#63 id=63 data-nosnippet>63</a>
+<a href=#64 id=64 data-nosnippet>64</a><span class="attr">#[derive(Clone)]
+<a href=#65 id=65 data-nosnippet>65</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>App {
+<a href=#66 id=66 data-nosnippet>66</a>    config: Arc&lt;Config&gt;,
+<a href=#67 id=67 data-nosnippet>67</a>    requests: owner::Pool,
+<a href=#68 id=68 data-nosnippet>68</a>    sockets: Arc&lt;Semaphore&gt;,
+<a href=#69 id=69 data-nosnippet>69</a>    http: Arc&lt;Semaphore&gt;,
+<a href=#70 id=70 data-nosnippet>70</a>    assets: Assets,
+<a href=#71 id=71 data-nosnippet>71</a>    system: Arc&lt;admin::System&gt;,
+<a href=#72 id=72 data-nosnippet>72</a>    cluster: <span class="prelude-ty">Option</span>&lt;peer::Cluster&gt;,
+<a href=#73 id=73 data-nosnippet>73</a>    _cluster_stop: <span class="prelude-ty">Option</span>&lt;Arc&lt;tokio::sync::watch::Sender&lt;()&gt;&gt;&gt;,
+<a href=#74 id=74 data-nosnippet>74</a>}
+<a href=#75 id=75 data-nosnippet>75</a><span class="doccomment">/// Build a router inside a Tokio runtime. Serve it through [`BoundedListener`]
+<a href=#76 id=76 data-nosnippet>76</a>/// (as [`serve`] does) to enforce admission before HTTP parsing. GET `/session`
+<a href=#77 id=77 data-nosnippet>77</a>/// issues a same-origin cookie; POST `/session` remains available when an access
+<a href=#78 id=78 data-nosnippet>78</a>/// key is configured. Applications need their own resource policy.
+<a href=#79 id=79 data-nosnippet>79</a></span><span class="kw">pub fn </span>router(config: Config, assets: Assets) -&gt; <span class="prelude-ty">Result</span>&lt;Router, std::io::Error&gt; {
+<a href=#80 id=80 data-nosnippet>80</a>    <span class="kw">let </span>origin: Uri = config.origin.parse().map_err(std::io::Error::other)<span class="question-mark">?</span>;
+<a href=#81 id=81 data-nosnippet>81</a>    <span class="kw">if </span>!<span class="macro">matches!</span>(origin.scheme_str(), <span class="prelude-val">Some</span>(<span class="string">"http" </span>| <span class="string">"https"</span>))
+<a href=#82 id=82 data-nosnippet>82</a>        || origin.authority().is_none()
+<a href=#83 id=83 data-nosnippet>83</a>        || origin
+<a href=#84 id=84 data-nosnippet>84</a>            .path_and_query()
+<a href=#85 id=85 data-nosnippet>85</a>            .is_some_and(|path| path.as_str() != <span class="string">"/"</span>)
+<a href=#86 id=86 data-nosnippet>86</a>        || config.origin.ends_with(<span class="string">'/'</span>)
+<a href=#87 id=87 data-nosnippet>87</a>        || config.origin.contains(<span class="string">'@'</span>)
+<a href=#88 id=88 data-nosnippet>88</a>        || !(config.access_key.is_empty() || (<span class="number">16</span>..=<span class="number">256</span>).contains(<span class="kw-2">&amp;</span>config.access_key.len()))
+<a href=#89 id=89 data-nosnippet>89</a>        || !(<span class="number">1</span>..=<span class="number">1024</span>).contains(<span class="kw-2">&amp;</span>config.max_sessions)
+<a href=#90 id=90 data-nosnippet>90</a>        || config.session_ttl.is_zero()
+<a href=#91 id=91 data-nosnippet>91</a>        || config.session_ttl &gt; Duration::from_secs(<span class="number">86_400</span>)
+<a href=#92 id=92 data-nosnippet>92</a>        || config.write_timeout.is_zero()
+<a href=#93 id=93 data-nosnippet>93</a>        || config.write_timeout &gt; Duration::from_secs(<span class="number">30</span>)
+<a href=#94 id=94 data-nosnippet>94</a>        || !(<span class="number">1</span>..=<span class="number">2048</span>).contains(<span class="kw-2">&amp;</span>config.max_tcp_connections)
+<a href=#95 id=95 data-nosnippet>95</a>        || config.handshake_timeout.is_zero()
+<a href=#96 id=96 data-nosnippet>96</a>        || config.handshake_timeout &gt; Duration::from_secs(<span class="number">30</span>)
+<a href=#97 id=97 data-nosnippet>97</a>        || !(<span class="number">1</span>..=<span class="number">32</span>).contains(<span class="kw-2">&amp;</span>config.workers)
+<a href=#98 id=98 data-nosnippet>98</a>    {
+<a href=#99 id=99 data-nosnippet>99</a>        <span class="kw">return </span><span class="prelude-val">Err</span>(std::io::Error::new(
+<a href=#100 id=100 data-nosnippet>100</a>            std::io::ErrorKind::InvalidInput,
+<a href=#101 id=101 data-nosnippet>101</a>            <span class="string">"invalid origin, key or transport limits"</span>,
+<a href=#102 id=102 data-nosnippet>102</a>        ));
+<a href=#103 id=103 data-nosnippet>103</a>    }
+<a href=#104 id=104 data-nosnippet>104</a>    <span class="kw">let </span>sockets = Arc::new(Semaphore::new(config.limits.max_connections));
+<a href=#105 id=105 data-nosnippet>105</a>    <span class="kw">let </span>requests = owner::start(config.clone())<span class="question-mark">?</span>;
+<a href=#106 id=106 data-nosnippet>106</a>    <span class="kw">let </span>(cluster, cluster_stop) = <span class="kw">match </span>config.cluster.clone() {
+<a href=#107 id=107 data-nosnippet>107</a>        <span class="prelude-val">Some</span>(settings) =&gt; {
+<a href=#108 id=108 data-nosnippet>108</a>            <span class="kw">let </span>(cluster, stop) = peer::Cluster::start(settings, requests.clone())<span class="question-mark">?</span>;
+<a href=#109 id=109 data-nosnippet>109</a>            (<span class="prelude-val">Some</span>(cluster), <span class="prelude-val">Some</span>(stop))
+<a href=#110 id=110 data-nosnippet>110</a>        }
+<a href=#111 id=111 data-nosnippet>111</a>        <span class="prelude-val">None </span>=&gt; (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>),
+<a href=#112 id=112 data-nosnippet>112</a>    };
+<a href=#113 id=113 data-nosnippet>113</a>    <span class="kw">let </span>admin = config.admin;
+<a href=#114 id=114 data-nosnippet>114</a>    <span class="kw">let </span>app = App {
+<a href=#115 id=115 data-nosnippet>115</a>        config: Arc::new(config),
+<a href=#116 id=116 data-nosnippet>116</a>        requests,
+<a href=#117 id=117 data-nosnippet>117</a>        sockets,
+<a href=#118 id=118 data-nosnippet>118</a>        http: Arc::new(Semaphore::new(<span class="number">512</span>)),
+<a href=#119 id=119 data-nosnippet>119</a>        assets,
+<a href=#120 id=120 data-nosnippet>120</a>        system: Arc::new(admin::System::new()),
+<a href=#121 id=121 data-nosnippet>121</a>        cluster,
+<a href=#122 id=122 data-nosnippet>122</a>        _cluster_stop: cluster_stop,
+<a href=#123 id=123 data-nosnippet>123</a>    };
+<a href=#124 id=124 data-nosnippet>124</a>    <span class="kw">let </span><span class="kw-2">mut </span>router = Router::new()
+<a href=#125 id=125 data-nosnippet>125</a>        .route(<span class="string">"/session"</span>, get(session).post(login))
+<a href=#126 id=126 data-nosnippet>126</a>        .route(<span class="string">"/logout"</span>, post(logout))
+<a href=#127 id=127 data-nosnippet>127</a>        .route(<span class="string">"/ws"</span>, get(upgrade))
+<a href=#128 id=128 data-nosnippet>128</a>        .route(<span class="string">"/health"</span>, get(|| <span class="kw">async </span>{ <span class="string">"morrow-web preview\n" </span>}));
+<a href=#129 id=129 data-nosnippet>129</a>    <span class="kw">if </span>admin {
+<a href=#130 id=130 data-nosnippet>130</a>        router = router
+<a href=#131 id=131 data-nosnippet>131</a>            .route(<span class="string">"/admin"</span>, get(admin::page))
+<a href=#132 id=132 data-nosnippet>132</a>            .route(<span class="string">"/admin/"</span>, get(admin::page))
+<a href=#133 id=133 data-nosnippet>133</a>            .route(<span class="string">"/admin/status"</span>, get(admin::status))
+<a href=#134 id=134 data-nosnippet>134</a>            .route(<span class="string">"/admin/style.css"</span>, get(admin::stylesheet));
+<a href=#135 id=135 data-nosnippet>135</a>    }
+<a href=#136 id=136 data-nosnippet>136</a>    <span class="prelude-val">Ok</span>(router
+<a href=#137 id=137 data-nosnippet>137</a>        .fallback(asset)
+<a href=#138 id=138 data-nosnippet>138</a>        .layer(DefaultBodyLimit::max(<span class="number">1024</span>))
+<a href=#139 id=139 data-nosnippet>139</a>        .layer(middleware::from_fn_with_state(app.clone(), admission))
+<a href=#140 id=140 data-nosnippet>140</a>        .with_state(app))
+<a href=#141 id=141 data-nosnippet>141</a>}
+<a href=#142 id=142 data-nosnippet>142</a>
+<a href=#143 id=143 data-nosnippet>143</a><span class="doccomment">/// Serve embedded assets and the preview protocol with bounded TCP admission.
+<a href=#144 id=144 data-nosnippet>144</a></span><span class="kw">pub async fn </span>serve(
+<a href=#145 id=145 data-nosnippet>145</a>    listener: tokio::net::TcpListener,
+<a href=#146 id=146 data-nosnippet>146</a>    config: Config,
+<a href=#147 id=147 data-nosnippet>147</a>    assets: Assets,
+<a href=#148 id=148 data-nosnippet>148</a>) -&gt; std::io::Result&lt;()&gt; {
+<a href=#149 id=149 data-nosnippet>149</a>    <span class="kw">let </span>listener = BoundedListener::new(
+<a href=#150 id=150 data-nosnippet>150</a>        listener,
+<a href=#151 id=151 data-nosnippet>151</a>        config.max_tcp_connections,
+<a href=#152 id=152 data-nosnippet>152</a>        config.handshake_timeout,
+<a href=#153 id=153 data-nosnippet>153</a>    )<span class="question-mark">?</span>;
+<a href=#154 id=154 data-nosnippet>154</a>    axum::serve(listener, router(config, assets)<span class="question-mark">?</span>).<span class="kw">await
+<a href=#155 id=155 data-nosnippet>155</a></span>}
+<a href=#156 id=156 data-nosnippet>156</a>
+<a href=#157 id=157 data-nosnippet>157</a><span class="kw">async fn </span>admission(State(app): State&lt;App&gt;, request: Request, next: Next) -&gt; Response {
+<a href=#158 id=158 data-nosnippet>158</a>    <span class="kw">let </span><span class="prelude-val">Ok</span>(_permit) = app.http.clone().try_acquire_owned() <span class="kw">else </span>{
+<a href=#159 id=159 data-nosnippet>159</a>        <span class="kw">return </span>StatusCode::SERVICE_UNAVAILABLE.into_response();
+<a href=#160 id=160 data-nosnippet>160</a>    };
+<a href=#161 id=161 data-nosnippet>161</a>    <span class="kw">match </span>tokio::time::timeout(Duration::from_secs(<span class="number">5</span>), next.run(request)).<span class="kw">await </span>{
+<a href=#162 id=162 data-nosnippet>162</a>        <span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>response) =&gt; {
+<a href=#163 id=163 data-nosnippet>163</a>            <span class="kw">if </span>response.status() != StatusCode::SWITCHING_PROTOCOLS {
+<a href=#164 id=164 data-nosnippet>164</a>                response
+<a href=#165 id=165 data-nosnippet>165</a>                    .headers_mut()
+<a href=#166 id=166 data-nosnippet>166</a>                    .insert(header::CONNECTION, HeaderValue::from_static(<span class="string">"close"</span>));
+<a href=#167 id=167 data-nosnippet>167</a>            }
+<a href=#168 id=168 data-nosnippet>168</a>            response.headers_mut().insert(
+<a href=#169 id=169 data-nosnippet>169</a>                header::X_CONTENT_TYPE_OPTIONS,
+<a href=#170 id=170 data-nosnippet>170</a>                HeaderValue::from_static(<span class="string">"nosniff"</span>),
+<a href=#171 id=171 data-nosnippet>171</a>            );
+<a href=#172 id=172 data-nosnippet>172</a>            response.headers_mut().insert(
+<a href=#173 id=173 data-nosnippet>173</a>                header::REFERRER_POLICY,
+<a href=#174 id=174 data-nosnippet>174</a>                HeaderValue::from_static(<span class="string">"no-referrer"</span>),
+<a href=#175 id=175 data-nosnippet>175</a>            );
+<a href=#176 id=176 data-nosnippet>176</a>            response
+<a href=#177 id=177 data-nosnippet>177</a>        }
+<a href=#178 id=178 data-nosnippet>178</a>        <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; StatusCode::REQUEST_TIMEOUT.into_response(),
+<a href=#179 id=179 data-nosnippet>179</a>    }
+<a href=#180 id=180 data-nosnippet>180</a>}
+<a href=#181 id=181 data-nosnippet>181</a><span class="kw">fn </span>origin(headers: <span class="kw-2">&amp;</span>HeaderMap, app: <span class="kw-2">&amp;</span>App) -&gt; <span class="prelude-ty">Result</span>&lt;(), StatusCode&gt; {
+<a href=#182 id=182 data-nosnippet>182</a>    <span class="kw">if </span>headers.get(header::ORIGIN).and_then(|v| v.to_str().ok()) != <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>app.config.origin) {
+<a href=#183 id=183 data-nosnippet>183</a>        <span class="prelude-val">Err</span>(StatusCode::FORBIDDEN)
+<a href=#184 id=184 data-nosnippet>184</a>    } <span class="kw">else </span>{
+<a href=#185 id=185 data-nosnippet>185</a>        <span class="prelude-val">Ok</span>(())
+<a href=#186 id=186 data-nosnippet>186</a>    }
+<a href=#187 id=187 data-nosnippet>187</a>}
+<a href=#188 id=188 data-nosnippet>188</a><span class="kw">fn </span>session_cookie(headers: <span class="kw-2">&amp;</span>HeaderMap) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;String&gt;, StatusCode&gt; {
+<a href=#189 id=189 data-nosnippet>189</a>    <span class="kw">let </span><span class="prelude-val">Some</span>(values) = headers.get(header::COOKIE).and_then(|v| v.to_str().ok()) <span class="kw">else </span>{
+<a href=#190 id=190 data-nosnippet>190</a>        <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
+<a href=#191 id=191 data-nosnippet>191</a>    };
+<a href=#192 id=192 data-nosnippet>192</a>    <span class="kw">let </span><span class="kw-2">mut </span>found = values
+<a href=#193 id=193 data-nosnippet>193</a>        .split(<span class="string">';'</span>)
+<a href=#194 id=194 data-nosnippet>194</a>        .filter_map(|v| v.trim().strip_prefix(<span class="string">"morrow_session="</span>));
+<a href=#195 id=195 data-nosnippet>195</a>    <span class="kw">let </span><span class="prelude-val">Some</span>(token) = found.next() <span class="kw">else </span>{
+<a href=#196 id=196 data-nosnippet>196</a>        <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
+<a href=#197 id=197 data-nosnippet>197</a>    };
+<a href=#198 id=198 data-nosnippet>198</a>    <span class="kw">if </span>found.next().is_some() || token.len() != <span class="number">64 </span>|| !token.bytes().all(|b| b.is_ascii_hexdigit())
+<a href=#199 id=199 data-nosnippet>199</a>    {
+<a href=#200 id=200 data-nosnippet>200</a>        <span class="kw">return </span><span class="prelude-val">Err</span>(StatusCode::UNAUTHORIZED);
+<a href=#201 id=201 data-nosnippet>201</a>    }
+<a href=#202 id=202 data-nosnippet>202</a>    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(token.into()))
+<a href=#203 id=203 data-nosnippet>203</a>}
+<a href=#204 id=204 data-nosnippet>204</a><span class="kw">fn </span>cookie(headers: <span class="kw-2">&amp;</span>HeaderMap) -&gt; <span class="prelude-ty">Result</span>&lt;String, StatusCode&gt; {
+<a href=#205 id=205 data-nosnippet>205</a>    session_cookie(headers)<span class="question-mark">?</span>.ok_or(StatusCode::UNAUTHORIZED)
+<a href=#206 id=206 data-nosnippet>206</a>}
+<a href=#207 id=207 data-nosnippet>207</a><span class="kw">async fn </span>response&lt;T&gt;(
+<a href=#208 id=208 data-nosnippet>208</a>    app: <span class="kw-2">&amp;</span>App,
+<a href=#209 id=209 data-nosnippet>209</a>    request: owner::Request,
+<a href=#210 id=210 data-nosnippet>210</a>    rx: oneshot::Receiver&lt;<span class="prelude-ty">Result</span>&lt;T, StatusCode&gt;&gt;,
+<a href=#211 id=211 data-nosnippet>211</a>) -&gt; <span class="prelude-ty">Result</span>&lt;T, StatusCode&gt; {
+<a href=#212 id=212 data-nosnippet>212</a>    app.requests
+<a href=#213 id=213 data-nosnippet>213</a>        .try_send(request)
+<a href=#214 id=214 data-nosnippet>214</a>        .map_err(|<span class="kw">_</span>| StatusCode::SERVICE_UNAVAILABLE)<span class="question-mark">?</span>;
+<a href=#215 id=215 data-nosnippet>215</a>    tokio::time::timeout(Duration::from_secs(<span class="number">2</span>), rx)
+<a href=#216 id=216 data-nosnippet>216</a>        .<span class="kw">await
+<a href=#217 id=217 data-nosnippet>217</a>        </span>.map_err(|<span class="kw">_</span>| StatusCode::SERVICE_UNAVAILABLE)<span class="question-mark">?
+<a href=#218 id=218 data-nosnippet>218</a>        </span>.map_err(|<span class="kw">_</span>| StatusCode::SERVICE_UNAVAILABLE)<span class="question-mark">?
+<a href=#219 id=219 data-nosnippet>219</a></span>}
+<a href=#220 id=220 data-nosnippet>220</a><span class="attr">#[derive(Deserialize)]
+<a href=#221 id=221 data-nosnippet>221</a>#[serde(deny_unknown_fields)]
+<a href=#222 id=222 data-nosnippet>222</a></span><span class="kw">struct </span>Credentials {
+<a href=#223 id=223 data-nosnippet>223</a>    access_key: String,
+<a href=#224 id=224 data-nosnippet>224</a>}
+<a href=#225 id=225 data-nosnippet>225</a><span class="attr">#[derive(Serialize)]
+<a href=#226 id=226 data-nosnippet>226</a></span><span class="kw">struct </span>SessionResponse {
+<a href=#227 id=227 data-nosnippet>227</a>    csrf: String,
+<a href=#228 id=228 data-nosnippet>228</a>}
+<a href=#229 id=229 data-nosnippet>229</a><span class="kw">fn </span>session_response(authentication: owner::Authentication) -&gt; Response {
+<a href=#230 id=230 data-nosnippet>230</a>    <span class="kw">let </span><span class="kw-2">mut </span>response = Json(SessionResponse {
+<a href=#231 id=231 data-nosnippet>231</a>        csrf: authentication.csrf,
+<a href=#232 id=232 data-nosnippet>232</a>    })
+<a href=#233 id=233 data-nosnippet>233</a>    .into_response();
+<a href=#234 id=234 data-nosnippet>234</a>    response
+<a href=#235 id=235 data-nosnippet>235</a>        .headers_mut()
+<a href=#236 id=236 data-nosnippet>236</a>        .insert(header::CACHE_CONTROL, HeaderValue::from_static(<span class="string">"no-store"</span>));
+<a href=#237 id=237 data-nosnippet>237</a>    response
+<a href=#238 id=238 data-nosnippet>238</a>}
+<a href=#239 id=239 data-nosnippet>239</a><span class="kw">fn </span>issued_session(app: <span class="kw-2">&amp;</span>App, auth: owner::Authentication) -&gt; <span class="prelude-ty">Result</span>&lt;Response, StatusCode&gt; {
+<a href=#240 id=240 data-nosnippet>240</a>    <span class="kw">let </span>cookie = <span class="macro">format!</span>(
+<a href=#241 id=241 data-nosnippet>241</a>        <span class="string">"morrow_session={}; HttpOnly; SameSite=Strict; Path=/; Max-Age={}{}"</span>,
+<a href=#242 id=242 data-nosnippet>242</a>        auth.token,
+<a href=#243 id=243 data-nosnippet>243</a>        app.config.session_ttl.as_secs().max(<span class="number">1</span>),
+<a href=#244 id=244 data-nosnippet>244</a>        <span class="kw">if </span>app.config.origin.starts_with(<span class="string">"https:"</span>) {
+<a href=#245 id=245 data-nosnippet>245</a>            <span class="string">"; Secure"
+<a href=#246 id=246 data-nosnippet>246</a>        </span>} <span class="kw">else </span>{
+<a href=#247 id=247 data-nosnippet>247</a>            <span class="string">""
+<a href=#248 id=248 data-nosnippet>248</a>        </span>}
+<a href=#249 id=249 data-nosnippet>249</a>    );
+<a href=#250 id=250 data-nosnippet>250</a>    <span class="kw">let </span><span class="kw-2">mut </span>response = session_response(auth);
+<a href=#251 id=251 data-nosnippet>251</a>    response.headers_mut().insert(
+<a href=#252 id=252 data-nosnippet>252</a>        header::SET_COOKIE,
+<a href=#253 id=253 data-nosnippet>253</a>        cookie
+<a href=#254 id=254 data-nosnippet>254</a>            .parse()
+<a href=#255 id=255 data-nosnippet>255</a>            .map_err(|<span class="kw">_</span>| StatusCode::INTERNAL_SERVER_ERROR)<span class="question-mark">?</span>,
+<a href=#256 id=256 data-nosnippet>256</a>    );
+<a href=#257 id=257 data-nosnippet>257</a>    <span class="prelude-val">Ok</span>(response)
+<a href=#258 id=258 data-nosnippet>258</a>}
+<a href=#259 id=259 data-nosnippet>259</a><span class="kw">async fn </span>open_session(app: <span class="kw-2">&amp;</span>App) -&gt; <span class="prelude-ty">Result</span>&lt;owner::Authentication, StatusCode&gt; {
+<a href=#260 id=260 data-nosnippet>260</a>    <span class="kw">let </span>(reply, rx) = oneshot::channel();
+<a href=#261 id=261 data-nosnippet>261</a>    response(app, owner::Request::Open { reply }, rx).<span class="kw">await
+<a href=#262 id=262 data-nosnippet>262</a></span>}
+<a href=#263 id=263 data-nosnippet>263</a><span class="kw">async fn </span>login(
+<a href=#264 id=264 data-nosnippet>264</a>    State(app): State&lt;App&gt;,
+<a href=#265 id=265 data-nosnippet>265</a>    headers: HeaderMap,
+<a href=#266 id=266 data-nosnippet>266</a>    Json(credentials): Json&lt;Credentials&gt;,
+<a href=#267 id=267 data-nosnippet>267</a>) -&gt; <span class="prelude-ty">Result</span>&lt;Response, StatusCode&gt; {
+<a href=#268 id=268 data-nosnippet>268</a>    origin(<span class="kw-2">&amp;</span>headers, <span class="kw-2">&amp;</span>app)<span class="question-mark">?</span>;
+<a href=#269 id=269 data-nosnippet>269</a>    <span class="kw">let </span>(reply, rx) = oneshot::channel();
+<a href=#270 id=270 data-nosnippet>270</a>    issued_session(
+<a href=#271 id=271 data-nosnippet>271</a>        <span class="kw-2">&amp;</span>app,
+<a href=#272 id=272 data-nosnippet>272</a>        response(
+<a href=#273 id=273 data-nosnippet>273</a>            <span class="kw-2">&amp;</span>app,
+<a href=#274 id=274 data-nosnippet>274</a>            owner::Request::Login {
+<a href=#275 id=275 data-nosnippet>275</a>                key: credentials.access_key,
+<a href=#276 id=276 data-nosnippet>276</a>                reply,
+<a href=#277 id=277 data-nosnippet>277</a>            },
+<a href=#278 id=278 data-nosnippet>278</a>            rx,
+<a href=#279 id=279 data-nosnippet>279</a>        )
+<a href=#280 id=280 data-nosnippet>280</a>        .<span class="kw">await</span><span class="question-mark">?</span>,
+<a href=#281 id=281 data-nosnippet>281</a>    )
+<a href=#282 id=282 data-nosnippet>282</a>}
+<a href=#283 id=283 data-nosnippet>283</a><span class="kw">async fn </span>session(State(app): State&lt;App&gt;, headers: HeaderMap) -&gt; <span class="prelude-ty">Result</span>&lt;Response, StatusCode&gt; {
+<a href=#284 id=284 data-nosnippet>284</a>    <span class="comment">// Same-origin fetch may omit Origin for GET. No CORS response is provided;
+<a href=#285 id=285 data-nosnippet>285</a>    // cross-origin callers cannot read the nonce. Explicit foreign origins fail.
+<a href=#286 id=286 data-nosnippet>286</a>    </span><span class="kw">if </span>headers.contains_key(header::ORIGIN) {
+<a href=#287 id=287 data-nosnippet>287</a>        origin(<span class="kw-2">&amp;</span>headers, <span class="kw-2">&amp;</span>app)<span class="question-mark">?</span>;
+<a href=#288 id=288 data-nosnippet>288</a>    }
+<a href=#289 id=289 data-nosnippet>289</a>    <span class="kw">match </span>session_cookie(<span class="kw-2">&amp;</span>headers)<span class="question-mark">? </span>{
+<a href=#290 id=290 data-nosnippet>290</a>        <span class="prelude-val">Some</span>(token) =&gt; {
+<a href=#291 id=291 data-nosnippet>291</a>            <span class="kw">let </span>(reply, rx) = oneshot::channel();
+<a href=#292 id=292 data-nosnippet>292</a>            <span class="kw">match </span>response(
+<a href=#293 id=293 data-nosnippet>293</a>                <span class="kw-2">&amp;</span>app,
+<a href=#294 id=294 data-nosnippet>294</a>                owner::Request::Authenticate {
+<a href=#295 id=295 data-nosnippet>295</a>                    token,
+<a href=#296 id=296 data-nosnippet>296</a>                    csrf: <span class="prelude-val">None</span>,
+<a href=#297 id=297 data-nosnippet>297</a>                    reply,
+<a href=#298 id=298 data-nosnippet>298</a>                },
+<a href=#299 id=299 data-nosnippet>299</a>                rx,
+<a href=#300 id=300 data-nosnippet>300</a>            )
+<a href=#301 id=301 data-nosnippet>301</a>            .<span class="kw">await
+<a href=#302 id=302 data-nosnippet>302</a>            </span>{
+<a href=#303 id=303 data-nosnippet>303</a>                <span class="prelude-val">Ok</span>(auth) =&gt; <span class="prelude-val">Ok</span>(session_response(auth)),
+<a href=#304 id=304 data-nosnippet>304</a>                <span class="prelude-val">Err</span>(StatusCode::UNAUTHORIZED) =&gt; issued_session(<span class="kw-2">&amp;</span>app, open_session(<span class="kw-2">&amp;</span>app).<span class="kw">await</span><span class="question-mark">?</span>),
+<a href=#305 id=305 data-nosnippet>305</a>                <span class="prelude-val">Err</span>(status) =&gt; <span class="prelude-val">Err</span>(status),
+<a href=#306 id=306 data-nosnippet>306</a>            }
+<a href=#307 id=307 data-nosnippet>307</a>        }
+<a href=#308 id=308 data-nosnippet>308</a>        <span class="prelude-val">None </span>=&gt; issued_session(<span class="kw-2">&amp;</span>app, open_session(<span class="kw-2">&amp;</span>app).<span class="kw">await</span><span class="question-mark">?</span>),
+<a href=#309 id=309 data-nosnippet>309</a>    }
+<a href=#310 id=310 data-nosnippet>310</a>}
+<a href=#311 id=311 data-nosnippet>311</a><span class="kw">async fn </span>logout(State(app): State&lt;App&gt;, headers: HeaderMap) -&gt; <span class="prelude-ty">Result</span>&lt;Response, StatusCode&gt; {
+<a href=#312 id=312 data-nosnippet>312</a>    origin(<span class="kw-2">&amp;</span>headers, <span class="kw-2">&amp;</span>app)<span class="question-mark">?</span>;
+<a href=#313 id=313 data-nosnippet>313</a>    <span class="kw">let </span>csrf = headers
+<a href=#314 id=314 data-nosnippet>314</a>        .get(<span class="string">"x-morrow-csrf"</span>)
+<a href=#315 id=315 data-nosnippet>315</a>        .and_then(|v| v.to_str().ok())
+<a href=#316 id=316 data-nosnippet>316</a>        .ok_or(StatusCode::FORBIDDEN)<span class="question-mark">?
+<a href=#317 id=317 data-nosnippet>317</a>        </span>.to_owned();
+<a href=#318 id=318 data-nosnippet>318</a>    <span class="kw">let </span>(reply, rx) = oneshot::channel();
+<a href=#319 id=319 data-nosnippet>319</a>    response(
+<a href=#320 id=320 data-nosnippet>320</a>        <span class="kw-2">&amp;</span>app,
+<a href=#321 id=321 data-nosnippet>321</a>        owner::Request::Logout {
+<a href=#322 id=322 data-nosnippet>322</a>            token: cookie(<span class="kw-2">&amp;</span>headers)<span class="question-mark">?</span>,
+<a href=#323 id=323 data-nosnippet>323</a>            csrf,
+<a href=#324 id=324 data-nosnippet>324</a>            reply,
+<a href=#325 id=325 data-nosnippet>325</a>        },
+<a href=#326 id=326 data-nosnippet>326</a>        rx,
+<a href=#327 id=327 data-nosnippet>327</a>    )
+<a href=#328 id=328 data-nosnippet>328</a>    .<span class="kw">await</span><span class="question-mark">?</span>;
+<a href=#329 id=329 data-nosnippet>329</a>    <span class="kw">let </span><span class="kw-2">mut </span>response = StatusCode::NO_CONTENT.into_response();
+<a href=#330 id=330 data-nosnippet>330</a>    response.headers_mut().insert(
+<a href=#331 id=331 data-nosnippet>331</a>        header::SET_COOKIE,
+<a href=#332 id=332 data-nosnippet>332</a>        HeaderValue::from_static(<span class="string">"morrow_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0"</span>),
+<a href=#333 id=333 data-nosnippet>333</a>    );
+<a href=#334 id=334 data-nosnippet>334</a>    <span class="prelude-val">Ok</span>(response)
+<a href=#335 id=335 data-nosnippet>335</a>}
+<a href=#336 id=336 data-nosnippet>336</a><span class="kw">async fn </span>upgrade(
+<a href=#337 id=337 data-nosnippet>337</a>    State(app): State&lt;App&gt;,
+<a href=#338 id=338 data-nosnippet>338</a>    headers: HeaderMap,
+<a href=#339 id=339 data-nosnippet>339</a>    ws: WebSocketUpgrade,
+<a href=#340 id=340 data-nosnippet>340</a>) -&gt; <span class="prelude-ty">Result</span>&lt;Response, StatusCode&gt; {
+<a href=#341 id=341 data-nosnippet>341</a>    origin(<span class="kw-2">&amp;</span>headers, <span class="kw-2">&amp;</span>app)<span class="question-mark">?</span>;
+<a href=#342 id=342 data-nosnippet>342</a>    <span class="kw">let </span>protocols: Vec&lt;<span class="kw">_</span>&gt; = ws
+<a href=#343 id=343 data-nosnippet>343</a>        .requested_protocols()
+<a href=#344 id=344 data-nosnippet>344</a>        .filter_map(|v| v.to_str().ok())
+<a href=#345 id=345 data-nosnippet>345</a>        .collect();
+<a href=#346 id=346 data-nosnippet>346</a>    <span class="kw">let </span>format = socket::Format::negotiate(<span class="kw-2">&amp;</span>protocols).ok_or(StatusCode::BAD_REQUEST)<span class="question-mark">?</span>;
+<a href=#347 id=347 data-nosnippet>347</a>    <span class="kw">let </span><span class="kw-2">mut </span>nonces = protocols
+<a href=#348 id=348 data-nosnippet>348</a>        .iter()
+<a href=#349 id=349 data-nosnippet>349</a>        .filter_map(|p| p.strip_prefix(<span class="string">"morrow.csrf."</span>));
+<a href=#350 id=350 data-nosnippet>350</a>    <span class="kw">let </span>csrf = nonces.next().ok_or(StatusCode::FORBIDDEN)<span class="question-mark">?</span>.to_owned();
+<a href=#351 id=351 data-nosnippet>351</a>    <span class="kw">if </span>nonces.next().is_some() || csrf.len() != <span class="number">64 </span>{
+<a href=#352 id=352 data-nosnippet>352</a>        <span class="kw">return </span><span class="prelude-val">Err</span>(StatusCode::FORBIDDEN);
+<a href=#353 id=353 data-nosnippet>353</a>    }
+<a href=#354 id=354 data-nosnippet>354</a>    <span class="kw">let </span>permit = app
+<a href=#355 id=355 data-nosnippet>355</a>        .sockets
+<a href=#356 id=356 data-nosnippet>356</a>        .clone()
+<a href=#357 id=357 data-nosnippet>357</a>        .try_acquire_owned()
+<a href=#358 id=358 data-nosnippet>358</a>        .map_err(|<span class="kw">_</span>| StatusCode::TOO_MANY_REQUESTS)<span class="question-mark">?</span>;
+<a href=#359 id=359 data-nosnippet>359</a>    <span class="kw">let </span>(reply, rx) = oneshot::channel();
+<a href=#360 id=360 data-nosnippet>360</a>    <span class="kw">let </span>auth = response(
+<a href=#361 id=361 data-nosnippet>361</a>        <span class="kw-2">&amp;</span>app,
+<a href=#362 id=362 data-nosnippet>362</a>        owner::Request::Authenticate {
+<a href=#363 id=363 data-nosnippet>363</a>            token: cookie(<span class="kw-2">&amp;</span>headers)<span class="question-mark">?</span>,
+<a href=#364 id=364 data-nosnippet>364</a>            csrf: <span class="prelude-val">Some</span>(csrf),
+<a href=#365 id=365 data-nosnippet>365</a>            reply,
+<a href=#366 id=366 data-nosnippet>366</a>        },
+<a href=#367 id=367 data-nosnippet>367</a>        rx,
+<a href=#368 id=368 data-nosnippet>368</a>    )
+<a href=#369 id=369 data-nosnippet>369</a>    .<span class="kw">await</span><span class="question-mark">?</span>;
+<a href=#370 id=370 data-nosnippet>370</a>    <span class="prelude-val">Ok</span>(ws
+<a href=#371 id=371 data-nosnippet>371</a>        .protocols([format.name()])
+<a href=#372 id=372 data-nosnippet>372</a>        .max_message_size(morrow_web_protocol::MAX_FRAME_BYTES)
+<a href=#373 id=373 data-nosnippet>373</a>        .max_frame_size(morrow_web_protocol::MAX_FRAME_BYTES)
+<a href=#374 id=374 data-nosnippet>374</a>        .read_buffer_size(<span class="number">8192</span>)
+<a href=#375 id=375 data-nosnippet>375</a>        .write_buffer_size(<span class="number">0</span>)
+<a href=#376 id=376 data-nosnippet>376</a>        .max_write_buffer_size(<span class="number">2 </span>* morrow_web_protocol::MAX_FRAME_BYTES)
+<a href=#377 id=377 data-nosnippet>377</a>        .on_upgrade(<span class="kw">move </span>|socket| socket::run(socket, app, auth, permit, format)))
+<a href=#378 id=378 data-nosnippet>378</a>}
+<a href=#379 id=379 data-nosnippet>379</a><span class="kw">async fn </span>asset(State(app): State&lt;App&gt;, uri: Uri) -&gt; Response {
+<a href=#380 id=380 data-nosnippet>380</a>    <span class="kw">let </span>name = <span class="kw">if </span>uri.path() == <span class="string">"/" </span>{
+<a href=#381 id=381 data-nosnippet>381</a>        <span class="string">"index.html"
+<a href=#382 id=382 data-nosnippet>382</a>    </span>} <span class="kw">else </span>{
+<a href=#383 id=383 data-nosnippet>383</a>        uri.path().trim_start_matches(<span class="string">'/'</span>)
+<a href=#384 id=384 data-nosnippet>384</a>    };
+<a href=#385 id=385 data-nosnippet>385</a>    <span class="kw">let </span>content_type = <span class="kw">match </span>name {
+<a href=#386 id=386 data-nosnippet>386</a>        <span class="string">"index.html" </span>=&gt; <span class="string">"text/html; charset=utf-8"</span>,
+<a href=#387 id=387 data-nosnippet>387</a>        <span class="string">"bootstrap.js" </span>| <span class="string">"morrow_browser.js" </span>| <span class="string">"worker.js" </span>=&gt; <span class="string">"text/javascript; charset=utf-8"</span>,
+<a href=#388 id=388 data-nosnippet>388</a>        <span class="string">"morrow_browser_bg.wasm" </span>| <span class="string">"morrow_app.wasm" </span>=&gt; <span class="string">"application/wasm"</span>,
+<a href=#389 id=389 data-nosnippet>389</a>        <span class="string">"style.css" </span>=&gt; <span class="string">"text/css; charset=utf-8"</span>,
+<a href=#390 id=390 data-nosnippet>390</a>        <span class="kw">_ </span>=&gt; <span class="kw">return </span>StatusCode::NOT_FOUND.into_response(),
+<a href=#391 id=391 data-nosnippet>391</a>    };
+<a href=#392 id=392 data-nosnippet>392</a>    <span class="kw">let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, bytes)) = app.assets.iter().find(|(path, <span class="kw">_</span>)| <span class="kw-2">*</span>path == name) <span class="kw">else </span>{
+<a href=#393 id=393 data-nosnippet>393</a>        <span class="kw">return if </span>name == <span class="string">"index.html" </span>{
+<a href=#394 id=394 data-nosnippet>394</a>            (
+<a href=#395 id=395 data-nosnippet>395</a>                StatusCode::SERVICE_UNAVAILABLE,
+<a href=#396 id=396 data-nosnippet>396</a>                <span class="string">"Browser assets are not embedded. Run cargo xtask web-build.\n"</span>,
+<a href=#397 id=397 data-nosnippet>397</a>            )
+<a href=#398 id=398 data-nosnippet>398</a>                .into_response()
+<a href=#399 id=399 data-nosnippet>399</a>        } <span class="kw">else </span>{
+<a href=#400 id=400 data-nosnippet>400</a>            StatusCode::NOT_FOUND.into_response()
+<a href=#401 id=401 data-nosnippet>401</a>        };
+<a href=#402 id=402 data-nosnippet>402</a>    };
+<a href=#403 id=403 data-nosnippet>403</a>    <span class="kw">if </span>name == <span class="string">"index.html" </span>&amp;&amp; !app.config.admin {
+<a href=#404 id=404 data-nosnippet>404</a>        <span class="kw">let </span>body = <span class="kw">match </span>std::str::from_utf8(bytes) {
+<a href=#405 id=405 data-nosnippet>405</a>            <span class="prelude-val">Ok</span>(html) =&gt; html
+<a href=#406 id=406 data-nosnippet>406</a>                .replace(<span class="string">" &lt;a href=\"/admin\"&gt;System dashboard&lt;/a&gt;"</span>, <span class="string">""</span>)
+<a href=#407 id=407 data-nosnippet>407</a>                .into_bytes(),
+<a href=#408 id=408 data-nosnippet>408</a>            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; bytes.to_vec(),
+<a href=#409 id=409 data-nosnippet>409</a>        };
+<a href=#410 id=410 data-nosnippet>410</a>        <span class="kw">return </span>asset_headers(
+<a href=#411 id=411 data-nosnippet>411</a>            (
+<a href=#412 id=412 data-nosnippet>412</a>                [
+<a href=#413 id=413 data-nosnippet>413</a>                    (header::CONTENT_TYPE, content_type),
+<a href=#414 id=414 data-nosnippet>414</a>                    (header::CACHE_CONTROL, <span class="string">"no-cache"</span>),
+<a href=#415 id=415 data-nosnippet>415</a>                ],
+<a href=#416 id=416 data-nosnippet>416</a>                body,
+<a href=#417 id=417 data-nosnippet>417</a>            )
+<a href=#418 id=418 data-nosnippet>418</a>                .into_response(),
+<a href=#419 id=419 data-nosnippet>419</a>            <span class="bool-val">false</span>,
+<a href=#420 id=420 data-nosnippet>420</a>        );
+<a href=#421 id=421 data-nosnippet>421</a>    }
+<a href=#422 id=422 data-nosnippet>422</a>    asset_headers(
+<a href=#423 id=423 data-nosnippet>423</a>        (
+<a href=#424 id=424 data-nosnippet>424</a>            [
+<a href=#425 id=425 data-nosnippet>425</a>                (header::CONTENT_TYPE, content_type),
+<a href=#426 id=426 data-nosnippet>426</a>                (header::CACHE_CONTROL, <span class="string">"no-cache"</span>),
+<a href=#427 id=427 data-nosnippet>427</a>            ],
+<a href=#428 id=428 data-nosnippet>428</a>            <span class="kw-2">*</span>bytes,
+<a href=#429 id=429 data-nosnippet>429</a>        )
+<a href=#430 id=430 data-nosnippet>430</a>            .into_response(),
+<a href=#431 id=431 data-nosnippet>431</a>        name == <span class="string">"worker.js"</span>,
+<a href=#432 id=432 data-nosnippet>432</a>    )
+<a href=#433 id=433 data-nosnippet>433</a>}
+<a href=#434 id=434 data-nosnippet>434</a><span class="kw">fn </span>asset_headers(<span class="kw-2">mut </span>response: Response, worker: bool) -&gt; Response {
+<a href=#435 id=435 data-nosnippet>435</a>    response.headers_mut().insert(header::CONTENT_SECURITY_POLICY, HeaderValue::from_static(<span class="string">"default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"</span>));
+<a href=#436 id=436 data-nosnippet>436</a>    <span class="kw">if </span>worker {
+<a href=#437 id=437 data-nosnippet>437</a>        response
+<a href=#438 id=438 data-nosnippet>438</a>            .headers_mut()
+<a href=#439 id=439 data-nosnippet>439</a>            .insert(<span class="string">"service-worker-allowed"</span>, HeaderValue::from_static(<span class="string">"/"</span>));
+<a href=#440 id=440 data-nosnippet>440</a>    }
+<a href=#441 id=441 data-nosnippet>441</a>    response
+<a href=#442 id=442 data-nosnippet>442</a>}
+</code></pre></div></section></main></body></html>

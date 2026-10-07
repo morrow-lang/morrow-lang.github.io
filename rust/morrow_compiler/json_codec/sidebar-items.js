@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Callback","Direction","Kind"],"struct":["Entry","Field","Plan","Variant"]};

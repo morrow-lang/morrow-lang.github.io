@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["BinaryOp","Comparison","DataValue","Item","LoadKind","Operand","Operation","Scalar","Statement","UnaryOp"],"fn":["bare"],"struct":["Buffer","Data","Function","Program"]};
